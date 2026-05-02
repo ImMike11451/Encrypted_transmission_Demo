@@ -1,0 +1,11 @@
+{
+    "ServerID":"6789",
+    "Port":9898,
+    "UserDB":"root",
+    "PassDB":"123456",
+    "Host":"127.0.0.1",
+    "ConnectDB":"secmng",
+    "ShmKey":"/usr/lib",
+    "ShmMaxNode":100
+
+}
