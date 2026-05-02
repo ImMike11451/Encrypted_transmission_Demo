@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+message RequestMsg
+{
+    //1 密钥协商  2 密钥效验 3 密钥注销
+    int32 cmdType = 1;   //报文类型
+    bytes clientID = 2;  //客户端编号
+    bytes serverID = 3;  //服务器端编号
+    bytes sign = 4;
+    bytes data = 5;
+}
+
+message RespondMsg
+{
+    bool status = 1;   //返回值
+    int32 seckeyID = 2;  //对称密钥编号
+    bytes clientID = 3;  // 客户端编号
+    bytes serverID = 4;  //服务器端编号
+    bytes data = 5;  //服务器端随机数
+}
