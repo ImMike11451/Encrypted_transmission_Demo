@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerOP.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="Codec.cpp">
+      <Filter>common\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="CodecFactory.cpp">
+      <Filter>common\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="RequestCodec.cpp">
+      <Filter>common\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="RequestFactory.cpp">
+      <Filter>common\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="RespondCodec.cpp">
+      <Filter>common\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="RespondFactory.cpp">
+      <Filter>common\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="AesCrypto.cpp">
+      <Filter>common\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="Hash.cpp">
+      <Filter>common\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="RsaCrypto.cpp">
+      <Filter>common\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpSocket.cpp">
+      <Filter>common\net</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpServer.cpp">
+      <Filter>common\net</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseShm.cpp">
+      <Filter>common\shm</Filter>
+    </ClCompile>
+    <ClCompile Include="SecKeyShm.cpp">
+      <Filter>common\shm</Filter>
+    </ClCompile>
+    <ClCompile Include="Message.pb.cc">
+      <Filter>common\proto</Filter>
+    </ClCompile>
+    <ClCompile Include="mysqlOP.cpp">
+      <Filter>common\db</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="Base64Util.cpp">
+      <Filter>common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadPool.cpp">
+      <Filter>common\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="EpollServer.cpp">
+      <Filter>common\Thread</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ServerOP.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="Codec.h">
+      <Filter>common\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="CodecFactory.h">
+      <Filter>common\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="RequestCodec.h">
+      <Filter>common\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="RequestFactory.h">
+      <Filter>common\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="RespondCodec.h">
+      <Filter>common\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="RespondFactory.h">
+      <Filter>common\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="AesCrypto.h">
+      <Filter>common\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="Hash.h">
+      <Filter>common\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="RsaCrypto.h">
+      <Filter>common\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpSocket.h">
+      <Filter>common\net</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpServer.h">
+      <Filter>common\net</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseShm.h">
+      <Filter>common\shm</Filter>
+    </ClInclude>
+    <ClInclude Include="SecKeyShm.h">
+      <Filter>common\shm</Filter>
+    </ClInclude>
+    <ClInclude Include="SeckKeyNodeInfo.h">
+      <Filter>common\shm</Filter>
+    </ClInclude>
+    <ClInclude Include="Message.pb.h">
+      <Filter>common\proto</Filter>
+    </ClInclude>
+    <ClInclude Include="mysqlOP.h">
+      <Filter>common\db</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorCode.h">
+      <Filter>common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="Base64Util.h">
+      <Filter>common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadPool.h">
+      <Filter>common\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="EpollServer.h">
+      <Filter>common\Thread</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="server">
+      <UniqueIdentifier>{1f9864d6-9f80-4d0b-b6e2-cf556f3d9f51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{0a8916bc-445c-4c6a-8d2d-4d02dcc53180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\net">
+      <UniqueIdentifier>{e12630c6-29d0-471b-a887-4fe3220aa23a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\proto">
+      <UniqueIdentifier>{f55a1c6e-8aba-4804-bc5b-065904f465d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\shm">
+      <UniqueIdentifier>{f01d9a07-0ed6-4205-b313-9fb982abb46d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\codec">
+      <UniqueIdentifier>{1b5d87a7-c0e1-4dc3-a05e-ee771149c113}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\crypto">
+      <UniqueIdentifier>{116d134f-1259-4e19-8099-88332c582614}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\db">
+      <UniqueIdentifier>{cc0398fa-4c0a-4c33-b1de-294385fefa75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\util">
+      <UniqueIdentifier>{95466af6-1fbe-4a93-b863-b4bb34fb2eb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\Thread">
+      <UniqueIdentifier>{a541f0ca-6655-48a5-8cc8-99cc2f672362}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
