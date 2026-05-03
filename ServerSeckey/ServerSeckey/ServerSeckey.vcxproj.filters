@@ -67,6 +67,18 @@
     <ClCompile Include="EpollServer.cpp">
       <Filter>common\Thread</Filter>
     </ClCompile>
+    <ClCompile Include="MessageService.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="V2RequestCodec.cpp">
+      <Filter>common\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="V2RespondCodec.cpp">
+      <Filter>common\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageV2.pb.cc">
+      <Filter>common\proto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ServerOP.h">
@@ -137,6 +149,18 @@
     </ClInclude>
     <ClInclude Include="EpollServer.h">
       <Filter>common\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageService.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="V2RequestCodec.h">
+      <Filter>common\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="V2RespondCodec.h">
+      <Filter>common\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageV2.pb.h">
+      <Filter>common\proto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

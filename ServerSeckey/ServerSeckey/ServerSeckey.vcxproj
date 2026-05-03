@@ -92,6 +92,8 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Message.pb.cc" />
+    <ClCompile Include="MessageService.cpp" />
+    <ClCompile Include="MessageV2.pb.cc" />
     <ClCompile Include="mysqlOP.cpp" />
     <ClCompile Include="RequestCodec.cpp" />
     <ClCompile Include="RequestFactory.cpp" />
@@ -103,6 +105,8 @@
     <ClCompile Include="TcpServer.cpp" />
     <ClCompile Include="TcpSocket.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
+    <ClCompile Include="V2RequestCodec.cpp" />
+    <ClCompile Include="V2RespondCodec.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AesCrypto.h" />
@@ -116,6 +120,8 @@
     <ClInclude Include="Hash.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Message.pb.h" />
+    <ClInclude Include="MessageService.h" />
+    <ClInclude Include="MessageV2.pb.h" />
     <ClInclude Include="mysqlOP.h" />
     <ClInclude Include="RequestCodec.h" />
     <ClInclude Include="RequestFactory.h" />
@@ -128,6 +134,8 @@
     <ClInclude Include="TcpServer.h" />
     <ClInclude Include="TcpSocket.h" />
     <ClInclude Include="ThreadPool.h" />
+    <ClInclude Include="V2RequestCodec.h" />
+    <ClInclude Include="V2RespondCodec.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
