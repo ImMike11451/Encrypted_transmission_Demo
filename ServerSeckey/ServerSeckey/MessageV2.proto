@@ -1,0 +1,144 @@
+syntax = "proto3";
+
+// 包名用于给生成的 C++ 代码提供命名空间。
+// 生成后大致会对应 secmng::v2 这样的命名空间。
+package secmng.v2;
+
+// 命令类型：表示当前这个包是什么业务。
+// 第一阶段我们只做“发送消息”这一种新业务，所以这里只保留最小集合。
+enum CommandType {
+  // 未知命令，通常作为默认值兜底。
+  CMD_UNKNOWN = 0;
+
+  // 客户端 -> 服务端：发送加密消息请求
+  CMD_SEND_MSG_REQ = 1;
+
+  // 服务端 -> 客户端：发送加密消息响应
+  CMD_SEND_MSG_RESP = 2;
+}
+
+// 结果码：服务端处理完请求后，告诉客户端发生了什么。
+enum ResultCode {
+  // 未知结果，默认值兜底。
+  RESULT_UNKNOWN = 0;
+
+  // 处理成功
+  RESULT_SUCCESS = 1;
+
+  // 通用失败
+  RESULT_FAILED = 2;
+
+  // 没有找到对应的密钥
+  RESULT_KEY_NOT_FOUND = 3;
+
+  // 找到了密钥，但密钥状态无效，例如已经注销或过期
+  RESULT_KEY_INVALID = 4;
+
+  // 密文解密失败，常见原因是 key 不匹配、nonce 不匹配、算法不匹配
+  RESULT_DECRYPT_FAILED = 5;
+
+  // 请求字段不完整或者请求格式不合法
+  RESULT_INVALID_REQUEST = 6;
+}
+
+// 消息类型：第一阶段只做文本消息。
+// 先保留这个枚举，是为了后续扩展文件消息、系统消息时不用改协议骨架。
+enum MessageType {
+  // 默认未知类型
+  MSG_TYPE_UNKNOWN = 0;
+
+  // 文本消息
+  MSG_TYPE_TEXT = 1;
+}
+
+// 公共头：每个请求和响应都可以带一份。
+// 这样公共路由信息就不会散落在业务体里面。
+message Header {
+  // 消息唯一编号，由客户端生成。
+  // 后面排查问题、关联日志、数据库记录时都很有用。
+  string message_id = 1;
+
+  // 当前包的命令类型
+  CommandType command = 2;
+
+  // 发送方节点 ID
+  string sender_id = 3;
+
+  // 接收方节点 ID
+  string receiver_id = 4;
+
+  // 时间戳，建议客户端发送 Unix 时间戳（秒或毫秒都可以，但项目里要统一）
+  int64 timestamp = 5;
+}
+
+// 加密消息体：真正描述“这条消息是怎么加密出来的”
+message EncryptedMessage {
+  // 本次消息使用的密钥编号
+  int32 key_id = 1;
+
+  // 当前消息类型
+  MessageType msg_type = 2;
+
+  // 密文内容
+  // 建议传 base64 编码后的字符串，而不是原始二进制
+  string ciphertext = 3;
+
+  // 随机数/IV/nonce
+  // 如果后面使用 AES-GCM，这个字段必须保留
+  string nonce = 4;
+
+  // 认证标签 tag
+  // 如果第一阶段暂时还不是 GCM，可以先传空串
+  string tag = 5;
+
+  // 算法名称，例如：
+  // AES-128-CBC
+  // AES-256-CBC
+  // AES-128-GCM
+  string algorithm = 6;
+}
+
+// 发送消息请求体
+message SendMessageRequest {
+  // 这里单独包一层，而不是直接把 EncryptedMessage 放进总包，
+  // 是为了以后这个请求还可以扩展其他字段，比如优先级、重试标记等。
+  EncryptedMessage message = 1;
+}
+
+// 发送消息响应体
+message SendMessageResponse {
+  // 结构化结果码，给程序判断用
+  ResultCode code = 1;
+
+  // 结果文字描述，给日志或用户提示用
+  string message = 2;
+
+  // 服务端为这条消息分配/记录的唯一 ID
+  string server_message_id = 3;
+
+  // 服务端处理完成时间
+  int64 server_time = 4;
+}
+
+// 总请求包：统一承载所有请求类型
+message RequestPacket {
+  // 公共头
+  Header header = 1;
+
+  // oneof 表示这些请求体里同一时刻只能出现一个
+  oneof body {
+    // 第一阶段只有一种新请求：发送消息
+    SendMessageRequest send_msg_req = 2;
+  }
+}
+
+// 总响应包：统一承载所有响应类型
+message ResponsePacket {
+  // 公共头
+  Header header = 1;
+
+  oneof body {
+    // 第一阶段只有一种新响应：发送消息响应
+    SendMessageResponse send_msg_resp = 2;
+  }
+}
