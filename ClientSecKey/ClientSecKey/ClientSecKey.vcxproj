@@ -81,6 +81,7 @@
     <LibraryPath>/home/zgf/protobuf-3.8/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="AesCrypto.cpp" />
     <ClCompile Include="Base64Util.cpp" />
     <ClCompile Include="BaseShm.cpp" />
     <ClCompile Include="ClientOP.cpp" />
@@ -91,6 +92,7 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Message.pb.cc" />
+    <ClCompile Include="MessageClient.cpp" />
     <ClCompile Include="MessageV2.pb.cc" />
     <ClCompile Include="RequestCodec.cpp" />
     <ClCompile Include="RequestFactory.cpp" />
@@ -103,6 +105,7 @@
     <ClCompile Include="V2RespondCodec.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AesCrypto.h" />
     <ClInclude Include="Base64Util.h" />
     <ClInclude Include="BaseShm.h" />
     <ClInclude Include="ClientOP.h" />
@@ -113,6 +116,7 @@
     <ClInclude Include="Hash.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Message.pb.h" />
+    <ClInclude Include="MessageClient.h" />
     <ClInclude Include="MessageV2.pb.h" />
     <ClInclude Include="RequestCodec.h" />
     <ClInclude Include="RequestFactory.h" />

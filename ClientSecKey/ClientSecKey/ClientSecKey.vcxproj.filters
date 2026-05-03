@@ -61,6 +61,12 @@
     <ClCompile Include="V2RespondCodec.cpp">
       <Filter>common\codec</Filter>
     </ClCompile>
+    <ClCompile Include="MessageClient.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="AesCrypto.cpp">
+      <Filter>common\crypto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientOP.h">
@@ -125,6 +131,12 @@
     </ClInclude>
     <ClInclude Include="V2RespondCodec.h">
       <Filter>common\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageClient.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="AesCrypto.h">
+      <Filter>common\crypto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
