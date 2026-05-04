@@ -1,4 +1,6 @@
 #include "mysqlOP.h"
+#include "mysqlOP.h"
+#include "mysqlOP.h"
 #include "Logger.h"
 
 mysqlOP::mysqlOP()
@@ -241,4 +243,47 @@ std::string mysqlOP::getCurTime()
 	char buf[64]{ 0 };
 	strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", localtime(&now));
 	return buf;
+}
+
+bool mysqlOP::insertMessageLog(const std::string& msgId, const std::string& senderId, const std::string& receiverId, int keyId, const std::string& msgType, const std::string& ciphertext, const std::string& nonce, const std::string& tag, const std::string& sendTime, int status)
+{
+	char sql[2048]{ 0 };
+	// 这里仍然沿用你当前项目“sprintf 拼 SQL”的风格，
+	// 后面建议升级成参数化 SQL，避免注入风险。
+	sprintf(sql,
+		"insert into message_log(msg_id,sender_id,receiver_id,key_id,msg_type,"
+		"ciphertext,nonce,tag_value,send_time,status) "
+		"values('%s','%s','%s',%d,'%s','%s','%s','%s','%s',%d)",
+		msgId.c_str(),senderId.c_str(),receiverId.c_str(),keyId,msgType.c_str(),
+		ciphertext.c_str(),nonce.c_str(),
+		tag.c_str(),sendTime.c_str(),status
+	);
+	if(mysql_query(m_conn, sql))
+	{
+		Logger::info("insertMessageLog sql: " + std::string(sql));
+		Logger::error("insertMessageLog failed: " + std::string(mysql_error(m_conn)));
+		return false;
+	}
+	return true;
+}
+
+bool mysqlOP::insertAuditLog(const std::string& logId, const std::string& nodeId, const std::string& action, const std::string& targetId, int result, const std::string& detail, const std::string& createTime)
+{
+	char sql[2048]{ 0 };
+
+	sprintf(sql,
+		"insert into audit_log(log_id,node_id,action,target_id,result,detail,create_time) "
+		"values('%s','%s','%s','%s',%d,'%s','%s')",
+		logId.c_str(),nodeId.c_str(),action.c_str(),targetId.c_str(),
+		result,detail.c_str(),createTime.c_str()
+	);
+
+	if (mysql_query(m_conn, sql))
+	{
+		Logger::info("insertAuditLog sql: " + std::string(sql));
+		Logger::error("insertAuditLog failed: " + std::string(mysql_error(m_conn)));
+		return false;
+	}
+
+	return true;
 }

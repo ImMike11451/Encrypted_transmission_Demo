@@ -27,7 +27,27 @@ public:
 	bool checkSecKey(std::string clientID, std::string serverID, int keyID);
 	//根据clientID和serverID和keyID更新秘钥状态，返回true表示更新成功，false表示更新失败
 	bool logoutSecKey(std::string clientID, std::string serverID, int keyID);
+	// 获得当前时间
 	std::string getCurTime();
+	// 向 message_log 插入消息记录
+	bool insertMessageLog(const std::string& msgId,
+		const std::string& senderId,
+		const std::string& receiverId,
+		int keyId,
+		const std::string& msgType,
+		const std::string& ciphertext,
+		const std::string& nonce,
+		const std::string& tag,
+		const std::string& sendTime,
+		int status);
+	// 向 audit_log 插入审计记录
+	bool insertAuditLog(const std::string& logId,
+		const std::string& nodeId,
+		const std::string& action,
+		const std::string& targetId,
+		int result,
+		const std::string& detail,
+		const std::string& createTime);
 
 private:
 	MYSQL* m_conn;
