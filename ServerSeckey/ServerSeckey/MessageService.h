@@ -1,8 +1,8 @@
 #pragma once
-#include "SeckeyShm.h"
+#include "SecKeyShm.h"
 #include "mysqlOP.h"
 #include "V2RespondCodec.h"
-#include "messageV2.pb.h"
+#include "MessageV2.pb.h"
 #include <string>
 
 // 这个结构体表示服务端查 key 之后得到的结果。
@@ -72,6 +72,9 @@ private:
     // 生成服务端消息记录 ID。
     // 第一阶段先用简单规则，后面可以替换成更规范的 UUID。
     std::string generateServerMessageId();
+
+    // 生成审计日志 ID
+	std::string generateAuditLogId();
 
 private:
     std::string m_serverId;   // 当前服务端 ID

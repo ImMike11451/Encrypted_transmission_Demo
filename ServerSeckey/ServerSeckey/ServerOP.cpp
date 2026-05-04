@@ -75,6 +75,7 @@ void ServerOP::startServer()
 
 	while (true)
 	{
+		// 等待事件，返回就绪的事件数量
 		int nready = m_server->wait(events, maxEvents, -1);
 		if(nready < 0)
 		{

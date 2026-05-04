@@ -2,6 +2,8 @@
 #include "AesCrypto.h"
 #include "Base64Util.h"
 #include "Logger.h"
+#include "AuditService.h"
+#include "MessageRepository.h"
 #include <ctime>
 #include <sstream>
 
@@ -31,12 +33,29 @@ V2SendMessageResponseInfo MessageService::handleSendMessage(const secmng::v2::Re
 	respInfo.serverMessageId = "";
 	respInfo.serverTime = static_cast<long long>(std::time(nullptr));
 
+	// 这里先创建两个轻量服务对象。
+	// 第一阶段这样写改动最小，不需要额外改 MessageService 构造函数签名。
+	MessageRepository msgRepo(m_db);
+	AuditService auditSvc(m_db);
+
 	// 第 2 步：校验请求字段是否合法
 	std::string validateErr;
 	if(!validateRequest(packet, validateErr))
 	{
 		respInfo.code = secmng::v2::RESULT_INVALID_REQUEST;
 		respInfo.message = validateErr;
+
+		// 请求非法也应该写审计日志，方便排查恶意请求或调用错误
+		auditSvc.logAction(
+			generateAuditLogId(),
+			packet.has_header()?packet.header().sender_id():"",
+			"MSG_SEND",
+			"", // 同上，receiverId 也取不到
+			0,
+			"invalid request: " + validateErr,
+			m_db->getCurTime()
+		);
+
 		return respInfo;
 	}
 	// 取出请求头和请求体，后面会频繁使用
@@ -51,6 +70,17 @@ V2SendMessageResponseInfo MessageService::handleSendMessage(const secmng::v2::Re
 	{
 		respInfo.code = secmng::v2::RESULT_KEY_NOT_FOUND;
 		respInfo.message = keyResult.errorMsg;
+
+		auditSvc.logAction(
+			generateAuditLogId(),
+			header.sender_id(),
+			"MSG_SEND",
+			std::to_string(encMsg.key_id()),
+			0,
+			"key not found: " + keyResult.errorMsg,
+			m_db->getCurTime()
+		);
+
 		return respInfo;
 	}
 
@@ -58,6 +88,17 @@ V2SendMessageResponseInfo MessageService::handleSendMessage(const secmng::v2::Re
 	{
 		respInfo.code = secmng::v2::RESULT_KEY_INVALID;
 		respInfo.message = keyResult.errorMsg;
+
+		auditSvc.logAction(
+			generateAuditLogId(),
+			header.sender_id(),
+			"MSG_SEND",
+			std::to_string(encMsg.key_id()),
+			0,
+			"key invalid: " + keyResult.errorMsg,
+			m_db->getCurTime()
+		);
+
 		return respInfo;
 	}
 
@@ -67,25 +108,69 @@ V2SendMessageResponseInfo MessageService::handleSendMessage(const secmng::v2::Re
 	{
 		respInfo.code = secmng::v2::RESULT_DECRYPT_FAILED;
 		respInfo.message = decResult.errorMsg;
+
+		auditSvc.logAction(
+			generateAuditLogId(),
+			header.sender_id(),
+			"MSG_DECRYPT",
+			header.message_id(),
+			0,
+			"decrypt failed: " + decResult.errorMsg,
+			m_db->getCurTime()
+		);
+
 		return respInfo;
 	}
 
-	// 到这里说明：
-   // 1. 请求合法
-   // 2. key 存在且有效
-   // 3. 密文成功解密
+	// 第 5 步：生成服务端消息 ID
+	std::string serverMsgId = generateServerMessageId();
 
-	// 第一阶段这里先把消息落库和审计日志接口位置留出来。
-    // 后续你再补 MessageRepository / AuditService 时，
-    // 只需要把这两步补进去，不需要改动整个主流程。
+	// 第 6 步：写 message_log
+	MessageLogRecord msgRecord;
+	msgRecord.msgId = serverMsgId;
+	msgRecord.senderId = header.sender_id();
+	msgRecord.receiverId = header.receiver_id();
+	msgRecord.keyId = encMsg.key_id();
+	msgRecord.msgType = "text";
+	msgRecord.ciphertext = encMsg.ciphertext();
+	msgRecord.nonce = encMsg.nonce();
+	msgRecord.tag = encMsg.tag();
+	msgRecord.sendTime = m_db->getCurTime();
+	msgRecord.status = 1;
 
-    // TODO:
-    // 1. 调用 MessageRepository 插入 message_log
-    // 2. 调用 AuditService 记录 audit_log
+	bool msgInsertRet = msgRepo.insertMessage(msgRecord);
+	if (!msgInsertRet)
+	{
+		respInfo.code = secmng::v2::RESULT_FAILED;
+		respInfo.message = "insert message_log failed";
+
+		auditSvc.logAction(
+			generateAuditLogId(),
+			header.sender_id(),
+			"MSG_STORE",
+			serverMsgId,
+			0,
+			"insert message_log failed",
+			m_db->getCurTime()
+		);
+
+		return respInfo;
+	}
+
+	// 第 7 步：写成功审计日志
+	auditSvc.logAction(
+		generateAuditLogId(),
+		header.sender_id(),
+		"MSG_SEND",
+		serverMsgId,
+		1,
+		"message send success",
+		m_db->getCurTime()
+	);
 
 	Logger::info("消息解密成功，明文内容: " + decResult.plaintext);
 
-	// 第 5 步：组装成功响应
+	// 第 8 步：组装成功响应
 	respInfo.code = secmng::v2::RESULT_SUCCESS;
 	respInfo.message = "消息发送成功";
 	respInfo.serverMessageId = generateServerMessageId();
@@ -315,5 +400,12 @@ std::string MessageService::generateServerMessageId()
 {
 	std::stringstream ss;
 	ss << m_serverId << "_" << static_cast<long long>(time(nullptr));
+	return ss.str();
+}
+
+std::string MessageService::generateAuditLogId()
+{
+	std::stringstream ss;
+	ss << m_serverId << "_audit_" << static_cast<long long>(time(nullptr));
 	return ss.str();
 }
