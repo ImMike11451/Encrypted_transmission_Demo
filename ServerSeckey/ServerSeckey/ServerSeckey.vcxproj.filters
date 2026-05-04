@@ -76,6 +76,12 @@
     <ClCompile Include="V2RespondCodec.cpp">
       <Filter>common\codec</Filter>
     </ClCompile>
+    <ClCompile Include="MessageRepository.cpp">
+      <Filter>common\log</Filter>
+    </ClCompile>
+    <ClCompile Include="AuditService.cpp">
+      <Filter>common\log</Filter>
+    </ClCompile>
     <ClCompile Include="MessageV2.pb.cc">
       <Filter>common\proto</Filter>
     </ClCompile>
@@ -159,6 +165,12 @@
     <ClInclude Include="V2RespondCodec.h">
       <Filter>common\codec</Filter>
     </ClInclude>
+    <ClInclude Include="MessageRepository.h">
+      <Filter>common\log</Filter>
+    </ClInclude>
+    <ClInclude Include="AuditService.h">
+      <Filter>common\log</Filter>
+    </ClInclude>
     <ClInclude Include="MessageV2.pb.h">
       <Filter>common\proto</Filter>
     </ClInclude>
@@ -193,6 +205,9 @@
     </Filter>
     <Filter Include="common\Thread">
       <UniqueIdentifier>{a541f0ca-6655-48a5-8cc8-99cc2f672362}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\log">
+      <UniqueIdentifier>{96d45369-1ca8-4bba-8e88-0c1b0479d3be}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
