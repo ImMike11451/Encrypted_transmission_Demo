@@ -44,8 +44,8 @@ int SecKeyShm::shmWrite(NodeSHMInfo * pNodeInfo)
 	{
 		// pNode依次指向每个节点的首地址
 		pNode = pAddr + i;
-		Logger::info("clientID 比较: " + std::string(pNode->clientID) + ", " + std::string(pNodeInfo->clientID));
-		Logger::info("serverID 比较: " + std::string(pNode->serverID) + ", " + std::string(pNodeInfo->serverID));
+		//Logger::info("clientID 比较: " + std::string(pNode->clientID) + ", " + std::string(pNodeInfo->clientID));
+		//Logger::info("serverID 比较: " + std::string(pNode->serverID) + ", " + std::string(pNodeInfo->serverID));
 		if (strcmp(pNode->clientID, pNodeInfo->clientID) == 0 &&
 			strcmp(pNode->serverID, pNodeInfo->serverID) == 0)
 		{
@@ -102,8 +102,8 @@ NodeSHMInfo SecKeyShm::shmRead(string clientID, string serverID)
 	for (i = 0; i < m_maxNode; i++)
 	{
 		pNode = pAddr + i;
-		Logger::info("clientID 比较: " + std::string(pNode->clientID) + ", " + clientID);
-		Logger::info("serverID 比较: " + std::string(pNode->serverID) + ", " + serverID);
+		//Logger::info("clientID 比较: " + std::string(pNode->clientID) + ", " + clientID);
+		//Logger::info("serverID 比较: " + std::string(pNode->serverID) + ", " + serverID);
 		if (strcmp(pNode->clientID, clientID.data()) == 0 &&
 			strcmp(pNode->serverID, serverID.data()) == 0)
 		{
