@@ -267,16 +267,43 @@ bool mysqlOP::insertMessageLog(const std::string& msgId, const std::string& send
 	return true;
 }
 
-bool mysqlOP::insertAuditLog(const std::string& logId, const std::string& nodeId, const std::string& action, const std::string& targetId, int result, const std::string& detail, const std::string& createTime)
+bool mysqlOP::insertAuditLog(const std::string& logId,
+	const std::string& nodeId,
+	const std::string& action,
+	const std::string& targetId,
+	int result,
+	const std::string& detail,
+	const std::string& createTime)
 {
 	char sql[2048]{ 0 };
 
-	sprintf(sql,
-		"insert into audit_log(log_id,node_id,action,target_id,result,detail,create_time) "
-		"values('%s','%s','%s','%s',%d,'%s','%s')",
-		logId.c_str(),nodeId.c_str(),action.c_str(),targetId.c_str(),
-		result,detail.c_str(),createTime.c_str()
-	);
+	if (nodeId.empty())
+	{
+		sprintf(sql,
+			"insert into audit_log(log_id,node_id,action,target_id,result,detail,create_time) "
+			"values('%s',NULL,'%s','%s',%d,'%s','%s')",
+			logId.c_str(),
+			action.c_str(),
+			targetId.c_str(),
+			result,
+			detail.c_str(),
+			createTime.c_str()
+		);
+	}
+	else
+	{
+		sprintf(sql,
+			"insert into audit_log(log_id,node_id,action,target_id,result,detail,create_time) "
+			"values('%s','%s','%s','%s',%d,'%s','%s')",
+			logId.c_str(),
+			nodeId.c_str(),
+			action.c_str(),
+			targetId.c_str(),
+			result,
+			detail.c_str(),
+			createTime.c_str()
+		);
+	}
 
 	if (mysql_query(m_conn, sql))
 	{
@@ -287,3 +314,4 @@ bool mysqlOP::insertAuditLog(const std::string& logId, const std::string& nodeId
 
 	return true;
 }
+
