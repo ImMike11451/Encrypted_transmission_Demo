@@ -66,6 +66,7 @@ std::string AesCrypto::aesCrypto(std::string data, size_t crypto)
     return outData;
 }
 
+//生成初始化向量 IV，这里简单地使用秘钥的最后 16 字节作为 IV
 void AesCrypto::generateIvec(unsigned char* ivec)
 {
 
