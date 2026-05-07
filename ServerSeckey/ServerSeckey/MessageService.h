@@ -64,7 +64,12 @@ private:
 
     // 使用当前项目已有的 AesCrypto 解密密文。
     // 注意：当前 AesCrypto 并不使用外部 nonce，而是内部用 key 派生固定 IV。
-    DecryptMessageResult decryptMessage(const std::string& base64Key,const std::string& base64Ciphertext,const std::string& algorithm);
+    DecryptMessageResult decryptMessage(const std::string& base64Key,
+        const std::string& base64Ciphertext,
+        const std::string& base64Nonce,
+        const std::string& base64Tag,
+        const std::string& algorithm);
+
 
     // 生成服务端响应头
     V2HeaderInfo buildResponseHeader(const secmng::v2::RequestPacket& packet,int command);

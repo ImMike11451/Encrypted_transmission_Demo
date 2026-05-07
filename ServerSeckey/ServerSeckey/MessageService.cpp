@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include "AuditService.h"
 #include "MessageRepository.h"
+#include "AesGcmCrypto.h"
 #include <ctime>
 #include <sstream>
 
@@ -103,7 +104,7 @@ V2SendMessageResponseInfo MessageService::handleSendMessage(const secmng::v2::Re
 	}
 
 	// 第 4 步：使用取到的 key 解密消息
-	DecryptMessageResult decResult = decryptMessage(keyResult.base64Key, encMsg.ciphertext(), encMsg.algorithm());
+	DecryptMessageResult decResult = decryptMessage(keyResult.base64Key, encMsg.ciphertext(), encMsg.nonce(), encMsg.tag(),encMsg.algorithm());
 	if (!decResult.success)
 	{
 		respInfo.code = secmng::v2::RESULT_DECRYPT_FAILED;
@@ -309,12 +310,16 @@ ActiveKeyResult MessageService::getActiveKey(const std::string& senderId, const 
 // 1. 只接收 key，不接收外部 IV
 // 2. IV 由 key 内部派生
 // 所以这里暂时不使用 nonce 参数来参与解密
-DecryptMessageResult MessageService::decryptMessage(const std::string& base64Key, const std::string& base64Ciphertext, const std::string& algorithm)
+DecryptMessageResult MessageService::decryptMessage(const std::string& base64Key,
+	const std::string& base64Ciphertext,
+	const std::string& base64Nonce,
+	const std::string& base64Tag,
+	const std::string& algorithm)
 {
 	DecryptMessageResult result;
 	result.success = false;
 
-	if (algorithm != "AES-128-CBC")
+	if (algorithm != "AES-128-GCM")
 	{
 		result.errorMsg = "unsupported algorithm: " + algorithm;
 		return result;
@@ -336,22 +341,32 @@ DecryptMessageResult MessageService::decryptMessage(const std::string& base64Key
 		return result;
 	}
 
-	// 第 3 步：使用现有 AesCrypto 解密
-	try
+	std::string nonceBin = Base64Util::decode(base64Nonce);
+	if(nonceBin.empty())
 	{
-		AesCrypto aes(rawKey);
-		std::string plaintext = aes.aesDecrypt(cipherBin);
-
-		result.success = true;
-		result.plaintext = plaintext;
-		return result;
-	}
-	catch (...)
-	{
-		result.errorMsg = "exception occurred during aes decrypt";
+		result.errorMsg = "failed to decode base64 nonce";
 		return result;
 	}
 
+	std::string tagBin = Base64Util::decode(base64Tag);
+	if (tagBin.empty())
+	{
+		result.errorMsg = "base64 tag decode failed";
+		return result;
+	}
+
+	AesGcmCrypto aes(rawKey);
+	GcmDecryptResult gcmResult = aes.decrypt(nonceBin, cipherBin, tagBin);
+
+	if (!gcmResult.success)
+	{
+		result.errorMsg = gcmResult.errorMsg;
+		return result;
+	}
+
+	result.success = true;
+	result.plaintext = gcmResult.plaintext;
+	return result;
 }
 
 // 根据请求包构造响应头。

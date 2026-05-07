@@ -41,13 +41,13 @@ public:
 	std::string secKeyCheck(RequestMsg* msg);
 	//秘钥注销
 	std::string SeckeyLogout(RequestMsg* msg);
+	// 处理 v2 协议请求
+	std::string processV2Request(const std::string& recvData);
+
 
 private:
 	//生成随机字符串
 	std::string getRandKey(keyLen len);
-
-	//统一处理客户端请求的函数，根据请求类型调用不同的处理函数
-	//void handleClient(TcpSocket* tcp);
 
 	//处理一个已经就绪的客户端fd
 	void handleClientFd(int clientfd);
@@ -60,9 +60,6 @@ private:
 
 	// 取消fd处理标记
 	void unmarkFdProcessing(int fd);
-
-	//根据请求类型调用不同的处理函数
-	//std::string processRequest(RequestMsg* msg);
 
 
 private:

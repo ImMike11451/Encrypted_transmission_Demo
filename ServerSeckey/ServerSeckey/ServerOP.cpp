@@ -9,6 +9,9 @@
 #include "Config.h"
 #include "ErrorCode.h"
 #include "Logger.h"
+#include "MessageService.h"
+#include "V2RequestCodec.h"
+#include "V2RespondCodec.h"
 #include <string>
 #include <fstream> 
 #include <unistd.h>
@@ -146,82 +149,7 @@ void ServerOP::startServer()
 			}
 		}
 	}
-
-	////设置服务器监听端口
-	//m_server->setListen(m_port);
-
-	//Logger::info("等待客户端连接...");
-
-	//while (1)
-	//{
-	//	TcpSocket* tcp = m_server->acceptClient(10);
-	//	if(tcp == nullptr)
-	//	{
-	//		//Logger::warn("暂时无客户端连接，等待...");
-	//		continue;
-	//	}
-	//	//通信,创建子线程
-	//	//pthread_t tid;
-	//	//pthread_create(&tid, NULL, working, this);
-	//	////线程回收
-	//	//pthread_detach(tid);
-	//	//// 插入 map 时加锁
-	//	//{
-	//	//	//将map的访问放在互斥锁保护的范围内，确保线程安全
-	//	//	std::lock_guard<std::mutex> lock(m_mutex);
-	//	//	m_list.insert(std::make_pair(tid, tcp));
-	//	//}
-
-	//	// 把连接处理任务提交给线程池
-	//	m_pool->enqueue([this, tcp]() {
-	//		this->handleClient(tcp);
-
-	//		// 处理完成后断开连接并清理资源
-	//		tcp->disconnect();
-	//		delete tcp;
-	//		});
-
-	//}
-
 }
-
-//void* ServerOP::working(void* arg)
-//{
-//	usleep(500000);
-//	std::string data = string();
-//	//通过参数将传递的this对象转换
-//	ServerOP* op = static_cast<ServerOP*>(arg);
-//	//从op中将通信的套接字取出
-//	TcpSocket* tcp = nullptr;
-//	//读取m_list时加锁
-//	{
-//		//访问共享资源m_list时加锁，确保线程安全
-//		std::lock_guard<std::mutex> lock(op->m_mutex);
-//		//根据当前线程ID从map中获取对应的TcpSocket对象
-//		auto it = op->m_list.find(pthread_self());
-//		if (it != op->m_list.end()) {
-//			tcp = it->second;
-//		}
-//	}
-//	if (tcp == nullptr)
-//	{
-//		Logger::error("未找到当前线程对应的TcpSocket对象");
-//		return NULL;
-//	}
-//
-//	op->handleClient(tcp);
-//
-//	tcp->disconnect();
-//
-//	//从map中删除当前线程ID对应的条目
-//	{
-//		std::lock_guard<std::mutex> lock(op->m_mutex);
-//		op->m_list.erase(pthread_self());
-//	}
-//
-//	delete tcp;
-//	return NULL;
-//}
 
 std::string ServerOP::seckeyAgree(RequestMsg* reqMsg)
 {
@@ -393,78 +321,8 @@ std::string ServerOP::getRandKey(keyLen len)
 	std::string key(len, '\0');
 	RAND_bytes((unsigned char*)key.data(), len);
 	return key;
-	//生成随机数种子
-	//static bool seed = false;
-	//if (!seed)
-	//{
-	//	srand(time(NULL));
-	//	seed = true;
-	//}
-
-	//int flage = 0;
-	//string randStr = string();
-	//char* cs = "^)$#}{|>?@!";
-	//for (int i = 0; i < len; i++)
-	//{
-
-	//	//4种情况
-	//	flage = rand() % 4;
-	//	switch (flage)
-	//	{
-	//	case 0: //a-z
-	//		randStr.append(1,'a' + rand() % 26);
-	//		break;
-	//	case 1://A-Z
-	//		randStr.append(1, 'A' + rand() % 26);
-	//		break;
-	//	case 2://0-9
-	//		randStr.append(1, '0' + rand() % 10);
-	//		break;
-	//	case 3:
-	//		randStr.append(1,cs[rand() % strlen(cs)]);
-	//		break;
-	//	default:
-	//		break;
-	//	}
-	//}
-	/*return randStr;*/
 }
 
-//void ServerOP::handleClient(TcpSocket* tcp)
-//{
-//	std::string recvData;
-//	
-//	//接收客户端数据
-//	int ret = tcp->recvMsg(recvData, 10);
-//	if(ret != 0)
-//	{
-//		Logger::error("接收客户端数据失败, ret = " + std::to_string(ret));
-//		return;
-//	}
-//
-//	//解码
-//	std::unique_ptr<CodecFactory> fac = std::make_unique<RequestFactory>(recvData);
-//	std::unique_ptr<Codec> c(fac->createCodec());
-//	
-//	RequestMsg* recvReq = (RequestMsg*)c->decodeMsg();
-//	if (recvReq == nullptr)
-//	{
-//		Logger::error("请求解码失败");
-//		return;
-//	}
-//
-//	Logger::info("客户端：" + recvReq->clientid() + "  连接成功");
-//
-//	// 3. 处理业务
-//	std::string rspData = processRequest(recvReq);
-//
-//	//发送响应
-//	ret = tcp->sendMsg(rspData, 10);
-//	if(ret != 0)
-//	{
-//		Logger::error("发送响应数据失败, ret = " + std::to_string(ret));
-//	}
-//}
 
 void ServerOP::handleClientFd(int clientfd)
 {
@@ -480,24 +338,42 @@ void ServerOP::handleClientFd(int clientfd)
         return;
     }
 
-    // 解码请求
-    std::unique_ptr<CodecFactory> fac = std::make_unique<RequestFactory>(recvData);
-    std::unique_ptr<Codec> c(fac->createCodec());
+	std::string rspData;
 
-    // 注意：这里返回的是Codec内部成员地址，不能delete
-    RequestMsg* recvReq = static_cast<RequestMsg*>(c->decodeMsg());
-    if (recvReq == nullptr)
-    {
-        Logger::error("请求解码失败, fd = " + std::to_string(clientfd));
-        m_server->delFd(clientfd);
-        tcp.disconnect();
-        return;
-    }
+	if (recvData.size() >= 4 && recvData.substr(0, 4) == "V2PK")
+	{
+		std::string v2Body = recvData.substr(4);
+		rspData = processV2Request(v2Body);
 
-    Logger::info("收到客户端请求: " + recvReq->clientid());
+		if(rspData.empty())
+		{
+			Logger::error("处理 v2 请求失败, fd = " + std::to_string(clientfd));
+			m_server->delFd(clientfd);
+			tcp.disconnect();
+			return;
+		}
+	}
+	else
+	{
+		// 解码请求
+		std::unique_ptr<CodecFactory> fac = std::make_unique<RequestFactory>(recvData);
+		std::unique_ptr<Codec> c(fac->createCodec());
 
-    // 处理业务
-    std::string rspData = processRequest(recvReq);
+		// 注意：这里返回的是Codec内部成员地址，不能delete
+		RequestMsg* recvReq = static_cast<RequestMsg*>(c->decodeMsg());
+		if (recvReq == nullptr)
+		{
+			Logger::error("请求解码失败, fd = " + std::to_string(clientfd));
+			m_server->delFd(clientfd);
+			tcp.disconnect();
+			return;
+		}
+
+		Logger::info("收到客户端请求: " + recvReq->clientid());
+
+		// 处理业务
+		rspData = processRequest(recvReq);
+	}
 
     // 发送响应
     ret = tcp.sendMsg(rspData, 10);
@@ -509,6 +385,8 @@ void ServerOP::handleClientFd(int clientfd)
     // 短连接：本次请求处理完成就关闭
     m_server->delFd(clientfd);
     tcp.disconnect();
+
+	std::cout << "------------------------------------------------------" << std::endl;
 }
 
 std::string ServerOP::processRequest(RequestMsg* msg)
@@ -560,5 +438,34 @@ void ServerOP::unmarkFdProcessing(int fd)
 {
 	std::lock_guard<std::mutex> lock(m_fdMutex);
 	m_processingFds.erase(fd);
+}
+
+std::string ServerOP::processV2Request(const std::string& recvData)
+{
+	// 第 1 步：尝试按 v2 协议解码
+	V2RequestCodec codec(recvData);
+	secmng::v2::RequestPacket* packet = static_cast<secmng::v2::RequestPacket*>(codec.decodeMsg());
+
+	if (packet == nullptr)
+	{
+		Logger::error("v2 请求解码失败。");
+		return "";
+	}
+
+	Logger::info("v2 has_send_msg_req = " + std::to_string(packet->has_send_msg_req()));
+	// 第 2 步：这里只处理 send_msg_req
+	if (!packet->has_send_msg_req())
+	{
+		Logger::error("不是支持的 v2 请求类型。");
+		return "";
+	}
+
+	// 第 3 步：交给 MessageService 处理业务
+	MessageService msgService(m_serverID, mySQL.get(), m_shm.get());
+	V2SendMessageResponseInfo respInfo = msgService.handleSendMessage(*packet);
+
+	// 第 4 步：编码响应并返回	
+	V2RespondCodec rspCodec(&respInfo);
+	return rspCodec.encodeMsg();
 }
 
