@@ -7,7 +7,8 @@ void InitUI()
 	std::cout << "---------- 1. 秘钥协商 ----------" << "\n";
 	std::cout << "---------- 2. 秘钥校验 ----------" << "\n";
 	std::cout << "---------- 3. 秘钥注销 ----------" << "\n";
-	std::cout << "---------- 4. 退    出 ----------" << "\n";
+	std::cout << "---------- 4. 发送加密消息 ----------" << "\n";
+	std::cout << "---------- 5. 退    出 ----------" << "\n";
 	std::cout << "==========================================" << "\n";
 
 }
@@ -20,7 +21,7 @@ int main()
 
 	ClientOP clientOP("client.json");
 
-	while (nChoice != 4)
+	while (nChoice != 5)
 	{
 		InitUI();
 
@@ -37,6 +38,9 @@ int main()
 			break;
 		case 3:
 			clientOP.keyLogout();
+			break;
+		case 4:
+			clientOP.sendEncryptedMessage();
 			break;
 		default:
 			break;

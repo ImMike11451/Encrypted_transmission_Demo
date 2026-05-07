@@ -1,6 +1,7 @@
 #include "MessageClient.h"
 #include "Base64Util.h"
 #include "Logger.h"
+#include "AesGcmCrypto.h"
 
 
 MessageClient::MessageClient(const ClientInfo& info, SecKeyShm* shm)
@@ -44,6 +45,11 @@ bool MessageClient::sendTextMessage(const SendTextMessageInfo& msgInfo)
 	reqInfo.message.keyId = KeyNode.seckeyID;
 	reqInfo.message.msgType = secmng::v2::MSG_TYPE_TEXT;
 	reqInfo.message.ciphertext = encResult.ciphertext;
+	if (!reqInfo.message.ciphertext.empty())
+	{
+		reqInfo.message.ciphertext[0] = (reqInfo.message.ciphertext[0] == 'A') ? 'B' : 'A';
+	}
+
 	reqInfo.message.nonce = encResult.nonce;
 	reqInfo.message.tag = encResult.tag;
 	reqInfo.message.algorithm = encResult.algorithm;
@@ -60,6 +66,9 @@ bool MessageClient::sendTextMessage(const SendTextMessageInfo& msgInfo)
 		Logger::error("连接服务器失败");
 		return false;
 	}
+	encStr = "V2PK" + encStr; // 协议要求消息体前加上 "V2PK" 标识
+
+	//std::string sendBuf = "V2PK" + encStr;
 
 	ret = tcp.sendMsg(encStr, 10);
 	if (ret != 0)
@@ -138,8 +147,6 @@ EncryptTextResult MessageClient::encryptText(const std::string& base64Key, const
 {
 	EncryptTextResult result;
 	result.success = false; // 默认失败，后续成功时再改为 true
-	result.tag = "";     // 第一阶段如果未使用 GCM，可先置空
-	result.algorithm = "AES-128-CBC"; // 先写死一个算法标识，后面可升级
 
 	// 第 1 步：把 base64 key 解码成原始 key
 	std::string rawKey = Base64Util::decode(base64Key);
@@ -149,44 +156,38 @@ EncryptTextResult MessageClient::encryptText(const std::string& base64Key, const
 		return result;
 	}
 
-	// 第 2 步：准备 IV / nonce
-	// 第一阶段先简化处理：
-	// 用一个固定长度的字符串充当 IV。
-	// 以后升级到更现代的实现时，应改为随机生成并随消息发送。
-	std::string iv = "";
-
-	// 第 3 步：执行 AES 加密
-	try 
+	// 第 2 步：使用 AesGcmCrypto 执行 AES-GCM 加密
+	AesGcmCrypto aes(rawKey);
+	GcmEncryptResult gcmResult = aes.encrypt(plaintext);
+	if (!gcmResult.success)
 	{
-		// 这里假设你现有 AesCrypto 的构造方式和加密接口
-		// 支持“key + iv”的模式。
-		// 如果你现有 AesCrypto 接口不同，后面我们再按真实代码适配。
-		AesCrypto aes(rawKey);
-
-		// 将明文加密成二进制密文
-		std::string cipherBin = aes.aesEncrypt(plaintext); 
-		if(cipherBin.empty())
-		{
-			result.errorMsg = "AES 加密失败。";
-			return result;
-		}
-
-		// 为了便于协议传输和日志调试，这里将二进制密文转成 base64 字符串。
-		result.ciphertext = Base64Util::encode(reinterpret_cast<const unsigned char*>(cipherBin.data()), cipherBin.size());
-
-		// IV 也一并编码后发给服务端，方便服务端按相同参数解密。
-		//result.nonce = Base64Util::encode(reinterpret_cast<const unsigned char*>(iv.data()), iv.size());
-		result.nonce = "";
-
-		result.success = true;
-		return result;
-
-	}
-	catch(...)
-	{
-		result.errorMsg = "exception occurred during aes encryption";
+		result.errorMsg = gcmResult.errorMsg;
 		return result;
 	}
+
+	// 第 3 步：把二进制结果转成 base64 字符串，便于协议传输
+	// 因为 protobuf 里我们当前定义的是 string 字段，
+	// 为了避免直接传输不可见二进制带来的调试困难，
+	// 这里统一转成 base64。
+	result.ciphertext = Base64Util::encode(
+		reinterpret_cast<const unsigned char*>(gcmResult.ciphertext.data()), 
+		gcmResult.ciphertext.size()
+	);
+	result.nonce = Base64Util::encode(
+		reinterpret_cast<const unsigned char*>(gcmResult.nonce.data()),
+		gcmResult.nonce.size()
+	);
+
+	result.tag = Base64Util::encode(
+		reinterpret_cast<const unsigned char*>(gcmResult.tag.data()),
+		gcmResult.tag.size()
+	);
+
+	// 第 4 步：标记当前使用的算法
+	result.algorithm = "AES-128-GCM";
+
+	result.success = true;
+	return result;
 
 }
 

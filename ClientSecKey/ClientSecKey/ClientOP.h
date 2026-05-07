@@ -31,6 +31,8 @@ public:
 	void keyVerification();
 	// 秘钥注销
 	void keyLogout();
+	// 发送加密消息
+	void sendEncryptedMessage();
 
 
 private:

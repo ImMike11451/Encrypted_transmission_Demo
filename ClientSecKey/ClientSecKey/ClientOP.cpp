@@ -5,6 +5,7 @@
 #include "RespondCodec.h"
 #include "RespondFactory.h"
 #include "Message.pb.h"
+#include "MessageClient.h"
 #include "Hash.h"
 #include "Base64Util.h"
 #include "Config.h"
@@ -276,4 +277,36 @@ void ClientOP::keyLogout()
 		Logger::error("server msg: " + resData->data());
 	}
 
+}
+
+void ClientOP::sendEncryptedMessage()
+{
+
+	// 第 1 步：让用户输入接收方和明文
+	SendTextMessageInfo msgInfo;
+
+	std::cout << "请输入接收方节点 ID: ";
+	std::cin >> msgInfo.receiverId;
+
+	// 清理缓冲区换行
+	std::cin.ignore();
+
+	std::cout << "请输入要发送的明文消息: ";
+	std::getline(std::cin, msgInfo.plaintext);
+	if (msgInfo.plaintext.empty())
+	{
+		Logger::error("消息内容不能为空。");
+		return;
+	}
+
+	// 第 2 步：创建 MessageClient 并发送
+	MessageClient msgClient(m_info,m_shm.get());
+	bool ret = msgClient.sendTextMessage(msgInfo);
+
+	if (!ret)
+	{
+		Logger::error("发送加密消息失败。");
+		return;
+	}
+	Logger::info("发送加密消息完成。");
 }
