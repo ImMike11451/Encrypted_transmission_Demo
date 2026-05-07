@@ -82,6 +82,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="AesCrypto.cpp" />
+    <ClCompile Include="AesGcmCrypto.cpp" />
     <ClCompile Include="Base64Util.cpp" />
     <ClCompile Include="BaseShm.cpp" />
     <ClCompile Include="ClientOP.cpp" />
@@ -106,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AesCrypto.h" />
+    <ClInclude Include="AesGcmCrypto.h" />
     <ClInclude Include="Base64Util.h" />
     <ClInclude Include="BaseShm.h" />
     <ClInclude Include="ClientOP.h" />

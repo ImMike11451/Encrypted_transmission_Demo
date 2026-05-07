@@ -85,6 +85,9 @@
     <ClCompile Include="MessageV2.pb.cc">
       <Filter>common\proto</Filter>
     </ClCompile>
+    <ClCompile Include="AesGcmCrypto.cpp">
+      <Filter>common\crypto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ServerOP.h">
@@ -173,6 +176,9 @@
     </ClInclude>
     <ClInclude Include="MessageV2.pb.h">
       <Filter>common\proto</Filter>
+    </ClInclude>
+    <ClInclude Include="AesGcmCrypto.h">
+      <Filter>common\crypto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
