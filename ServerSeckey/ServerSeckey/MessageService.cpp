@@ -282,7 +282,7 @@ bool MessageService::validateQueryRequest(const secmng::v2::RequestPacket& packe
 	}
 
 	// 第 2 步：必须有 query_msg_req
-	if(packet.has_query_msg_req())
+	if(!packet.has_query_msg_req())
 	{
 		errorMsg = "query_msg_req is empty";
 		return false;
