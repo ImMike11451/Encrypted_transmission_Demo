@@ -22,6 +22,11 @@ V2RequestCodec::V2RequestCodec(V2SendMessageRequestInfo* info)
     initMessage(info);
 }
 
+V2RequestCodec::V2RequestCodec(V2QueryMessageRequestInfo* info)
+{
+    initMessage(info);
+}
+
 void V2RequestCodec::initMessage(const std::string& encStr)
 {
     // 这里只是简单保存原始字节流，不做解析。
@@ -87,6 +92,22 @@ void V2RequestCodec::initMessage(V2SendMessageRequestInfo* info)
 
     // 设置算法名称
     msg->set_algorithm(info->message.algorithm);
+}
+
+void V2RequestCodec::initMessage(V2QueryMessageRequestInfo* info)
+{
+    // 公共头
+    secmng::v2::Header* header = m_msg.mutable_header();
+    header->set_message_id(info->header.messageId);
+    header->set_command(static_cast<secmng::v2::CommandType>(info->header.command));
+    header->set_sender_id(info->header.senderId);
+    header->set_receiver_id(info->header.receiverId);
+    header->set_timestamp(info->header.timestamp);
+
+    // 请求体：query_msg_req
+    secmng::v2::QueryMessageRequest* req = m_msg.mutable_query_msg_req();
+    req->set_server_message_id(info->serverMessageId);
+
 }
 
 std::string V2RequestCodec::encodeMsg()

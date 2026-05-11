@@ -17,6 +17,11 @@ V2RespondCodec::V2RespondCodec(V2SendMessageResponseInfo* info)
     initMessage(info);
 }
 
+V2RespondCodec::V2RespondCodec(V2QueryMessageResponseInfo* info)
+{
+    initMessage(info);
+}
+
 void V2RespondCodec::initMessage(const std::string& encStr)
 {
     // 保存待解码的原始响应数据
@@ -54,6 +59,33 @@ void V2RespondCodec::initMessage(V2SendMessageResponseInfo* info)
 
     // 设置服务端处理时间
     resp->set_server_time(info->serverTime);
+
+    resp->set_delivery_status(
+        static_cast<secmng::v2::DeliveryStatus>(info->deliveryStatus)
+    );
+}
+
+void V2RespondCodec::initMessage(V2QueryMessageResponseInfo* info)
+{
+    // 公共头
+    secmng::v2::Header* header = m_msg.mutable_header();
+    header->set_message_id(info->header.messageId);
+    header->set_command(static_cast<secmng::v2::CommandType>(info->header.command));
+    header->set_sender_id(info->header.senderId);
+    header->set_receiver_id(info->header.receiverId);
+    header->set_timestamp(info->header.timestamp);
+
+    // 响应体：query_msg_resp
+    secmng::v2::QueryMessageResponse* resp = m_msg.mutable_query_msg_resp();
+    resp->set_code(static_cast<secmng::v2::ResultCode>(info->code));
+    resp->set_message(info->message);
+    resp->set_server_message_id(info->serverMessageId);
+    resp->set_sender_id(info->senderId);
+    resp->set_receiver_id(info->receiverId);
+    resp->set_key_id(info->keyId);
+    resp->set_msg_type(info->msgType);
+    resp->set_send_time(info->sendTime);
+    resp->set_status(info->status);
 }
 
 std::string V2RespondCodec::encodeMsg()

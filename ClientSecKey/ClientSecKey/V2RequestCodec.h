@@ -40,6 +40,13 @@ struct V2SendMessageRequestInfo
     V2EncryptedMessageInfo message;
 };
 
+//查询消息请求
+struct V2QueryMessageRequestInfo
+{
+    V2HeaderInfo header;
+    std::string serverMessageId;// 要查询的服务端消息 ID
+};
+
 // V2RequestCodec 的职责只有一个：
 // 把“C++ 业务结构” <-> “protobuf 请求对象/字符串”做转换。
 // 它不关心消息从哪来，也不关心消息往哪发。
@@ -57,11 +64,16 @@ public:
     // 调用者先准备业务结构，再交给 codec 生成 protobuf 字节流
     V2RequestCodec(V2SendMessageRequestInfo* info);
 
+    // 查询消息请求编码
+    V2RequestCodec(V2QueryMessageRequestInfo* info);
+
     // 解码初始化：把收到的字节流保存起来，后面 decodeMsg() 再解析
     void initMessage(const std::string& encStr);
 
     // 编码初始化：把业务结构填充进 protobuf 对象
     void initMessage(V2SendMessageRequestInfo* info);
+
+    void initMessage(V2QueryMessageRequestInfo* info);
 
     // 把 protobuf 请求对象序列化成字符串，供网络发送
     std::string encodeMsg() override;
