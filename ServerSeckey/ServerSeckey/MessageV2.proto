@@ -15,6 +15,10 @@ enum CommandType {
 
   // 服务端 -> 客户端：发送加密消息响应
   CMD_SEND_MSG_RESP = 2;
+
+  // 查询消息
+  CMD_QUERY_MSG_REQ = 3;
+  CMD_QUERY_MSG_RESP = 4;
 }
 
 // 结果码：服务端处理完请求后，告诉客户端发生了什么。
@@ -39,6 +43,8 @@ enum ResultCode {
 
   // 请求字段不完整或者请求格式不合法
   RESULT_INVALID_REQUEST = 6;
+
+  RESULT_MSG_NOT_FOUND = 7;
 }
 
 // 消息类型：第一阶段只做文本消息。
@@ -49,6 +55,13 @@ enum MessageType {
 
   // 文本消息
   MSG_TYPE_TEXT = 1;
+}
+
+// 投递状态
+enum DeliveryStatus {
+  DELIVERY_UNKNOWN = 0;
+  DELIVERY_ACCEPTED = 1;
+  DELIVERY_REJECTED = 2;
 }
 
 // 公共头：每个请求和响应都可以带一份。
@@ -118,7 +131,29 @@ message SendMessageResponse {
 
   // 服务端处理完成时间
   int64 server_time = 4;
+
+   DeliveryStatus delivery_status = 5;
 }
+
+// 查询消息请求
+message QueryMessageRequest {
+  string server_message_id = 1;
+}
+
+// 查询消息响应
+// 这里先只返回消息元数据，不直接返回明文或密文内容
+message QueryMessageResponse {
+  ResultCode code = 1;
+  string message = 2;
+  string server_message_id = 3;
+  string sender_id = 4;
+  string receiver_id = 5;
+  int32 key_id = 6;
+  string msg_type = 7;
+  int64 send_time = 8;
+  int32 status = 9;
+}
+
 
 // 总请求包：统一承载所有请求类型
 message RequestPacket {
@@ -129,6 +164,8 @@ message RequestPacket {
   oneof body {
     // 第一阶段只有一种新请求：发送消息
     SendMessageRequest send_msg_req = 2;
+
+    QueryMessageRequest query_msg_req = 3;
   }
 }
 
@@ -140,5 +177,7 @@ message ResponsePacket {
   oneof body {
     // 第一阶段只有一种新响应：发送消息响应
     SendMessageResponse send_msg_resp = 2;
+
+    QueryMessageResponse query_msg_resp = 3;
   }
 }

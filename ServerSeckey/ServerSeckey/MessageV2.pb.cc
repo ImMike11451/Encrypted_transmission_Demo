@@ -17,6 +17,8 @@
 #include <google/protobuf/port_def.inc>
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_EncryptedMessage_MessageV2_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Header_MessageV2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_QueryMessageRequest_MessageV2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_QueryMessageResponse_MessageV2_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_SendMessageRequest_MessageV2_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SendMessageResponse_MessageV2_2eproto;
 namespace secmng {
@@ -37,15 +39,25 @@ class SendMessageResponseDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SendMessageResponse> _instance;
 } _SendMessageResponse_default_instance_;
+class QueryMessageRequestDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<QueryMessageRequest> _instance;
+} _QueryMessageRequest_default_instance_;
+class QueryMessageResponseDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<QueryMessageResponse> _instance;
+} _QueryMessageResponse_default_instance_;
 class RequestPacketDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<RequestPacket> _instance;
   const ::secmng::v2::SendMessageRequest* send_msg_req_;
+  const ::secmng::v2::QueryMessageRequest* query_msg_req_;
 } _RequestPacket_default_instance_;
 class ResponsePacketDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ResponsePacket> _instance;
   const ::secmng::v2::SendMessageResponse* send_msg_resp_;
+  const ::secmng::v2::QueryMessageResponse* query_msg_resp_;
 } _ResponsePacket_default_instance_;
 }  // namespace v2
 }  // namespace secmng
@@ -77,6 +89,34 @@ static void InitDefaultsscc_info_Header_MessageV2_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Header_MessageV2_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_Header_MessageV2_2eproto}, {}};
 
+static void InitDefaultsscc_info_QueryMessageRequest_MessageV2_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::secmng::v2::_QueryMessageRequest_default_instance_;
+    new (ptr) ::secmng::v2::QueryMessageRequest();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::secmng::v2::QueryMessageRequest::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_QueryMessageRequest_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_QueryMessageRequest_MessageV2_2eproto}, {}};
+
+static void InitDefaultsscc_info_QueryMessageResponse_MessageV2_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::secmng::v2::_QueryMessageResponse_default_instance_;
+    new (ptr) ::secmng::v2::QueryMessageResponse();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::secmng::v2::QueryMessageResponse::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_QueryMessageResponse_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_QueryMessageResponse_MessageV2_2eproto}, {}};
+
 static void InitDefaultsscc_info_RequestPacket_MessageV2_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -88,10 +128,11 @@ static void InitDefaultsscc_info_RequestPacket_MessageV2_2eproto() {
   ::secmng::v2::RequestPacket::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<2> scc_info_RequestPacket_MessageV2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 2, InitDefaultsscc_info_RequestPacket_MessageV2_2eproto}, {
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<3> scc_info_RequestPacket_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 3, InitDefaultsscc_info_RequestPacket_MessageV2_2eproto}, {
       &scc_info_Header_MessageV2_2eproto.base,
-      &scc_info_SendMessageRequest_MessageV2_2eproto.base,}};
+      &scc_info_SendMessageRequest_MessageV2_2eproto.base,
+      &scc_info_QueryMessageRequest_MessageV2_2eproto.base,}};
 
 static void InitDefaultsscc_info_ResponsePacket_MessageV2_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -104,10 +145,11 @@ static void InitDefaultsscc_info_ResponsePacket_MessageV2_2eproto() {
   ::secmng::v2::ResponsePacket::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<2> scc_info_ResponsePacket_MessageV2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 2, InitDefaultsscc_info_ResponsePacket_MessageV2_2eproto}, {
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<3> scc_info_ResponsePacket_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 3, InitDefaultsscc_info_ResponsePacket_MessageV2_2eproto}, {
       &scc_info_Header_MessageV2_2eproto.base,
-      &scc_info_SendMessageResponse_MessageV2_2eproto.base,}};
+      &scc_info_SendMessageResponse_MessageV2_2eproto.base,
+      &scc_info_QueryMessageResponse_MessageV2_2eproto.base,}};
 
 static void InitDefaultsscc_info_SendMessageRequest_MessageV2_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -138,8 +180,8 @@ static void InitDefaultsscc_info_SendMessageResponse_MessageV2_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SendMessageResponse_MessageV2_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_SendMessageResponse_MessageV2_2eproto}, {}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_MessageV2_2eproto[6];
-static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_MessageV2_2eproto[3];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_MessageV2_2eproto[8];
+static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_MessageV2_2eproto[4];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_MessageV2_2eproto = nullptr;
 
 const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_MessageV2_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -179,6 +221,27 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_MessageV2_2eproto::offsets[] P
   PROTOBUF_FIELD_OFFSET(::secmng::v2::SendMessageResponse, message_),
   PROTOBUF_FIELD_OFFSET(::secmng::v2::SendMessageResponse, server_message_id_),
   PROTOBUF_FIELD_OFFSET(::secmng::v2::SendMessageResponse, server_time_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::SendMessageResponse, delivery_status_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageRequest, server_message_id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageResponse, code_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageResponse, message_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageResponse, server_message_id_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageResponse, sender_id_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageResponse, receiver_id_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageResponse, key_id_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageResponse, msg_type_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageResponse, send_time_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageResponse, status_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::secmng::v2::RequestPacket, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -186,6 +249,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_MessageV2_2eproto::offsets[] P
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::secmng::v2::RequestPacket, header_),
   offsetof(::secmng::v2::RequestPacketDefaultTypeInternal, send_msg_req_),
+  offsetof(::secmng::v2::RequestPacketDefaultTypeInternal, query_msg_req_),
   PROTOBUF_FIELD_OFFSET(::secmng::v2::RequestPacket, body_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::secmng::v2::ResponsePacket, _internal_metadata_),
@@ -194,6 +258,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_MessageV2_2eproto::offsets[] P
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::secmng::v2::ResponsePacket, header_),
   offsetof(::secmng::v2::ResponsePacketDefaultTypeInternal, send_msg_resp_),
+  offsetof(::secmng::v2::ResponsePacketDefaultTypeInternal, query_msg_resp_),
   PROTOBUF_FIELD_OFFSET(::secmng::v2::ResponsePacket, body_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -201,8 +266,10 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 10, -1, sizeof(::secmng::v2::EncryptedMessage)},
   { 21, -1, sizeof(::secmng::v2::SendMessageRequest)},
   { 27, -1, sizeof(::secmng::v2::SendMessageResponse)},
-  { 36, -1, sizeof(::secmng::v2::RequestPacket)},
-  { 44, -1, sizeof(::secmng::v2::ResponsePacket)},
+  { 37, -1, sizeof(::secmng::v2::QueryMessageRequest)},
+  { 43, -1, sizeof(::secmng::v2::QueryMessageResponse)},
+  { 57, -1, sizeof(::secmng::v2::RequestPacket)},
+  { 66, -1, sizeof(::secmng::v2::ResponsePacket)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -210,6 +277,8 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_EncryptedMessage_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_SendMessageRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_SendMessageResponse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_QueryMessageRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_QueryMessageResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_RequestPacket_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_ResponsePacket_default_instance_),
 };
@@ -224,30 +293,47 @@ const char descriptor_table_protodef_MessageV2_2eproto[] =
   "\n\nciphertext\030\003 \001(\t\022\r\n\005nonce\030\004 \001(\t\022\013\n\003tag"
   "\030\005 \001(\t\022\021\n\talgorithm\030\006 \001(\t\"B\n\022SendMessage"
   "Request\022,\n\007message\030\001 \001(\0132\033.secmng.v2.Enc"
-  "ryptedMessage\"{\n\023SendMessageResponse\022#\n\004"
-  "code\030\001 \001(\0162\025.secmng.v2.ResultCode\022\017\n\007mes"
-  "sage\030\002 \001(\t\022\031\n\021server_message_id\030\003 \001(\t\022\023\n"
-  "\013server_time\030\004 \001(\003\"q\n\rRequestPacket\022!\n\006h"
-  "eader\030\001 \001(\0132\021.secmng.v2.Header\0225\n\014send_m"
-  "sg_req\030\002 \001(\0132\035.secmng.v2.SendMessageRequ"
-  "estH\000B\006\n\004body\"t\n\016ResponsePacket\022!\n\006heade"
-  "r\030\001 \001(\0132\021.secmng.v2.Header\0227\n\rsend_msg_r"
-  "esp\030\002 \001(\0132\036.secmng.v2.SendMessageRespons"
-  "eH\000B\006\n\004body*K\n\013CommandType\022\017\n\013CMD_UNKNOW"
-  "N\020\000\022\024\n\020CMD_SEND_MSG_REQ\020\001\022\025\n\021CMD_SEND_MS"
-  "G_RESP\020\002*\260\001\n\nResultCode\022\022\n\016RESULT_UNKNOW"
-  "N\020\000\022\022\n\016RESULT_SUCCESS\020\001\022\021\n\rRESULT_FAILED"
-  "\020\002\022\030\n\024RESULT_KEY_NOT_FOUND\020\003\022\026\n\022RESULT_K"
-  "EY_INVALID\020\004\022\031\n\025RESULT_DECRYPT_FAILED\020\005\022"
-  "\032\n\026RESULT_INVALID_REQUEST\020\006*6\n\013MessageTy"
-  "pe\022\024\n\020MSG_TYPE_UNKNOWN\020\000\022\021\n\rMSG_TYPE_TEX"
-  "T\020\001b\006proto3"
+  "ryptedMessage\"\257\001\n\023SendMessageResponse\022#\n"
+  "\004code\030\001 \001(\0162\025.secmng.v2.ResultCode\022\017\n\007me"
+  "ssage\030\002 \001(\t\022\031\n\021server_message_id\030\003 \001(\t\022\023"
+  "\n\013server_time\030\004 \001(\003\0222\n\017delivery_status\030\005"
+  " \001(\0162\031.secmng.v2.DeliveryStatus\"0\n\023Query"
+  "MessageRequest\022\031\n\021server_message_id\030\001 \001("
+  "\t\"\324\001\n\024QueryMessageResponse\022#\n\004code\030\001 \001(\016"
+  "2\025.secmng.v2.ResultCode\022\017\n\007message\030\002 \001(\t"
+  "\022\031\n\021server_message_id\030\003 \001(\t\022\021\n\tsender_id"
+  "\030\004 \001(\t\022\023\n\013receiver_id\030\005 \001(\t\022\016\n\006key_id\030\006 "
+  "\001(\005\022\020\n\010msg_type\030\007 \001(\t\022\021\n\tsend_time\030\010 \001(\003"
+  "\022\016\n\006status\030\t \001(\005\"\252\001\n\rRequestPacket\022!\n\006he"
+  "ader\030\001 \001(\0132\021.secmng.v2.Header\0225\n\014send_ms"
+  "g_req\030\002 \001(\0132\035.secmng.v2.SendMessageReque"
+  "stH\000\0227\n\rquery_msg_req\030\003 \001(\0132\036.secmng.v2."
+  "QueryMessageRequestH\000B\006\n\004body\"\257\001\n\016Respon"
+  "sePacket\022!\n\006header\030\001 \001(\0132\021.secmng.v2.Hea"
+  "der\0227\n\rsend_msg_resp\030\002 \001(\0132\036.secmng.v2.S"
+  "endMessageResponseH\000\0229\n\016query_msg_resp\030\003"
+  " \001(\0132\037.secmng.v2.QueryMessageResponseH\000B"
+  "\006\n\004body*z\n\013CommandType\022\017\n\013CMD_UNKNOWN\020\000\022"
+  "\024\n\020CMD_SEND_MSG_REQ\020\001\022\025\n\021CMD_SEND_MSG_RE"
+  "SP\020\002\022\025\n\021CMD_QUERY_MSG_REQ\020\003\022\026\n\022CMD_QUERY"
+  "_MSG_RESP\020\004*\312\001\n\nResultCode\022\022\n\016RESULT_UNK"
+  "NOWN\020\000\022\022\n\016RESULT_SUCCESS\020\001\022\021\n\rRESULT_FAI"
+  "LED\020\002\022\030\n\024RESULT_KEY_NOT_FOUND\020\003\022\026\n\022RESUL"
+  "T_KEY_INVALID\020\004\022\031\n\025RESULT_DECRYPT_FAILED"
+  "\020\005\022\032\n\026RESULT_INVALID_REQUEST\020\006\022\030\n\024RESULT"
+  "_MSG_NOT_FOUND\020\007*6\n\013MessageType\022\024\n\020MSG_T"
+  "YPE_UNKNOWN\020\000\022\021\n\rMSG_TYPE_TEXT\020\001*T\n\016Deli"
+  "veryStatus\022\024\n\020DELIVERY_UNKNOWN\020\000\022\025\n\021DELI"
+  "VERY_ACCEPTED\020\001\022\025\n\021DELIVERY_REJECTED\020\002b\006"
+  "proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_MessageV2_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_MessageV2_2eproto_sccs[6] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_MessageV2_2eproto_sccs[8] = {
   &scc_info_EncryptedMessage_MessageV2_2eproto.base,
   &scc_info_Header_MessageV2_2eproto.base,
+  &scc_info_QueryMessageRequest_MessageV2_2eproto.base,
+  &scc_info_QueryMessageResponse_MessageV2_2eproto.base,
   &scc_info_RequestPacket_MessageV2_2eproto.base,
   &scc_info_ResponsePacket_MessageV2_2eproto.base,
   &scc_info_SendMessageRequest_MessageV2_2eproto.base,
@@ -256,10 +342,10 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Mes
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_MessageV2_2eproto_once;
 static bool descriptor_table_MessageV2_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_MessageV2_2eproto = {
-  &descriptor_table_MessageV2_2eproto_initialized, descriptor_table_protodef_MessageV2_2eproto, "MessageV2.proto", 1051,
-  &descriptor_table_MessageV2_2eproto_once, descriptor_table_MessageV2_2eproto_sccs, descriptor_table_MessageV2_2eproto_deps, 6, 0,
+  &descriptor_table_MessageV2_2eproto_initialized, descriptor_table_protodef_MessageV2_2eproto, "MessageV2.proto", 1646,
+  &descriptor_table_MessageV2_2eproto_once, descriptor_table_MessageV2_2eproto_sccs, descriptor_table_MessageV2_2eproto_deps, 8, 0,
   schemas, file_default_instances, TableStruct_MessageV2_2eproto::offsets,
-  file_level_metadata_MessageV2_2eproto, 6, file_level_enum_descriptors_MessageV2_2eproto, file_level_service_descriptors_MessageV2_2eproto,
+  file_level_metadata_MessageV2_2eproto, 8, file_level_enum_descriptors_MessageV2_2eproto, file_level_service_descriptors_MessageV2_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -275,6 +361,8 @@ bool CommandType_IsValid(int value) {
     case 0:
     case 1:
     case 2:
+    case 3:
+    case 4:
       return true;
     default:
       return false;
@@ -294,6 +382,7 @@ bool ResultCode_IsValid(int value) {
     case 4:
     case 5:
     case 6:
+    case 7:
       return true;
     default:
       return false;
@@ -308,6 +397,21 @@ bool MessageType_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* DeliveryStatus_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageV2_2eproto);
+  return file_level_enum_descriptors_MessageV2_2eproto[3];
+}
+bool DeliveryStatus_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
       return true;
     default:
       return false;
@@ -1668,6 +1772,7 @@ const int SendMessageResponse::kCodeFieldNumber;
 const int SendMessageResponse::kMessageFieldNumber;
 const int SendMessageResponse::kServerMessageIdFieldNumber;
 const int SendMessageResponse::kServerTimeFieldNumber;
+const int SendMessageResponse::kDeliveryStatusFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 SendMessageResponse::SendMessageResponse()
@@ -1687,9 +1792,9 @@ SendMessageResponse::SendMessageResponse(const SendMessageResponse& from)
   if (from.server_message_id().size() > 0) {
     server_message_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.server_message_id_);
   }
-  ::memcpy(&server_time_, &from.server_time_,
-    static_cast<size_t>(reinterpret_cast<char*>(&code_) -
-    reinterpret_cast<char*>(&server_time_)) + sizeof(code_));
+  ::memcpy(&code_, &from.code_,
+    static_cast<size_t>(reinterpret_cast<char*>(&server_time_) -
+    reinterpret_cast<char*>(&code_)) + sizeof(server_time_));
   // @@protoc_insertion_point(copy_constructor:secmng.v2.SendMessageResponse)
 }
 
@@ -1697,9 +1802,9 @@ void SendMessageResponse::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_SendMessageResponse_MessageV2_2eproto.base);
   message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   server_message_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  ::memset(&server_time_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&code_) -
-      reinterpret_cast<char*>(&server_time_)) + sizeof(code_));
+  ::memset(&code_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&server_time_) -
+      reinterpret_cast<char*>(&code_)) + sizeof(server_time_));
 }
 
 SendMessageResponse::~SendMessageResponse() {
@@ -1729,9 +1834,9 @@ void SendMessageResponse::Clear() {
 
   message_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   server_message_id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  ::memset(&server_time_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&code_) -
-      reinterpret_cast<char*>(&server_time_)) + sizeof(code_));
+  ::memset(&code_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&server_time_) -
+      reinterpret_cast<char*>(&code_)) + sizeof(server_time_));
   _internal_metadata_.Clear();
 }
 
@@ -1770,6 +1875,14 @@ const char* SendMessageResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAME
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
           server_time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
           CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .secmng.v2.DeliveryStatus delivery_status = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+          set_delivery_status(static_cast<::secmng::v2::DeliveryStatus>(val));
         } else goto handle_unusual;
         continue;
       default: {
@@ -1859,6 +1972,20 @@ bool SendMessageResponse::MergePartialFromCodedStream(
         break;
       }
 
+      // .secmng.v2.DeliveryStatus delivery_status = 5;
+      case 5: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (40 & 0xFF)) {
+          int value = 0;
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   int, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_delivery_status(static_cast< ::secmng::v2::DeliveryStatus >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -1917,6 +2044,12 @@ void SendMessageResponse::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64(4, this->server_time(), output);
   }
 
+  // .secmng.v2.DeliveryStatus delivery_status = 5;
+  if (this->delivery_status() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnum(
+      5, this->delivery_status(), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -1963,6 +2096,12 @@ void SendMessageResponse::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(4, this->server_time(), target);
   }
 
+  // .secmng.v2.DeliveryStatus delivery_status = 5;
+  if (this->delivery_status() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      5, this->delivery_status(), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -1998,17 +2137,23 @@ size_t SendMessageResponse::ByteSizeLong() const {
         this->server_message_id());
   }
 
+  // .secmng.v2.ResultCode code = 1;
+  if (this->code() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->code());
+  }
+
+  // .secmng.v2.DeliveryStatus delivery_status = 5;
+  if (this->delivery_status() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->delivery_status());
+  }
+
   // int64 server_time = 4;
   if (this->server_time() != 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
         this->server_time());
-  }
-
-  // .secmng.v2.ResultCode code = 1;
-  if (this->code() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->code());
   }
 
   int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
@@ -2046,11 +2191,14 @@ void SendMessageResponse::MergeFrom(const SendMessageResponse& from) {
 
     server_message_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.server_message_id_);
   }
-  if (from.server_time() != 0) {
-    set_server_time(from.server_time());
-  }
   if (from.code() != 0) {
     set_code(from.code());
+  }
+  if (from.delivery_status() != 0) {
+    set_delivery_status(from.delivery_status());
+  }
+  if (from.server_time() != 0) {
+    set_server_time(from.server_time());
   }
 }
 
@@ -2083,11 +2231,1002 @@ void SendMessageResponse::InternalSwap(SendMessageResponse* other) {
     GetArenaNoVirtual());
   server_message_id_.Swap(&other->server_message_id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
-  swap(server_time_, other->server_time_);
   swap(code_, other->code_);
+  swap(delivery_status_, other->delivery_status_);
+  swap(server_time_, other->server_time_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata SendMessageResponse::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void QueryMessageRequest::InitAsDefaultInstance() {
+}
+class QueryMessageRequest::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int QueryMessageRequest::kServerMessageIdFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+QueryMessageRequest::QueryMessageRequest()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:secmng.v2.QueryMessageRequest)
+}
+QueryMessageRequest::QueryMessageRequest(const QueryMessageRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  server_message_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.server_message_id().size() > 0) {
+    server_message_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.server_message_id_);
+  }
+  // @@protoc_insertion_point(copy_constructor:secmng.v2.QueryMessageRequest)
+}
+
+void QueryMessageRequest::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_QueryMessageRequest_MessageV2_2eproto.base);
+  server_message_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+QueryMessageRequest::~QueryMessageRequest() {
+  // @@protoc_insertion_point(destructor:secmng.v2.QueryMessageRequest)
+  SharedDtor();
+}
+
+void QueryMessageRequest::SharedDtor() {
+  server_message_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void QueryMessageRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const QueryMessageRequest& QueryMessageRequest::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_QueryMessageRequest_MessageV2_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void QueryMessageRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:secmng.v2.QueryMessageRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  server_message_id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* QueryMessageRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // string server_message_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_server_message_id(), ptr, ctx, "secmng.v2.QueryMessageRequest.server_message_id");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool QueryMessageRequest::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:secmng.v2.QueryMessageRequest)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string server_message_id = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (10 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_server_message_id()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->server_message_id().data(), static_cast<int>(this->server_message_id().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.QueryMessageRequest.server_message_id"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:secmng.v2.QueryMessageRequest)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:secmng.v2.QueryMessageRequest)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void QueryMessageRequest::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:secmng.v2.QueryMessageRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string server_message_id = 1;
+  if (this->server_message_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->server_message_id().data(), static_cast<int>(this->server_message_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageRequest.server_message_id");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->server_message_id(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:secmng.v2.QueryMessageRequest)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* QueryMessageRequest::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:secmng.v2.QueryMessageRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string server_message_id = 1;
+  if (this->server_message_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->server_message_id().data(), static_cast<int>(this->server_message_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageRequest.server_message_id");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        1, this->server_message_id(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:secmng.v2.QueryMessageRequest)
+  return target;
+}
+
+size_t QueryMessageRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:secmng.v2.QueryMessageRequest)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string server_message_id = 1;
+  if (this->server_message_id().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->server_message_id());
+  }
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void QueryMessageRequest::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:secmng.v2.QueryMessageRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  const QueryMessageRequest* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<QueryMessageRequest>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:secmng.v2.QueryMessageRequest)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:secmng.v2.QueryMessageRequest)
+    MergeFrom(*source);
+  }
+}
+
+void QueryMessageRequest::MergeFrom(const QueryMessageRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:secmng.v2.QueryMessageRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.server_message_id().size() > 0) {
+
+    server_message_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.server_message_id_);
+  }
+}
+
+void QueryMessageRequest::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:secmng.v2.QueryMessageRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void QueryMessageRequest::CopyFrom(const QueryMessageRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:secmng.v2.QueryMessageRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool QueryMessageRequest::IsInitialized() const {
+  return true;
+}
+
+void QueryMessageRequest::Swap(QueryMessageRequest* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void QueryMessageRequest::InternalSwap(QueryMessageRequest* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  server_message_id_.Swap(&other->server_message_id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata QueryMessageRequest::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void QueryMessageResponse::InitAsDefaultInstance() {
+}
+class QueryMessageResponse::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int QueryMessageResponse::kCodeFieldNumber;
+const int QueryMessageResponse::kMessageFieldNumber;
+const int QueryMessageResponse::kServerMessageIdFieldNumber;
+const int QueryMessageResponse::kSenderIdFieldNumber;
+const int QueryMessageResponse::kReceiverIdFieldNumber;
+const int QueryMessageResponse::kKeyIdFieldNumber;
+const int QueryMessageResponse::kMsgTypeFieldNumber;
+const int QueryMessageResponse::kSendTimeFieldNumber;
+const int QueryMessageResponse::kStatusFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+QueryMessageResponse::QueryMessageResponse()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:secmng.v2.QueryMessageResponse)
+}
+QueryMessageResponse::QueryMessageResponse(const QueryMessageResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.message().size() > 0) {
+    message_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.message_);
+  }
+  server_message_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.server_message_id().size() > 0) {
+    server_message_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.server_message_id_);
+  }
+  sender_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.sender_id().size() > 0) {
+    sender_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.sender_id_);
+  }
+  receiver_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.receiver_id().size() > 0) {
+    receiver_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.receiver_id_);
+  }
+  msg_type_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.msg_type().size() > 0) {
+    msg_type_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.msg_type_);
+  }
+  ::memcpy(&code_, &from.code_,
+    static_cast<size_t>(reinterpret_cast<char*>(&status_) -
+    reinterpret_cast<char*>(&code_)) + sizeof(status_));
+  // @@protoc_insertion_point(copy_constructor:secmng.v2.QueryMessageResponse)
+}
+
+void QueryMessageResponse::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_QueryMessageResponse_MessageV2_2eproto.base);
+  message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  server_message_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  sender_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  receiver_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  msg_type_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::memset(&code_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&status_) -
+      reinterpret_cast<char*>(&code_)) + sizeof(status_));
+}
+
+QueryMessageResponse::~QueryMessageResponse() {
+  // @@protoc_insertion_point(destructor:secmng.v2.QueryMessageResponse)
+  SharedDtor();
+}
+
+void QueryMessageResponse::SharedDtor() {
+  message_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  server_message_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  sender_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  receiver_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  msg_type_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void QueryMessageResponse::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const QueryMessageResponse& QueryMessageResponse::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_QueryMessageResponse_MessageV2_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void QueryMessageResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:secmng.v2.QueryMessageResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  message_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  server_message_id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  sender_id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  receiver_id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  msg_type_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::memset(&code_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&status_) -
+      reinterpret_cast<char*>(&code_)) + sizeof(status_));
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* QueryMessageResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // .secmng.v2.ResultCode code = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+          set_code(static_cast<::secmng::v2::ResultCode>(val));
+        } else goto handle_unusual;
+        continue;
+      // string message = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_message(), ptr, ctx, "secmng.v2.QueryMessageResponse.message");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string server_message_id = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_server_message_id(), ptr, ctx, "secmng.v2.QueryMessageResponse.server_message_id");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string sender_id = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_sender_id(), ptr, ctx, "secmng.v2.QueryMessageResponse.sender_id");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string receiver_id = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_receiver_id(), ptr, ctx, "secmng.v2.QueryMessageResponse.receiver_id");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 key_id = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
+          key_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string msg_type = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 58)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_msg_type(), ptr, ctx, "secmng.v2.QueryMessageResponse.msg_type");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int64 send_time = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 64)) {
+          send_time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 status = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 72)) {
+          status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool QueryMessageResponse::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:secmng.v2.QueryMessageResponse)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // .secmng.v2.ResultCode code = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
+          int value = 0;
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   int, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_code(static_cast< ::secmng::v2::ResultCode >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string message = 2;
+      case 2: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_message()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->message().data(), static_cast<int>(this->message().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.QueryMessageResponse.message"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string server_message_id = 3;
+      case 3: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (26 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_server_message_id()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->server_message_id().data(), static_cast<int>(this->server_message_id().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.QueryMessageResponse.server_message_id"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string sender_id = 4;
+      case 4: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (34 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_sender_id()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->sender_id().data(), static_cast<int>(this->sender_id().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.QueryMessageResponse.sender_id"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string receiver_id = 5;
+      case 5: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (42 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_receiver_id()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->receiver_id().data(), static_cast<int>(this->receiver_id().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.QueryMessageResponse.receiver_id"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 key_id = 6;
+      case 6: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (48 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                 input, &key_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string msg_type = 7;
+      case 7: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (58 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_msg_type()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->msg_type().data(), static_cast<int>(this->msg_type().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.QueryMessageResponse.msg_type"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int64 send_time = 8;
+      case 8: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (64 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int64, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT64>(
+                 input, &send_time_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 status = 9;
+      case 9: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (72 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                 input, &status_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:secmng.v2.QueryMessageResponse)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:secmng.v2.QueryMessageResponse)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void QueryMessageResponse::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:secmng.v2.QueryMessageResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .secmng.v2.ResultCode code = 1;
+  if (this->code() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnum(
+      1, this->code(), output);
+  }
+
+  // string message = 2;
+  if (this->message().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->message().data(), static_cast<int>(this->message().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageResponse.message");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->message(), output);
+  }
+
+  // string server_message_id = 3;
+  if (this->server_message_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->server_message_id().data(), static_cast<int>(this->server_message_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageResponse.server_message_id");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->server_message_id(), output);
+  }
+
+  // string sender_id = 4;
+  if (this->sender_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->sender_id().data(), static_cast<int>(this->sender_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageResponse.sender_id");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      4, this->sender_id(), output);
+  }
+
+  // string receiver_id = 5;
+  if (this->receiver_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->receiver_id().data(), static_cast<int>(this->receiver_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageResponse.receiver_id");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->receiver_id(), output);
+  }
+
+  // int32 key_id = 6;
+  if (this->key_id() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(6, this->key_id(), output);
+  }
+
+  // string msg_type = 7;
+  if (this->msg_type().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->msg_type().data(), static_cast<int>(this->msg_type().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageResponse.msg_type");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      7, this->msg_type(), output);
+  }
+
+  // int64 send_time = 8;
+  if (this->send_time() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64(8, this->send_time(), output);
+  }
+
+  // int32 status = 9;
+  if (this->status() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(9, this->status(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:secmng.v2.QueryMessageResponse)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* QueryMessageResponse::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:secmng.v2.QueryMessageResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .secmng.v2.ResultCode code = 1;
+  if (this->code() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      1, this->code(), target);
+  }
+
+  // string message = 2;
+  if (this->message().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->message().data(), static_cast<int>(this->message().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageResponse.message");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        2, this->message(), target);
+  }
+
+  // string server_message_id = 3;
+  if (this->server_message_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->server_message_id().data(), static_cast<int>(this->server_message_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageResponse.server_message_id");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        3, this->server_message_id(), target);
+  }
+
+  // string sender_id = 4;
+  if (this->sender_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->sender_id().data(), static_cast<int>(this->sender_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageResponse.sender_id");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        4, this->sender_id(), target);
+  }
+
+  // string receiver_id = 5;
+  if (this->receiver_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->receiver_id().data(), static_cast<int>(this->receiver_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageResponse.receiver_id");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        5, this->receiver_id(), target);
+  }
+
+  // int32 key_id = 6;
+  if (this->key_id() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(6, this->key_id(), target);
+  }
+
+  // string msg_type = 7;
+  if (this->msg_type().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->msg_type().data(), static_cast<int>(this->msg_type().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageResponse.msg_type");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        7, this->msg_type(), target);
+  }
+
+  // int64 send_time = 8;
+  if (this->send_time() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(8, this->send_time(), target);
+  }
+
+  // int32 status = 9;
+  if (this->status() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(9, this->status(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:secmng.v2.QueryMessageResponse)
+  return target;
+}
+
+size_t QueryMessageResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:secmng.v2.QueryMessageResponse)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string message = 2;
+  if (this->message().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->message());
+  }
+
+  // string server_message_id = 3;
+  if (this->server_message_id().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->server_message_id());
+  }
+
+  // string sender_id = 4;
+  if (this->sender_id().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->sender_id());
+  }
+
+  // string receiver_id = 5;
+  if (this->receiver_id().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->receiver_id());
+  }
+
+  // string msg_type = 7;
+  if (this->msg_type().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->msg_type());
+  }
+
+  // .secmng.v2.ResultCode code = 1;
+  if (this->code() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->code());
+  }
+
+  // int32 key_id = 6;
+  if (this->key_id() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->key_id());
+  }
+
+  // int64 send_time = 8;
+  if (this->send_time() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
+        this->send_time());
+  }
+
+  // int32 status = 9;
+  if (this->status() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->status());
+  }
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void QueryMessageResponse::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:secmng.v2.QueryMessageResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  const QueryMessageResponse* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<QueryMessageResponse>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:secmng.v2.QueryMessageResponse)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:secmng.v2.QueryMessageResponse)
+    MergeFrom(*source);
+  }
+}
+
+void QueryMessageResponse::MergeFrom(const QueryMessageResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:secmng.v2.QueryMessageResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.message().size() > 0) {
+
+    message_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.message_);
+  }
+  if (from.server_message_id().size() > 0) {
+
+    server_message_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.server_message_id_);
+  }
+  if (from.sender_id().size() > 0) {
+
+    sender_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.sender_id_);
+  }
+  if (from.receiver_id().size() > 0) {
+
+    receiver_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.receiver_id_);
+  }
+  if (from.msg_type().size() > 0) {
+
+    msg_type_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.msg_type_);
+  }
+  if (from.code() != 0) {
+    set_code(from.code());
+  }
+  if (from.key_id() != 0) {
+    set_key_id(from.key_id());
+  }
+  if (from.send_time() != 0) {
+    set_send_time(from.send_time());
+  }
+  if (from.status() != 0) {
+    set_status(from.status());
+  }
+}
+
+void QueryMessageResponse::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:secmng.v2.QueryMessageResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void QueryMessageResponse::CopyFrom(const QueryMessageResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:secmng.v2.QueryMessageResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool QueryMessageResponse::IsInitialized() const {
+  return true;
+}
+
+void QueryMessageResponse::Swap(QueryMessageResponse* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void QueryMessageResponse::InternalSwap(QueryMessageResponse* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  message_.Swap(&other->message_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  server_message_id_.Swap(&other->server_message_id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  sender_id_.Swap(&other->sender_id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  receiver_id_.Swap(&other->receiver_id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  msg_type_.Swap(&other->msg_type_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(code_, other->code_);
+  swap(key_id_, other->key_id_);
+  swap(send_time_, other->send_time_);
+  swap(status_, other->status_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata QueryMessageResponse::GetMetadata() const {
   return GetMetadataStatic();
 }
 
@@ -2099,11 +3238,14 @@ void RequestPacket::InitAsDefaultInstance() {
       ::secmng::v2::Header::internal_default_instance());
   ::secmng::v2::_RequestPacket_default_instance_.send_msg_req_ = const_cast< ::secmng::v2::SendMessageRequest*>(
       ::secmng::v2::SendMessageRequest::internal_default_instance());
+  ::secmng::v2::_RequestPacket_default_instance_.query_msg_req_ = const_cast< ::secmng::v2::QueryMessageRequest*>(
+      ::secmng::v2::QueryMessageRequest::internal_default_instance());
 }
 class RequestPacket::HasBitSetters {
  public:
   static const ::secmng::v2::Header& header(const RequestPacket* msg);
   static const ::secmng::v2::SendMessageRequest& send_msg_req(const RequestPacket* msg);
+  static const ::secmng::v2::QueryMessageRequest& query_msg_req(const RequestPacket* msg);
 };
 
 const ::secmng::v2::Header&
@@ -2113,6 +3255,10 @@ RequestPacket::HasBitSetters::header(const RequestPacket* msg) {
 const ::secmng::v2::SendMessageRequest&
 RequestPacket::HasBitSetters::send_msg_req(const RequestPacket* msg) {
   return *msg->body_.send_msg_req_;
+}
+const ::secmng::v2::QueryMessageRequest&
+RequestPacket::HasBitSetters::query_msg_req(const RequestPacket* msg) {
+  return *msg->body_.query_msg_req_;
 }
 void RequestPacket::set_allocated_send_msg_req(::secmng::v2::SendMessageRequest* send_msg_req) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
@@ -2128,9 +3274,24 @@ void RequestPacket::set_allocated_send_msg_req(::secmng::v2::SendMessageRequest*
   }
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.RequestPacket.send_msg_req)
 }
+void RequestPacket::set_allocated_query_msg_req(::secmng::v2::QueryMessageRequest* query_msg_req) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  clear_body();
+  if (query_msg_req) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      query_msg_req = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, query_msg_req, submessage_arena);
+    }
+    set_has_query_msg_req();
+    body_.query_msg_req_ = query_msg_req;
+  }
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.RequestPacket.query_msg_req)
+}
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int RequestPacket::kHeaderFieldNumber;
 const int RequestPacket::kSendMsgReqFieldNumber;
+const int RequestPacket::kQueryMsgReqFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 RequestPacket::RequestPacket()
@@ -2151,6 +3312,10 @@ RequestPacket::RequestPacket(const RequestPacket& from)
   switch (from.body_case()) {
     case kSendMsgReq: {
       mutable_send_msg_req()->::secmng::v2::SendMessageRequest::MergeFrom(from.send_msg_req());
+      break;
+    }
+    case kQueryMsgReq: {
+      mutable_query_msg_req()->::secmng::v2::QueryMessageRequest::MergeFrom(from.query_msg_req());
       break;
     }
     case BODY_NOT_SET: {
@@ -2194,6 +3359,10 @@ void RequestPacket::clear_body() {
       delete body_.send_msg_req_;
       break;
     }
+    case kQueryMsgReq: {
+      delete body_.query_msg_req_;
+      break;
+    }
     case BODY_NOT_SET: {
       break;
     }
@@ -2235,6 +3404,13 @@ const char* RequestPacket::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr = ctx->ParseMessage(mutable_send_msg_req(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .secmng.v2.QueryMessageRequest query_msg_req = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          ptr = ctx->ParseMessage(mutable_query_msg_req(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -2290,6 +3466,17 @@ bool RequestPacket::MergePartialFromCodedStream(
         break;
       }
 
+      // .secmng.v2.QueryMessageRequest query_msg_req = 3;
+      case 3: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (26 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
+               input, mutable_query_msg_req()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -2329,6 +3516,12 @@ void RequestPacket::SerializeWithCachedSizes(
       2, HasBitSetters::send_msg_req(this), output);
   }
 
+  // .secmng.v2.QueryMessageRequest query_msg_req = 3;
+  if (has_query_msg_req()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, HasBitSetters::query_msg_req(this), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -2354,6 +3547,13 @@ void RequestPacket::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessageToArray(
         2, HasBitSetters::send_msg_req(this), target);
+  }
+
+  // .secmng.v2.QueryMessageRequest query_msg_req = 3;
+  if (has_query_msg_req()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        3, HasBitSetters::query_msg_req(this), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -2390,6 +3590,13 @@ size_t RequestPacket::ByteSizeLong() const {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *body_.send_msg_req_);
+      break;
+    }
+    // .secmng.v2.QueryMessageRequest query_msg_req = 3;
+    case kQueryMsgReq: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *body_.query_msg_req_);
       break;
     }
     case BODY_NOT_SET: {
@@ -2429,6 +3636,10 @@ void RequestPacket::MergeFrom(const RequestPacket& from) {
   switch (from.body_case()) {
     case kSendMsgReq: {
       mutable_send_msg_req()->::secmng::v2::SendMessageRequest::MergeFrom(from.send_msg_req());
+      break;
+    }
+    case kQueryMsgReq: {
+      mutable_query_msg_req()->::secmng::v2::QueryMessageRequest::MergeFrom(from.query_msg_req());
       break;
     }
     case BODY_NOT_SET: {
@@ -2479,11 +3690,14 @@ void ResponsePacket::InitAsDefaultInstance() {
       ::secmng::v2::Header::internal_default_instance());
   ::secmng::v2::_ResponsePacket_default_instance_.send_msg_resp_ = const_cast< ::secmng::v2::SendMessageResponse*>(
       ::secmng::v2::SendMessageResponse::internal_default_instance());
+  ::secmng::v2::_ResponsePacket_default_instance_.query_msg_resp_ = const_cast< ::secmng::v2::QueryMessageResponse*>(
+      ::secmng::v2::QueryMessageResponse::internal_default_instance());
 }
 class ResponsePacket::HasBitSetters {
  public:
   static const ::secmng::v2::Header& header(const ResponsePacket* msg);
   static const ::secmng::v2::SendMessageResponse& send_msg_resp(const ResponsePacket* msg);
+  static const ::secmng::v2::QueryMessageResponse& query_msg_resp(const ResponsePacket* msg);
 };
 
 const ::secmng::v2::Header&
@@ -2493,6 +3707,10 @@ ResponsePacket::HasBitSetters::header(const ResponsePacket* msg) {
 const ::secmng::v2::SendMessageResponse&
 ResponsePacket::HasBitSetters::send_msg_resp(const ResponsePacket* msg) {
   return *msg->body_.send_msg_resp_;
+}
+const ::secmng::v2::QueryMessageResponse&
+ResponsePacket::HasBitSetters::query_msg_resp(const ResponsePacket* msg) {
+  return *msg->body_.query_msg_resp_;
 }
 void ResponsePacket::set_allocated_send_msg_resp(::secmng::v2::SendMessageResponse* send_msg_resp) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
@@ -2508,9 +3726,24 @@ void ResponsePacket::set_allocated_send_msg_resp(::secmng::v2::SendMessageRespon
   }
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.ResponsePacket.send_msg_resp)
 }
+void ResponsePacket::set_allocated_query_msg_resp(::secmng::v2::QueryMessageResponse* query_msg_resp) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  clear_body();
+  if (query_msg_resp) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      query_msg_resp = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, query_msg_resp, submessage_arena);
+    }
+    set_has_query_msg_resp();
+    body_.query_msg_resp_ = query_msg_resp;
+  }
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.ResponsePacket.query_msg_resp)
+}
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ResponsePacket::kHeaderFieldNumber;
 const int ResponsePacket::kSendMsgRespFieldNumber;
+const int ResponsePacket::kQueryMsgRespFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ResponsePacket::ResponsePacket()
@@ -2531,6 +3764,10 @@ ResponsePacket::ResponsePacket(const ResponsePacket& from)
   switch (from.body_case()) {
     case kSendMsgResp: {
       mutable_send_msg_resp()->::secmng::v2::SendMessageResponse::MergeFrom(from.send_msg_resp());
+      break;
+    }
+    case kQueryMsgResp: {
+      mutable_query_msg_resp()->::secmng::v2::QueryMessageResponse::MergeFrom(from.query_msg_resp());
       break;
     }
     case BODY_NOT_SET: {
@@ -2574,6 +3811,10 @@ void ResponsePacket::clear_body() {
       delete body_.send_msg_resp_;
       break;
     }
+    case kQueryMsgResp: {
+      delete body_.query_msg_resp_;
+      break;
+    }
     case BODY_NOT_SET: {
       break;
     }
@@ -2615,6 +3856,13 @@ const char* ResponsePacket::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr = ctx->ParseMessage(mutable_send_msg_resp(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .secmng.v2.QueryMessageResponse query_msg_resp = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          ptr = ctx->ParseMessage(mutable_query_msg_resp(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -2670,6 +3918,17 @@ bool ResponsePacket::MergePartialFromCodedStream(
         break;
       }
 
+      // .secmng.v2.QueryMessageResponse query_msg_resp = 3;
+      case 3: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (26 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
+               input, mutable_query_msg_resp()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -2709,6 +3968,12 @@ void ResponsePacket::SerializeWithCachedSizes(
       2, HasBitSetters::send_msg_resp(this), output);
   }
 
+  // .secmng.v2.QueryMessageResponse query_msg_resp = 3;
+  if (has_query_msg_resp()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, HasBitSetters::query_msg_resp(this), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -2734,6 +3999,13 @@ void ResponsePacket::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessageToArray(
         2, HasBitSetters::send_msg_resp(this), target);
+  }
+
+  // .secmng.v2.QueryMessageResponse query_msg_resp = 3;
+  if (has_query_msg_resp()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        3, HasBitSetters::query_msg_resp(this), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -2770,6 +4042,13 @@ size_t ResponsePacket::ByteSizeLong() const {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *body_.send_msg_resp_);
+      break;
+    }
+    // .secmng.v2.QueryMessageResponse query_msg_resp = 3;
+    case kQueryMsgResp: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *body_.query_msg_resp_);
       break;
     }
     case BODY_NOT_SET: {
@@ -2809,6 +4088,10 @@ void ResponsePacket::MergeFrom(const ResponsePacket& from) {
   switch (from.body_case()) {
     case kSendMsgResp: {
       mutable_send_msg_resp()->::secmng::v2::SendMessageResponse::MergeFrom(from.send_msg_resp());
+      break;
+    }
+    case kQueryMsgResp: {
+      mutable_query_msg_resp()->::secmng::v2::QueryMessageResponse::MergeFrom(from.query_msg_resp());
       break;
     }
     case BODY_NOT_SET: {
@@ -2867,6 +4150,12 @@ template<> PROTOBUF_NOINLINE ::secmng::v2::SendMessageRequest* Arena::CreateMayb
 }
 template<> PROTOBUF_NOINLINE ::secmng::v2::SendMessageResponse* Arena::CreateMaybeMessage< ::secmng::v2::SendMessageResponse >(Arena* arena) {
   return Arena::CreateInternal< ::secmng::v2::SendMessageResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::secmng::v2::QueryMessageRequest* Arena::CreateMaybeMessage< ::secmng::v2::QueryMessageRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::secmng::v2::QueryMessageRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::secmng::v2::QueryMessageResponse* Arena::CreateMaybeMessage< ::secmng::v2::QueryMessageResponse >(Arena* arena) {
+  return Arena::CreateInternal< ::secmng::v2::QueryMessageResponse >(arena);
 }
 template<> PROTOBUF_NOINLINE ::secmng::v2::RequestPacket* Arena::CreateMaybeMessage< ::secmng::v2::RequestPacket >(Arena* arena) {
   return Arena::CreateInternal< ::secmng::v2::RequestPacket >(arena);
