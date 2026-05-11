@@ -49,6 +49,18 @@ public:
 		const std::string& detail,
 		const std::string& createTime);
 
+	// 根据 msg_id 查询单条消息
+	bool queryMessageLogById(const std::string& msgId,
+		std::string& senderId,
+		std::string& receiverId,
+		int& keyId,
+		std::string& msgType,
+		std::string& ciphertext,
+		std::string& nonce,
+		std::string& tag,
+		std::string& sendTime,
+		int& status);
+
 private:
 	MYSQL* m_conn;
 };

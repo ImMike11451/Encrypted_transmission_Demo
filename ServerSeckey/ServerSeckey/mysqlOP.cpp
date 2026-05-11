@@ -315,3 +315,55 @@ bool mysqlOP::insertAuditLog(const std::string& logId,
 	return true;
 }
 
+bool mysqlOP::queryMessageLogById(const std::string& msgId, std::string& senderId, std::string& receiverId, int& keyId, std::string& msgType, std::string& ciphertext, std::string& nonce, std::string& tag, std::string& sendTime, int& status)
+{
+	char sql[2048]{ 0 };
+
+	// 按 msg_id 查询单条消息记录。
+	sprintf(sql,
+		"select sender_id, receiver_id, key_id, msg_type, ciphertext, nonce, tag_value, send_time, status "
+		"from message_log where msg_id = '%s'",
+		msgId.c_str());
+
+	if(mysql_query(m_conn, sql))
+	{
+		Logger::info("queryMessageLogById sql: " + std::string(sql));
+		Logger::error("queryMessageLogById failed: " + std::string(mysql_error(m_conn)));
+		return false;
+	}
+
+	//将查询结果保存到内存中，返回一个结果集指针
+	MYSQL_RES* res = mysql_store_result(m_conn);
+	if (res == nullptr)
+	{
+		Logger::error("queryMessageLogById get result failed: " + std::string(mysql_error(m_conn)));
+		return false;
+	}
+
+	//将结果集中获取下一行，返回一个字符串数组
+	MYSQL_ROW row = mysql_fetch_row(res);
+	if(row == nullptr)
+	{
+		// 没查到数据不算 SQL 执行失败，但本函数先统一返回 false，
+		// 由上层 Repository 再决定 errorMsg 如何描述。
+		Logger::info("No message found with msg_id: " + msgId);
+		mysql_free_result(res);
+		return false;
+	}
+
+	// 结果列顺序要和 SQL select 顺序严格一致
+	senderId = row[0] ? row[0] : "";
+	receiverId = row[1] ? row[1] : "";
+	keyId = row[2] ? atoi(row[2]) : 0;
+	msgType = row[3] ? row[3] : "";
+	ciphertext = row[4] ? row[4] : "";
+	nonce = row[5] ? row[5] : "";
+	tag = row[6] ? row[6] : "";
+	sendTime = row[7] ? row[7] : "";
+	status = row[8] ? atoi(row[8]) : 0;
+
+	mysql_free_result(res);
+	
+	return true;
+}
+

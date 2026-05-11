@@ -18,9 +18,27 @@ struct MessageLogRecord
     int status;                // 状态：0处理中 1成功 2失败
 };
 
-// MessageRepository 的职责非常单一：
+// 这个结构体表示“查询单条消息”的结果。
+// 它服务于 MessageService 的查询业务，返回的是消息元数据。
+struct MessageQueryResult
+{
+    bool found;                // 是否查到记录
+    std::string msgId;         // 服务端消息 ID
+    std::string senderId;      // 原发送方
+    std::string receiverId;    // 原接收方
+    int keyId;                 // 使用的密钥编号
+    std::string msgType;       // 消息类型
+    std::string ciphertext;    // 密文（当前阶段先查出来，是否返回给客户端由服务层决定）
+    std::string nonce;         // nonce
+    std::string tag;           // tag
+    std::string sendTime;      // 发送时间
+    int status;                // 状态
+    std::string errorMsg;      // 查询失败时的错误信息
+};
+
 // 负责 message_log 表的数据库操作。
-// 第一阶段先只做“插入消息记录”这一件事。
+// 1. 把消息写入 message_log
+// 2. 从 message_log 查询消息
 class MessageRepository
 {
 public:
@@ -32,6 +50,9 @@ public:
 
     // 向 message_log 插入一条消息记录。
     bool insertMessage(const MessageLogRecord& record);
+
+    // 根据 server_message_id 查询单条消息
+	bool queryMessageById(const std::string& msgId, MessageQueryResult& result);
 
 private:
     mysqlOP* m_db;  // 数据库对象，不负责释放
