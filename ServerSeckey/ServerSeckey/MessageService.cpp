@@ -180,6 +180,125 @@ V2SendMessageResponseInfo MessageService::handleSendMessage(const secmng::v2::Re
 	return respInfo;
 }
 
+V2QueryMessageResponseInfo MessageService::handleQueryMessage(const secmng::v2::RequestPacket& packet)
+{
+	V2QueryMessageResponseInfo respInfo;
+
+	// 第 1 步：先准备默认失败响应
+	respInfo.header = buildResponseHeader(packet, secmng::v2::CMD_QUERY_MSG_RESP);
+	respInfo.code = secmng::v2::RESULT_FAILED;
+	respInfo.message = "query message failed";
+	respInfo.serverMessageId = "";
+	respInfo.senderId = "";
+	respInfo.receiverId = "";
+	respInfo.keyId = 0;
+	respInfo.msgType = "";
+	respInfo.sendTime = 0;
+	respInfo.status = 0;
+
+	// 查询业务同样会写审计日志，所以这里先准备服务对象
+	AuditService auditSvc(m_db);
+	MessageRepository msgRepo(m_db);
+
+	// 第 2 步：校验请求是否合法
+	std::string validateErr;
+	if (!validateQueryRequest(packet, validateErr))
+	{
+		respInfo.code = secmng::v2::RESULT_INVALID_REQUEST;
+		respInfo.message = validateErr;
+
+		// 非法查询请求也应留痕
+		auditSvc.logAction(
+			generateAuditLogId(),
+			packet.has_header() ? packet.header().sender_id() : "",
+			"MSG_QUERY",
+			"",
+			0,
+			"invalid query request: " + validateErr,
+			m_db->getCurTime()
+		);
+
+		return respInfo;
+	}
+
+	const secmng::v2::Header& header = packet.header();
+	const secmng::v2::QueryMessageRequest& req = packet.query_msg_req();
+
+	// 第 3 步：调用 Repository 查询消息
+	MessageQueryResult queryResult;
+	bool ret = msgRepo.queryMessageById(req.server_message_id(),queryResult);
+
+	if (!ret || !queryResult.found)
+	{
+		respInfo.code = secmng::v2::RESULT_MSG_NOT_FOUND;
+		respInfo.message = "message not found";
+		respInfo.serverMessageId = req.server_message_id();
+
+		auditSvc.logAction(
+			generateAuditLogId(),
+			header.sender_id(),
+			"MSG_QUERY",
+			req.server_message_id(),
+			0,
+			"message not found",
+			m_db->getCurTime()
+		);
+
+		return respInfo;
+	}
+
+	// 第 4 步：组装成功响应
+	respInfo.code = secmng::v2::RESULT_SUCCESS;
+	respInfo.message = "query message success";
+	respInfo.serverMessageId = queryResult.msgId;
+	respInfo.senderId = queryResult.senderId;
+	respInfo.receiverId = queryResult.receiverId;
+	respInfo.keyId = queryResult.keyId;
+	respInfo.msgType = queryResult.msgType;
+	respInfo.sendTime = 0;
+	respInfo.status = queryResult.status;
+
+	// 第 5 步：写成功审计日志
+	auditSvc.logAction(
+		generateAuditLogId(),
+		header.sender_id(),
+		"MSG_QUERY",
+		req.server_message_id(),
+		1,
+		"query message success",
+		m_db->getCurTime()
+	);
+
+	return respInfo;
+}
+
+bool MessageService::validateQueryRequest(const secmng::v2::RequestPacket& packet, std::string& errorMsg)
+{
+	// 第 1 步：必须有 header
+	if(!packet.has_header())
+	{
+		errorMsg = "header is empty";
+		return false;
+	}
+
+	// 第 2 步：必须有 query_msg_req
+	if(packet.has_query_msg_req())
+	{
+		errorMsg = "query_msg_req is empty";
+		return false;
+	}
+
+	const secmng::v2::QueryMessageRequest& req = packet.query_msg_req();
+
+	// 第 3 步：server_message_id 不能为空
+	if(req.server_message_id().empty())
+	{
+		errorMsg = "server_message_id is empty";
+		return false;
+	}
+	return true;
+}
+
 // 校验请求包是否合法。
 // 这一步的目标是尽早挡掉格式错误的请求，避免后面业务处理混乱。
 bool MessageService::validateRequest(const secmng::v2::RequestPacket& packet, std::string& errorMsg)

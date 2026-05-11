@@ -51,6 +51,15 @@ public:
     // 这里先返回 V2SendMessageResponseInfo，后面由外层 codec 编码。
 	V2SendMessageResponseInfo handleSendMessage(const secmng::v2::RequestPacket& packet);
 
+    // 处理“查询消息请求”
+    V2QueryMessageResponseInfo handleQueryMessage(
+        const secmng::v2::RequestPacket& packet
+    );
+private:
+    // 校验查询消息请求是否合法
+    bool validateQueryRequest(const secmng::v2::RequestPacket& packet,
+        std::string& errorMsg);
+
 private:
     // 校验请求包字段是否合法。
     // 合法返回 true，不合法时同时填写 errorMsg。
