@@ -1,6 +1,6 @@
 #pragma once
-
 #include <string>
+#include <vector>
 #include "Codec.h"
 #include "MessageV2.pb.h"
 #include "V2RequestCodec.h"
@@ -31,6 +31,28 @@ struct V2QueryMessageResponseInfo
     int status;                   // 消息状态
 };
 
+// 单条消息摘要
+// 对应 proto 中的 MessageSummary
+struct V2MessageSummaryInfo
+{
+    std::string serverMessageId;   // 服务端消息 ID
+    std::string senderId;          // 发送方
+    std::string receiverId;        // 接收方
+    int keyId;                     // 使用的密钥编号
+    std::string msgType;           // 消息类型
+    long long sendTime;            // 发送时间戳
+    int status;                    // 消息状态
+};
+
+// 查询最近 N 条消息响应
+struct V2QueryMessageListResponseInfo
+{
+    V2HeaderInfo header;                       // 公共头
+    int code;                                 // ResultCode
+    std::string message;                      // 响应描述
+    std::vector<V2MessageSummaryInfo> messages; // 消息摘要列表
+};
+
 // 响应编解码器：
 // 负责把服务端业务层的响应结构体编码成 protobuf 字节流，
 // 以及把收到的响应字节流还原成 protobuf 对象。
@@ -40,6 +62,7 @@ public:
     V2RespondCodec();
     V2RespondCodec(const std::string& encStr);
     V2RespondCodec(V2SendMessageResponseInfo* info);
+    V2RespondCodec(V2QueryMessageListResponseInfo* info);
 
     // 查询消息响应编码
     V2RespondCodec(V2QueryMessageResponseInfo* info);
@@ -47,6 +70,7 @@ public:
     void initMessage(const std::string& encStr);
     void initMessage(V2SendMessageResponseInfo* info);
     void initMessage(V2QueryMessageResponseInfo* info);
+    void initMessage(V2QueryMessageListResponseInfo* info);
 
     std::string encodeMsg() override;
     void* decodeMsg() override;

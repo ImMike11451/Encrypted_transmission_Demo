@@ -27,6 +27,11 @@ V2RequestCodec::V2RequestCodec(V2QueryMessageRequestInfo* info)
     initMessage(info);
 }
 
+V2RequestCodec::V2RequestCodec(V2QueryMessageListRequestInfo* info)
+{
+    initMessage(info);
+}
+
 void V2RequestCodec::initMessage(const std::string& encStr)
 {
     // 这里只是简单保存原始字节流，不做解析。
@@ -108,6 +113,22 @@ void V2RequestCodec::initMessage(V2QueryMessageRequestInfo* info)
     secmng::v2::QueryMessageRequest* req = m_msg.mutable_query_msg_req();
     req->set_server_message_id(info->serverMessageId);
 
+}
+
+void V2RequestCodec::initMessage(V2QueryMessageListRequestInfo* info)
+{
+    // 第 1 步：填充公共头
+    secmng::v2::Header* header = m_msg.mutable_header();
+    header->set_message_id(info->header.messageId);
+    header->set_command(static_cast<secmng::v2::CommandType>(info->header.command));
+    header->set_sender_id(info->header.senderId);
+    header->set_receiver_id(info->header.receiverId);
+    header->set_timestamp(info->header.timestamp);
+
+    // 第 2 步：填充列表查询请求体
+	secmng::v2::QueryMessageListRequest* req = m_msg.mutable_query_msg_list_req();
+    req->set_sender_id(info->senderId);
+    req->set_limit(info->limit);
 }
 
 std::string V2RequestCodec::encodeMsg()

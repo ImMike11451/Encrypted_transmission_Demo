@@ -17,6 +17,11 @@ V2RespondCodec::V2RespondCodec(V2SendMessageResponseInfo* info)
     initMessage(info);
 }
 
+V2RespondCodec::V2RespondCodec(V2QueryMessageListResponseInfo* info)
+{
+	initMessage(info);
+}
+
 V2RespondCodec::V2RespondCodec(V2QueryMessageResponseInfo* info)
 {
     initMessage(info);
@@ -86,6 +91,35 @@ void V2RespondCodec::initMessage(V2QueryMessageResponseInfo* info)
     resp->set_msg_type(info->msgType);
     resp->set_send_time(info->sendTime);
     resp->set_status(info->status);
+}
+
+void V2RespondCodec::initMessage(V2QueryMessageListResponseInfo* info)
+{
+    // 第 1 步：填充公共头
+    secmng::v2::Header* header = m_msg.mutable_header();
+    header->set_message_id(info->header.messageId);
+    header->set_command(static_cast<secmng::v2::CommandType>(info->header.command));
+    header->set_sender_id(info->header.senderId);
+    header->set_receiver_id(info->header.receiverId);
+    header->set_timestamp(info->header.timestamp);
+
+    // 第 2 步：填充列表查询响应体
+    secmng::v2::QueryMessageListResponse* resp = m_msg.mutable_query_msg_list_resp();
+    resp->set_code(static_cast<secmng::v2::ResultCode>(info->code));
+    resp->set_message(info->message);
+
+    // 第 3 步：逐条填充 MessageSummary 列表
+    for (const auto& item : info->messages)
+    {
+        secmng::v2::MessageSummary* summary = resp->add_messages();
+        summary->set_server_message_id(item.serverMessageId);
+        summary->set_sender_id(item.senderId);
+        summary->set_receiver_id(item.receiverId);
+        summary->set_key_id(item.keyId);
+        summary->set_msg_type(item.msgType);
+        summary->set_send_time(item.sendTime);
+        summary->set_status(item.status);
+    }
 }
 
 std::string V2RespondCodec::encodeMsg()
