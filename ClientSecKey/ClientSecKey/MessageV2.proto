@@ -19,6 +19,18 @@ enum CommandType {
   CMD_QUERY_MSG_REQ = 3;
 
   CMD_QUERY_MSG_RESP = 4;
+  
+  CMD_QUERY_MSG_LIST_REQ = 5;
+
+  CMD_QUERY_MSG_LIST_RESP = 6;
+}
+
+//列表查询
+message QueryMessageListRequest {
+  
+  string sender_id = 1;
+  
+  int32 limit = 2;
 }
 
 // 结果码：服务端处理完请求后，告诉客户端发生了什么。
@@ -59,6 +71,7 @@ enum MessageType {
 
 // 投递状态
 enum DeliveryStatus {
+
   DELIVERY_UNKNOWN = 0;
 
   DELIVERY_ACCEPTED = 1;
@@ -156,6 +169,42 @@ message QueryMessageResponse {
   int32 status = 9;
 }
 
+// 单条消息摘要
+// 用于列表查询响应中的每一个元素
+message MessageSummary {
+  // 服务端消息 ID
+  string server_message_id = 1;
+
+  // 原发送方
+  string sender_id = 2;
+
+  // 原接收方
+  string receiver_id = 3;
+
+  // 使用的密钥编号
+  int32 key_id = 4;
+
+  // 消息类型，例如 text
+  string msg_type = 5;
+
+  // 发送时间（Unix 时间戳）
+  int64 send_time = 6;
+
+  // 消息状态
+  int32 status = 7;
+}
+
+// 查询最近 N 条消息响应
+message QueryMessageListResponse {
+  // 结果码
+  ResultCode code = 1;
+
+  // 响应描述信息
+  string message = 2;
+
+  // 消息摘要列表
+  repeated MessageSummary messages = 3;
+}
 
 // 总请求包：统一承载所有请求类型
 message RequestPacket {
@@ -167,7 +216,11 @@ message RequestPacket {
     // 第一阶段只有一种新请求：发送消息
     SendMessageRequest send_msg_req = 2;
 
+    // 查询单条消息请求
     QueryMessageRequest query_msg_req = 3;
+    
+    // 查询最近 N 条消息请求
+    QueryMessageListRequest query_msg_list_req = 4;
   }
 }
 
@@ -179,7 +232,11 @@ message ResponsePacket {
   oneof body {
     // 第一阶段只有一种新响应：发送消息响应
     SendMessageResponse send_msg_resp = 2;
-
+    
+    // 查询单条消息响应
     QueryMessageResponse query_msg_resp = 3;
+
+    // 查询最近 N 条消息响应
+    QueryMessageListResponse query_msg_list_resp = 4;
   }
 }

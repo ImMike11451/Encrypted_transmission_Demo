@@ -48,7 +48,7 @@ struct TableStruct_MessageV2_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[8]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[11]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -63,6 +63,15 @@ extern EncryptedMessageDefaultTypeInternal _EncryptedMessage_default_instance_;
 class Header;
 class HeaderDefaultTypeInternal;
 extern HeaderDefaultTypeInternal _Header_default_instance_;
+class MessageSummary;
+class MessageSummaryDefaultTypeInternal;
+extern MessageSummaryDefaultTypeInternal _MessageSummary_default_instance_;
+class QueryMessageListRequest;
+class QueryMessageListRequestDefaultTypeInternal;
+extern QueryMessageListRequestDefaultTypeInternal _QueryMessageListRequest_default_instance_;
+class QueryMessageListResponse;
+class QueryMessageListResponseDefaultTypeInternal;
+extern QueryMessageListResponseDefaultTypeInternal _QueryMessageListResponse_default_instance_;
 class QueryMessageRequest;
 class QueryMessageRequestDefaultTypeInternal;
 extern QueryMessageRequestDefaultTypeInternal _QueryMessageRequest_default_instance_;
@@ -86,6 +95,9 @@ extern SendMessageResponseDefaultTypeInternal _SendMessageResponse_default_insta
 PROTOBUF_NAMESPACE_OPEN
 template<> ::secmng::v2::EncryptedMessage* Arena::CreateMaybeMessage<::secmng::v2::EncryptedMessage>(Arena*);
 template<> ::secmng::v2::Header* Arena::CreateMaybeMessage<::secmng::v2::Header>(Arena*);
+template<> ::secmng::v2::MessageSummary* Arena::CreateMaybeMessage<::secmng::v2::MessageSummary>(Arena*);
+template<> ::secmng::v2::QueryMessageListRequest* Arena::CreateMaybeMessage<::secmng::v2::QueryMessageListRequest>(Arena*);
+template<> ::secmng::v2::QueryMessageListResponse* Arena::CreateMaybeMessage<::secmng::v2::QueryMessageListResponse>(Arena*);
 template<> ::secmng::v2::QueryMessageRequest* Arena::CreateMaybeMessage<::secmng::v2::QueryMessageRequest>(Arena*);
 template<> ::secmng::v2::QueryMessageResponse* Arena::CreateMaybeMessage<::secmng::v2::QueryMessageResponse>(Arena*);
 template<> ::secmng::v2::RequestPacket* Arena::CreateMaybeMessage<::secmng::v2::RequestPacket>(Arena*);
@@ -102,12 +114,14 @@ enum CommandType : int {
   CMD_SEND_MSG_RESP = 2,
   CMD_QUERY_MSG_REQ = 3,
   CMD_QUERY_MSG_RESP = 4,
+  CMD_QUERY_MSG_LIST_REQ = 5,
+  CMD_QUERY_MSG_LIST_RESP = 6,
   CommandType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   CommandType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
 bool CommandType_IsValid(int value);
 constexpr CommandType CommandType_MIN = CMD_UNKNOWN;
-constexpr CommandType CommandType_MAX = CMD_QUERY_MSG_RESP;
+constexpr CommandType CommandType_MAX = CMD_QUERY_MSG_LIST_RESP;
 constexpr int CommandType_ARRAYSIZE = CommandType_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* CommandType_descriptor();
@@ -208,6 +222,145 @@ inline bool DeliveryStatus_Parse(
 }
 // ===================================================================
 
+class QueryMessageListRequest :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:secmng.v2.QueryMessageListRequest) */ {
+ public:
+  QueryMessageListRequest();
+  virtual ~QueryMessageListRequest();
+
+  QueryMessageListRequest(const QueryMessageListRequest& from);
+  QueryMessageListRequest(QueryMessageListRequest&& from) noexcept
+    : QueryMessageListRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline QueryMessageListRequest& operator=(const QueryMessageListRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline QueryMessageListRequest& operator=(QueryMessageListRequest&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const QueryMessageListRequest& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const QueryMessageListRequest* internal_default_instance() {
+    return reinterpret_cast<const QueryMessageListRequest*>(
+               &_QueryMessageListRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    0;
+
+  void Swap(QueryMessageListRequest* other);
+  friend void swap(QueryMessageListRequest& a, QueryMessageListRequest& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline QueryMessageListRequest* New() const final {
+    return CreateMaybeMessage<QueryMessageListRequest>(nullptr);
+  }
+
+  QueryMessageListRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<QueryMessageListRequest>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const QueryMessageListRequest& from);
+  void MergeFrom(const QueryMessageListRequest& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(QueryMessageListRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "secmng.v2.QueryMessageListRequest";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_MessageV2_2eproto);
+    return ::descriptor_table_MessageV2_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string sender_id = 1;
+  void clear_sender_id();
+  static const int kSenderIdFieldNumber = 1;
+  const std::string& sender_id() const;
+  void set_sender_id(const std::string& value);
+  void set_sender_id(std::string&& value);
+  void set_sender_id(const char* value);
+  void set_sender_id(const char* value, size_t size);
+  std::string* mutable_sender_id();
+  std::string* release_sender_id();
+  void set_allocated_sender_id(std::string* sender_id);
+
+  // int32 limit = 2;
+  void clear_limit();
+  static const int kLimitFieldNumber = 2;
+  ::PROTOBUF_NAMESPACE_ID::int32 limit() const;
+  void set_limit(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:secmng.v2.QueryMessageListRequest)
+ private:
+  class HasBitSetters;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr sender_id_;
+  ::PROTOBUF_NAMESPACE_ID::int32 limit_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_MessageV2_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Header :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:secmng.v2.Header) */ {
  public:
@@ -250,7 +403,7 @@ class Header :
                &_Header_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    0;
+    1;
 
   void Swap(Header* other);
   friend void swap(Header& a, Header& b) {
@@ -422,7 +575,7 @@ class EncryptedMessage :
                &_EncryptedMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    2;
 
   void Swap(EncryptedMessage* other);
   friend void swap(EncryptedMessage& a, EncryptedMessage& b) {
@@ -607,7 +760,7 @@ class SendMessageRequest :
                &_SendMessageRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    3;
 
   void Swap(SendMessageRequest* other);
   friend void swap(SendMessageRequest& a, SendMessageRequest& b) {
@@ -736,7 +889,7 @@ class SendMessageResponse :
                &_SendMessageResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   void Swap(SendMessageResponse* other);
   friend void swap(SendMessageResponse& a, SendMessageResponse& b) {
@@ -902,7 +1055,7 @@ class QueryMessageRequest :
                &_QueryMessageRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    5;
 
   void Swap(QueryMessageRequest* other);
   friend void swap(QueryMessageRequest& a, QueryMessageRequest& b) {
@@ -1034,7 +1187,7 @@ class QueryMessageResponse :
                &_QueryMessageResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    6;
 
   void Swap(QueryMessageResponse* other);
   friend void swap(QueryMessageResponse& a, QueryMessageResponse& b) {
@@ -1204,6 +1357,350 @@ class QueryMessageResponse :
 };
 // -------------------------------------------------------------------
 
+class MessageSummary :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:secmng.v2.MessageSummary) */ {
+ public:
+  MessageSummary();
+  virtual ~MessageSummary();
+
+  MessageSummary(const MessageSummary& from);
+  MessageSummary(MessageSummary&& from) noexcept
+    : MessageSummary() {
+    *this = ::std::move(from);
+  }
+
+  inline MessageSummary& operator=(const MessageSummary& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline MessageSummary& operator=(MessageSummary&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const MessageSummary& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const MessageSummary* internal_default_instance() {
+    return reinterpret_cast<const MessageSummary*>(
+               &_MessageSummary_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  void Swap(MessageSummary* other);
+  friend void swap(MessageSummary& a, MessageSummary& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline MessageSummary* New() const final {
+    return CreateMaybeMessage<MessageSummary>(nullptr);
+  }
+
+  MessageSummary* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<MessageSummary>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const MessageSummary& from);
+  void MergeFrom(const MessageSummary& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(MessageSummary* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "secmng.v2.MessageSummary";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_MessageV2_2eproto);
+    return ::descriptor_table_MessageV2_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string server_message_id = 1;
+  void clear_server_message_id();
+  static const int kServerMessageIdFieldNumber = 1;
+  const std::string& server_message_id() const;
+  void set_server_message_id(const std::string& value);
+  void set_server_message_id(std::string&& value);
+  void set_server_message_id(const char* value);
+  void set_server_message_id(const char* value, size_t size);
+  std::string* mutable_server_message_id();
+  std::string* release_server_message_id();
+  void set_allocated_server_message_id(std::string* server_message_id);
+
+  // string sender_id = 2;
+  void clear_sender_id();
+  static const int kSenderIdFieldNumber = 2;
+  const std::string& sender_id() const;
+  void set_sender_id(const std::string& value);
+  void set_sender_id(std::string&& value);
+  void set_sender_id(const char* value);
+  void set_sender_id(const char* value, size_t size);
+  std::string* mutable_sender_id();
+  std::string* release_sender_id();
+  void set_allocated_sender_id(std::string* sender_id);
+
+  // string receiver_id = 3;
+  void clear_receiver_id();
+  static const int kReceiverIdFieldNumber = 3;
+  const std::string& receiver_id() const;
+  void set_receiver_id(const std::string& value);
+  void set_receiver_id(std::string&& value);
+  void set_receiver_id(const char* value);
+  void set_receiver_id(const char* value, size_t size);
+  std::string* mutable_receiver_id();
+  std::string* release_receiver_id();
+  void set_allocated_receiver_id(std::string* receiver_id);
+
+  // string msg_type = 5;
+  void clear_msg_type();
+  static const int kMsgTypeFieldNumber = 5;
+  const std::string& msg_type() const;
+  void set_msg_type(const std::string& value);
+  void set_msg_type(std::string&& value);
+  void set_msg_type(const char* value);
+  void set_msg_type(const char* value, size_t size);
+  std::string* mutable_msg_type();
+  std::string* release_msg_type();
+  void set_allocated_msg_type(std::string* msg_type);
+
+  // int32 key_id = 4;
+  void clear_key_id();
+  static const int kKeyIdFieldNumber = 4;
+  ::PROTOBUF_NAMESPACE_ID::int32 key_id() const;
+  void set_key_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // int32 status = 7;
+  void clear_status();
+  static const int kStatusFieldNumber = 7;
+  ::PROTOBUF_NAMESPACE_ID::int32 status() const;
+  void set_status(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // int64 send_time = 6;
+  void clear_send_time();
+  static const int kSendTimeFieldNumber = 6;
+  ::PROTOBUF_NAMESPACE_ID::int64 send_time() const;
+  void set_send_time(::PROTOBUF_NAMESPACE_ID::int64 value);
+
+  // @@protoc_insertion_point(class_scope:secmng.v2.MessageSummary)
+ private:
+  class HasBitSetters;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr server_message_id_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr sender_id_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr receiver_id_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr msg_type_;
+  ::PROTOBUF_NAMESPACE_ID::int32 key_id_;
+  ::PROTOBUF_NAMESPACE_ID::int32 status_;
+  ::PROTOBUF_NAMESPACE_ID::int64 send_time_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_MessageV2_2eproto;
+};
+// -------------------------------------------------------------------
+
+class QueryMessageListResponse :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:secmng.v2.QueryMessageListResponse) */ {
+ public:
+  QueryMessageListResponse();
+  virtual ~QueryMessageListResponse();
+
+  QueryMessageListResponse(const QueryMessageListResponse& from);
+  QueryMessageListResponse(QueryMessageListResponse&& from) noexcept
+    : QueryMessageListResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline QueryMessageListResponse& operator=(const QueryMessageListResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline QueryMessageListResponse& operator=(QueryMessageListResponse&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const QueryMessageListResponse& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const QueryMessageListResponse* internal_default_instance() {
+    return reinterpret_cast<const QueryMessageListResponse*>(
+               &_QueryMessageListResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    8;
+
+  void Swap(QueryMessageListResponse* other);
+  friend void swap(QueryMessageListResponse& a, QueryMessageListResponse& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline QueryMessageListResponse* New() const final {
+    return CreateMaybeMessage<QueryMessageListResponse>(nullptr);
+  }
+
+  QueryMessageListResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<QueryMessageListResponse>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const QueryMessageListResponse& from);
+  void MergeFrom(const QueryMessageListResponse& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(QueryMessageListResponse* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "secmng.v2.QueryMessageListResponse";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_MessageV2_2eproto);
+    return ::descriptor_table_MessageV2_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .secmng.v2.MessageSummary messages = 3;
+  int messages_size() const;
+  void clear_messages();
+  static const int kMessagesFieldNumber = 3;
+  ::secmng::v2::MessageSummary* mutable_messages(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::secmng::v2::MessageSummary >*
+      mutable_messages();
+  const ::secmng::v2::MessageSummary& messages(int index) const;
+  ::secmng::v2::MessageSummary* add_messages();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::secmng::v2::MessageSummary >&
+      messages() const;
+
+  // string message = 2;
+  void clear_message();
+  static const int kMessageFieldNumber = 2;
+  const std::string& message() const;
+  void set_message(const std::string& value);
+  void set_message(std::string&& value);
+  void set_message(const char* value);
+  void set_message(const char* value, size_t size);
+  std::string* mutable_message();
+  std::string* release_message();
+  void set_allocated_message(std::string* message);
+
+  // .secmng.v2.ResultCode code = 1;
+  void clear_code();
+  static const int kCodeFieldNumber = 1;
+  ::secmng::v2::ResultCode code() const;
+  void set_code(::secmng::v2::ResultCode value);
+
+  // @@protoc_insertion_point(class_scope:secmng.v2.QueryMessageListResponse)
+ private:
+  class HasBitSetters;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::secmng::v2::MessageSummary > messages_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+  int code_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_MessageV2_2eproto;
+};
+// -------------------------------------------------------------------
+
 class RequestPacket :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:secmng.v2.RequestPacket) */ {
  public:
@@ -1243,6 +1740,7 @@ class RequestPacket :
   enum BodyCase {
     kSendMsgReq = 2,
     kQueryMsgReq = 3,
+    kQueryMsgListReq = 4,
     BODY_NOT_SET = 0,
   };
 
@@ -1252,7 +1750,7 @@ class RequestPacket :
                &_RequestPacket_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    9;
 
   void Swap(RequestPacket* other);
   friend void swap(RequestPacket& a, RequestPacket& b) {
@@ -1346,6 +1844,15 @@ class RequestPacket :
   ::secmng::v2::QueryMessageRequest* mutable_query_msg_req();
   void set_allocated_query_msg_req(::secmng::v2::QueryMessageRequest* query_msg_req);
 
+  // .secmng.v2.QueryMessageListRequest query_msg_list_req = 4;
+  bool has_query_msg_list_req() const;
+  void clear_query_msg_list_req();
+  static const int kQueryMsgListReqFieldNumber = 4;
+  const ::secmng::v2::QueryMessageListRequest& query_msg_list_req() const;
+  ::secmng::v2::QueryMessageListRequest* release_query_msg_list_req();
+  ::secmng::v2::QueryMessageListRequest* mutable_query_msg_list_req();
+  void set_allocated_query_msg_list_req(::secmng::v2::QueryMessageListRequest* query_msg_list_req);
+
   void clear_body();
   BodyCase body_case() const;
   // @@protoc_insertion_point(class_scope:secmng.v2.RequestPacket)
@@ -1353,6 +1860,7 @@ class RequestPacket :
   class HasBitSetters;
   void set_has_send_msg_req();
   void set_has_query_msg_req();
+  void set_has_query_msg_list_req();
 
   inline bool has_body() const;
   inline void clear_has_body();
@@ -1363,6 +1871,7 @@ class RequestPacket :
     BodyUnion() {}
     ::secmng::v2::SendMessageRequest* send_msg_req_;
     ::secmng::v2::QueryMessageRequest* query_msg_req_;
+    ::secmng::v2::QueryMessageListRequest* query_msg_list_req_;
   } body_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
@@ -1410,6 +1919,7 @@ class ResponsePacket :
   enum BodyCase {
     kSendMsgResp = 2,
     kQueryMsgResp = 3,
+    kQueryMsgListResp = 4,
     BODY_NOT_SET = 0,
   };
 
@@ -1419,7 +1929,7 @@ class ResponsePacket :
                &_ResponsePacket_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    10;
 
   void Swap(ResponsePacket* other);
   friend void swap(ResponsePacket& a, ResponsePacket& b) {
@@ -1513,6 +2023,15 @@ class ResponsePacket :
   ::secmng::v2::QueryMessageResponse* mutable_query_msg_resp();
   void set_allocated_query_msg_resp(::secmng::v2::QueryMessageResponse* query_msg_resp);
 
+  // .secmng.v2.QueryMessageListResponse query_msg_list_resp = 4;
+  bool has_query_msg_list_resp() const;
+  void clear_query_msg_list_resp();
+  static const int kQueryMsgListRespFieldNumber = 4;
+  const ::secmng::v2::QueryMessageListResponse& query_msg_list_resp() const;
+  ::secmng::v2::QueryMessageListResponse* release_query_msg_list_resp();
+  ::secmng::v2::QueryMessageListResponse* mutable_query_msg_list_resp();
+  void set_allocated_query_msg_list_resp(::secmng::v2::QueryMessageListResponse* query_msg_list_resp);
+
   void clear_body();
   BodyCase body_case() const;
   // @@protoc_insertion_point(class_scope:secmng.v2.ResponsePacket)
@@ -1520,6 +2039,7 @@ class ResponsePacket :
   class HasBitSetters;
   void set_has_send_msg_resp();
   void set_has_query_msg_resp();
+  void set_has_query_msg_list_resp();
 
   inline bool has_body() const;
   inline void clear_has_body();
@@ -1530,6 +2050,7 @@ class ResponsePacket :
     BodyUnion() {}
     ::secmng::v2::SendMessageResponse* send_msg_resp_;
     ::secmng::v2::QueryMessageResponse* query_msg_resp_;
+    ::secmng::v2::QueryMessageListResponse* query_msg_list_resp_;
   } body_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
@@ -1545,6 +2066,75 @@ class ResponsePacket :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// QueryMessageListRequest
+
+// string sender_id = 1;
+inline void QueryMessageListRequest::clear_sender_id() {
+  sender_id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& QueryMessageListRequest::sender_id() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.QueryMessageListRequest.sender_id)
+  return sender_id_.GetNoArena();
+}
+inline void QueryMessageListRequest::set_sender_id(const std::string& value) {
+  
+  sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageListRequest.sender_id)
+}
+inline void QueryMessageListRequest::set_sender_id(std::string&& value) {
+  
+  sender_id_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:secmng.v2.QueryMessageListRequest.sender_id)
+}
+inline void QueryMessageListRequest::set_sender_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:secmng.v2.QueryMessageListRequest.sender_id)
+}
+inline void QueryMessageListRequest::set_sender_id(const char* value, size_t size) {
+  
+  sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:secmng.v2.QueryMessageListRequest.sender_id)
+}
+inline std::string* QueryMessageListRequest::mutable_sender_id() {
+  
+  // @@protoc_insertion_point(field_mutable:secmng.v2.QueryMessageListRequest.sender_id)
+  return sender_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* QueryMessageListRequest::release_sender_id() {
+  // @@protoc_insertion_point(field_release:secmng.v2.QueryMessageListRequest.sender_id)
+  
+  return sender_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void QueryMessageListRequest::set_allocated_sender_id(std::string* sender_id) {
+  if (sender_id != nullptr) {
+    
+  } else {
+    
+  }
+  sender_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), sender_id);
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.QueryMessageListRequest.sender_id)
+}
+
+// int32 limit = 2;
+inline void QueryMessageListRequest::clear_limit() {
+  limit_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 QueryMessageListRequest::limit() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.QueryMessageListRequest.limit)
+  return limit_;
+}
+inline void QueryMessageListRequest::set_limit(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  limit_ = value;
+  // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageListRequest.limit)
+}
+
+// -------------------------------------------------------------------
+
 // Header
 
 // string message_id = 1;
@@ -2539,6 +3129,355 @@ inline void QueryMessageResponse::set_status(::PROTOBUF_NAMESPACE_ID::int32 valu
 
 // -------------------------------------------------------------------
 
+// MessageSummary
+
+// string server_message_id = 1;
+inline void MessageSummary::clear_server_message_id() {
+  server_message_id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& MessageSummary::server_message_id() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.MessageSummary.server_message_id)
+  return server_message_id_.GetNoArena();
+}
+inline void MessageSummary::set_server_message_id(const std::string& value) {
+  
+  server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:secmng.v2.MessageSummary.server_message_id)
+}
+inline void MessageSummary::set_server_message_id(std::string&& value) {
+  
+  server_message_id_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:secmng.v2.MessageSummary.server_message_id)
+}
+inline void MessageSummary::set_server_message_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:secmng.v2.MessageSummary.server_message_id)
+}
+inline void MessageSummary::set_server_message_id(const char* value, size_t size) {
+  
+  server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:secmng.v2.MessageSummary.server_message_id)
+}
+inline std::string* MessageSummary::mutable_server_message_id() {
+  
+  // @@protoc_insertion_point(field_mutable:secmng.v2.MessageSummary.server_message_id)
+  return server_message_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* MessageSummary::release_server_message_id() {
+  // @@protoc_insertion_point(field_release:secmng.v2.MessageSummary.server_message_id)
+  
+  return server_message_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void MessageSummary::set_allocated_server_message_id(std::string* server_message_id) {
+  if (server_message_id != nullptr) {
+    
+  } else {
+    
+  }
+  server_message_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), server_message_id);
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.MessageSummary.server_message_id)
+}
+
+// string sender_id = 2;
+inline void MessageSummary::clear_sender_id() {
+  sender_id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& MessageSummary::sender_id() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.MessageSummary.sender_id)
+  return sender_id_.GetNoArena();
+}
+inline void MessageSummary::set_sender_id(const std::string& value) {
+  
+  sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:secmng.v2.MessageSummary.sender_id)
+}
+inline void MessageSummary::set_sender_id(std::string&& value) {
+  
+  sender_id_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:secmng.v2.MessageSummary.sender_id)
+}
+inline void MessageSummary::set_sender_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:secmng.v2.MessageSummary.sender_id)
+}
+inline void MessageSummary::set_sender_id(const char* value, size_t size) {
+  
+  sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:secmng.v2.MessageSummary.sender_id)
+}
+inline std::string* MessageSummary::mutable_sender_id() {
+  
+  // @@protoc_insertion_point(field_mutable:secmng.v2.MessageSummary.sender_id)
+  return sender_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* MessageSummary::release_sender_id() {
+  // @@protoc_insertion_point(field_release:secmng.v2.MessageSummary.sender_id)
+  
+  return sender_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void MessageSummary::set_allocated_sender_id(std::string* sender_id) {
+  if (sender_id != nullptr) {
+    
+  } else {
+    
+  }
+  sender_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), sender_id);
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.MessageSummary.sender_id)
+}
+
+// string receiver_id = 3;
+inline void MessageSummary::clear_receiver_id() {
+  receiver_id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& MessageSummary::receiver_id() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.MessageSummary.receiver_id)
+  return receiver_id_.GetNoArena();
+}
+inline void MessageSummary::set_receiver_id(const std::string& value) {
+  
+  receiver_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:secmng.v2.MessageSummary.receiver_id)
+}
+inline void MessageSummary::set_receiver_id(std::string&& value) {
+  
+  receiver_id_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:secmng.v2.MessageSummary.receiver_id)
+}
+inline void MessageSummary::set_receiver_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  receiver_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:secmng.v2.MessageSummary.receiver_id)
+}
+inline void MessageSummary::set_receiver_id(const char* value, size_t size) {
+  
+  receiver_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:secmng.v2.MessageSummary.receiver_id)
+}
+inline std::string* MessageSummary::mutable_receiver_id() {
+  
+  // @@protoc_insertion_point(field_mutable:secmng.v2.MessageSummary.receiver_id)
+  return receiver_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* MessageSummary::release_receiver_id() {
+  // @@protoc_insertion_point(field_release:secmng.v2.MessageSummary.receiver_id)
+  
+  return receiver_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void MessageSummary::set_allocated_receiver_id(std::string* receiver_id) {
+  if (receiver_id != nullptr) {
+    
+  } else {
+    
+  }
+  receiver_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), receiver_id);
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.MessageSummary.receiver_id)
+}
+
+// int32 key_id = 4;
+inline void MessageSummary::clear_key_id() {
+  key_id_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 MessageSummary::key_id() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.MessageSummary.key_id)
+  return key_id_;
+}
+inline void MessageSummary::set_key_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  key_id_ = value;
+  // @@protoc_insertion_point(field_set:secmng.v2.MessageSummary.key_id)
+}
+
+// string msg_type = 5;
+inline void MessageSummary::clear_msg_type() {
+  msg_type_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& MessageSummary::msg_type() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.MessageSummary.msg_type)
+  return msg_type_.GetNoArena();
+}
+inline void MessageSummary::set_msg_type(const std::string& value) {
+  
+  msg_type_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:secmng.v2.MessageSummary.msg_type)
+}
+inline void MessageSummary::set_msg_type(std::string&& value) {
+  
+  msg_type_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:secmng.v2.MessageSummary.msg_type)
+}
+inline void MessageSummary::set_msg_type(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  msg_type_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:secmng.v2.MessageSummary.msg_type)
+}
+inline void MessageSummary::set_msg_type(const char* value, size_t size) {
+  
+  msg_type_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:secmng.v2.MessageSummary.msg_type)
+}
+inline std::string* MessageSummary::mutable_msg_type() {
+  
+  // @@protoc_insertion_point(field_mutable:secmng.v2.MessageSummary.msg_type)
+  return msg_type_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* MessageSummary::release_msg_type() {
+  // @@protoc_insertion_point(field_release:secmng.v2.MessageSummary.msg_type)
+  
+  return msg_type_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void MessageSummary::set_allocated_msg_type(std::string* msg_type) {
+  if (msg_type != nullptr) {
+    
+  } else {
+    
+  }
+  msg_type_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), msg_type);
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.MessageSummary.msg_type)
+}
+
+// int64 send_time = 6;
+inline void MessageSummary::clear_send_time() {
+  send_time_ = PROTOBUF_LONGLONG(0);
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 MessageSummary::send_time() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.MessageSummary.send_time)
+  return send_time_;
+}
+inline void MessageSummary::set_send_time(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  
+  send_time_ = value;
+  // @@protoc_insertion_point(field_set:secmng.v2.MessageSummary.send_time)
+}
+
+// int32 status = 7;
+inline void MessageSummary::clear_status() {
+  status_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 MessageSummary::status() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.MessageSummary.status)
+  return status_;
+}
+inline void MessageSummary::set_status(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  status_ = value;
+  // @@protoc_insertion_point(field_set:secmng.v2.MessageSummary.status)
+}
+
+// -------------------------------------------------------------------
+
+// QueryMessageListResponse
+
+// .secmng.v2.ResultCode code = 1;
+inline void QueryMessageListResponse::clear_code() {
+  code_ = 0;
+}
+inline ::secmng::v2::ResultCode QueryMessageListResponse::code() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.QueryMessageListResponse.code)
+  return static_cast< ::secmng::v2::ResultCode >(code_);
+}
+inline void QueryMessageListResponse::set_code(::secmng::v2::ResultCode value) {
+  
+  code_ = value;
+  // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageListResponse.code)
+}
+
+// string message = 2;
+inline void QueryMessageListResponse::clear_message() {
+  message_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& QueryMessageListResponse::message() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.QueryMessageListResponse.message)
+  return message_.GetNoArena();
+}
+inline void QueryMessageListResponse::set_message(const std::string& value) {
+  
+  message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageListResponse.message)
+}
+inline void QueryMessageListResponse::set_message(std::string&& value) {
+  
+  message_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:secmng.v2.QueryMessageListResponse.message)
+}
+inline void QueryMessageListResponse::set_message(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:secmng.v2.QueryMessageListResponse.message)
+}
+inline void QueryMessageListResponse::set_message(const char* value, size_t size) {
+  
+  message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:secmng.v2.QueryMessageListResponse.message)
+}
+inline std::string* QueryMessageListResponse::mutable_message() {
+  
+  // @@protoc_insertion_point(field_mutable:secmng.v2.QueryMessageListResponse.message)
+  return message_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* QueryMessageListResponse::release_message() {
+  // @@protoc_insertion_point(field_release:secmng.v2.QueryMessageListResponse.message)
+  
+  return message_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void QueryMessageListResponse::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+    
+  } else {
+    
+  }
+  message_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message);
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.QueryMessageListResponse.message)
+}
+
+// repeated .secmng.v2.MessageSummary messages = 3;
+inline int QueryMessageListResponse::messages_size() const {
+  return messages_.size();
+}
+inline void QueryMessageListResponse::clear_messages() {
+  messages_.Clear();
+}
+inline ::secmng::v2::MessageSummary* QueryMessageListResponse::mutable_messages(int index) {
+  // @@protoc_insertion_point(field_mutable:secmng.v2.QueryMessageListResponse.messages)
+  return messages_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::secmng::v2::MessageSummary >*
+QueryMessageListResponse::mutable_messages() {
+  // @@protoc_insertion_point(field_mutable_list:secmng.v2.QueryMessageListResponse.messages)
+  return &messages_;
+}
+inline const ::secmng::v2::MessageSummary& QueryMessageListResponse::messages(int index) const {
+  // @@protoc_insertion_point(field_get:secmng.v2.QueryMessageListResponse.messages)
+  return messages_.Get(index);
+}
+inline ::secmng::v2::MessageSummary* QueryMessageListResponse::add_messages() {
+  // @@protoc_insertion_point(field_add:secmng.v2.QueryMessageListResponse.messages)
+  return messages_.Add();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::secmng::v2::MessageSummary >&
+QueryMessageListResponse::messages() const {
+  // @@protoc_insertion_point(field_list:secmng.v2.QueryMessageListResponse.messages)
+  return messages_;
+}
+
+// -------------------------------------------------------------------
+
 // RequestPacket
 
 // .secmng.v2.Header header = 1;
@@ -2672,6 +3611,47 @@ inline ::secmng::v2::QueryMessageRequest* RequestPacket::mutable_query_msg_req()
   }
   // @@protoc_insertion_point(field_mutable:secmng.v2.RequestPacket.query_msg_req)
   return body_.query_msg_req_;
+}
+
+// .secmng.v2.QueryMessageListRequest query_msg_list_req = 4;
+inline bool RequestPacket::has_query_msg_list_req() const {
+  return body_case() == kQueryMsgListReq;
+}
+inline void RequestPacket::set_has_query_msg_list_req() {
+  _oneof_case_[0] = kQueryMsgListReq;
+}
+inline void RequestPacket::clear_query_msg_list_req() {
+  if (has_query_msg_list_req()) {
+    delete body_.query_msg_list_req_;
+    clear_has_body();
+  }
+}
+inline ::secmng::v2::QueryMessageListRequest* RequestPacket::release_query_msg_list_req() {
+  // @@protoc_insertion_point(field_release:secmng.v2.RequestPacket.query_msg_list_req)
+  if (has_query_msg_list_req()) {
+    clear_has_body();
+      ::secmng::v2::QueryMessageListRequest* temp = body_.query_msg_list_req_;
+    body_.query_msg_list_req_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::secmng::v2::QueryMessageListRequest& RequestPacket::query_msg_list_req() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.RequestPacket.query_msg_list_req)
+  return has_query_msg_list_req()
+      ? *body_.query_msg_list_req_
+      : *reinterpret_cast< ::secmng::v2::QueryMessageListRequest*>(&::secmng::v2::_QueryMessageListRequest_default_instance_);
+}
+inline ::secmng::v2::QueryMessageListRequest* RequestPacket::mutable_query_msg_list_req() {
+  if (!has_query_msg_list_req()) {
+    clear_body();
+    set_has_query_msg_list_req();
+    body_.query_msg_list_req_ = CreateMaybeMessage< ::secmng::v2::QueryMessageListRequest >(
+        GetArenaNoVirtual());
+  }
+  // @@protoc_insertion_point(field_mutable:secmng.v2.RequestPacket.query_msg_list_req)
+  return body_.query_msg_list_req_;
 }
 
 inline bool RequestPacket::has_body() const {
@@ -2820,6 +3800,47 @@ inline ::secmng::v2::QueryMessageResponse* ResponsePacket::mutable_query_msg_res
   return body_.query_msg_resp_;
 }
 
+// .secmng.v2.QueryMessageListResponse query_msg_list_resp = 4;
+inline bool ResponsePacket::has_query_msg_list_resp() const {
+  return body_case() == kQueryMsgListResp;
+}
+inline void ResponsePacket::set_has_query_msg_list_resp() {
+  _oneof_case_[0] = kQueryMsgListResp;
+}
+inline void ResponsePacket::clear_query_msg_list_resp() {
+  if (has_query_msg_list_resp()) {
+    delete body_.query_msg_list_resp_;
+    clear_has_body();
+  }
+}
+inline ::secmng::v2::QueryMessageListResponse* ResponsePacket::release_query_msg_list_resp() {
+  // @@protoc_insertion_point(field_release:secmng.v2.ResponsePacket.query_msg_list_resp)
+  if (has_query_msg_list_resp()) {
+    clear_has_body();
+      ::secmng::v2::QueryMessageListResponse* temp = body_.query_msg_list_resp_;
+    body_.query_msg_list_resp_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::secmng::v2::QueryMessageListResponse& ResponsePacket::query_msg_list_resp() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.ResponsePacket.query_msg_list_resp)
+  return has_query_msg_list_resp()
+      ? *body_.query_msg_list_resp_
+      : *reinterpret_cast< ::secmng::v2::QueryMessageListResponse*>(&::secmng::v2::_QueryMessageListResponse_default_instance_);
+}
+inline ::secmng::v2::QueryMessageListResponse* ResponsePacket::mutable_query_msg_list_resp() {
+  if (!has_query_msg_list_resp()) {
+    clear_body();
+    set_has_query_msg_list_resp();
+    body_.query_msg_list_resp_ = CreateMaybeMessage< ::secmng::v2::QueryMessageListResponse >(
+        GetArenaNoVirtual());
+  }
+  // @@protoc_insertion_point(field_mutable:secmng.v2.ResponsePacket.query_msg_list_resp)
+  return body_.query_msg_list_resp_;
+}
+
 inline bool ResponsePacket::has_body() const {
   return body_case() != BODY_NOT_SET;
 }
@@ -2832,6 +3853,12 @@ inline ResponsePacket::BodyCase ResponsePacket::body_case() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

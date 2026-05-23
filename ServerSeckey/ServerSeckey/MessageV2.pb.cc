@@ -17,12 +17,19 @@
 #include <google/protobuf/port_def.inc>
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_EncryptedMessage_MessageV2_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Header_MessageV2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_MessageSummary_MessageV2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_QueryMessageListRequest_MessageV2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_QueryMessageListResponse_MessageV2_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_QueryMessageRequest_MessageV2_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_QueryMessageResponse_MessageV2_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_SendMessageRequest_MessageV2_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SendMessageResponse_MessageV2_2eproto;
 namespace secmng {
 namespace v2 {
+class QueryMessageListRequestDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<QueryMessageListRequest> _instance;
+} _QueryMessageListRequest_default_instance_;
 class HeaderDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Header> _instance;
@@ -47,17 +54,27 @@ class QueryMessageResponseDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<QueryMessageResponse> _instance;
 } _QueryMessageResponse_default_instance_;
+class MessageSummaryDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<MessageSummary> _instance;
+} _MessageSummary_default_instance_;
+class QueryMessageListResponseDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<QueryMessageListResponse> _instance;
+} _QueryMessageListResponse_default_instance_;
 class RequestPacketDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<RequestPacket> _instance;
   const ::secmng::v2::SendMessageRequest* send_msg_req_;
   const ::secmng::v2::QueryMessageRequest* query_msg_req_;
+  const ::secmng::v2::QueryMessageListRequest* query_msg_list_req_;
 } _RequestPacket_default_instance_;
 class ResponsePacketDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ResponsePacket> _instance;
   const ::secmng::v2::SendMessageResponse* send_msg_resp_;
   const ::secmng::v2::QueryMessageResponse* query_msg_resp_;
+  const ::secmng::v2::QueryMessageListResponse* query_msg_list_resp_;
 } _ResponsePacket_default_instance_;
 }  // namespace v2
 }  // namespace secmng
@@ -88,6 +105,49 @@ static void InitDefaultsscc_info_Header_MessageV2_2eproto() {
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Header_MessageV2_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_Header_MessageV2_2eproto}, {}};
+
+static void InitDefaultsscc_info_MessageSummary_MessageV2_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::secmng::v2::_MessageSummary_default_instance_;
+    new (ptr) ::secmng::v2::MessageSummary();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::secmng::v2::MessageSummary::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_MessageSummary_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_MessageSummary_MessageV2_2eproto}, {}};
+
+static void InitDefaultsscc_info_QueryMessageListRequest_MessageV2_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::secmng::v2::_QueryMessageListRequest_default_instance_;
+    new (ptr) ::secmng::v2::QueryMessageListRequest();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::secmng::v2::QueryMessageListRequest::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_QueryMessageListRequest_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_QueryMessageListRequest_MessageV2_2eproto}, {}};
+
+static void InitDefaultsscc_info_QueryMessageListResponse_MessageV2_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::secmng::v2::_QueryMessageListResponse_default_instance_;
+    new (ptr) ::secmng::v2::QueryMessageListResponse();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::secmng::v2::QueryMessageListResponse::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_QueryMessageListResponse_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsscc_info_QueryMessageListResponse_MessageV2_2eproto}, {
+      &scc_info_MessageSummary_MessageV2_2eproto.base,}};
 
 static void InitDefaultsscc_info_QueryMessageRequest_MessageV2_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -128,11 +188,12 @@ static void InitDefaultsscc_info_RequestPacket_MessageV2_2eproto() {
   ::secmng::v2::RequestPacket::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<3> scc_info_RequestPacket_MessageV2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 3, InitDefaultsscc_info_RequestPacket_MessageV2_2eproto}, {
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<4> scc_info_RequestPacket_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 4, InitDefaultsscc_info_RequestPacket_MessageV2_2eproto}, {
       &scc_info_Header_MessageV2_2eproto.base,
       &scc_info_SendMessageRequest_MessageV2_2eproto.base,
-      &scc_info_QueryMessageRequest_MessageV2_2eproto.base,}};
+      &scc_info_QueryMessageRequest_MessageV2_2eproto.base,
+      &scc_info_QueryMessageListRequest_MessageV2_2eproto.base,}};
 
 static void InitDefaultsscc_info_ResponsePacket_MessageV2_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -145,11 +206,12 @@ static void InitDefaultsscc_info_ResponsePacket_MessageV2_2eproto() {
   ::secmng::v2::ResponsePacket::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<3> scc_info_ResponsePacket_MessageV2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 3, InitDefaultsscc_info_ResponsePacket_MessageV2_2eproto}, {
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<4> scc_info_ResponsePacket_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 4, InitDefaultsscc_info_ResponsePacket_MessageV2_2eproto}, {
       &scc_info_Header_MessageV2_2eproto.base,
       &scc_info_SendMessageResponse_MessageV2_2eproto.base,
-      &scc_info_QueryMessageResponse_MessageV2_2eproto.base,}};
+      &scc_info_QueryMessageResponse_MessageV2_2eproto.base,
+      &scc_info_QueryMessageListResponse_MessageV2_2eproto.base,}};
 
 static void InitDefaultsscc_info_SendMessageRequest_MessageV2_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -180,11 +242,18 @@ static void InitDefaultsscc_info_SendMessageResponse_MessageV2_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SendMessageResponse_MessageV2_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_SendMessageResponse_MessageV2_2eproto}, {}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_MessageV2_2eproto[8];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_MessageV2_2eproto[11];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_MessageV2_2eproto[4];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_MessageV2_2eproto = nullptr;
 
 const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_MessageV2_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageListRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageListRequest, sender_id_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageListRequest, limit_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::secmng::v2::Header, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -243,6 +312,26 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_MessageV2_2eproto::offsets[] P
   PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageResponse, send_time_),
   PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageResponse, status_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::MessageSummary, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::MessageSummary, server_message_id_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::MessageSummary, sender_id_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::MessageSummary, receiver_id_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::MessageSummary, key_id_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::MessageSummary, msg_type_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::MessageSummary, send_time_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::MessageSummary, status_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageListResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageListResponse, code_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageListResponse, message_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageListResponse, messages_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::secmng::v2::RequestPacket, _internal_metadata_),
   ~0u,  // no _extensions_
   PROTOBUF_FIELD_OFFSET(::secmng::v2::RequestPacket, _oneof_case_[0]),
@@ -250,6 +339,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_MessageV2_2eproto::offsets[] P
   PROTOBUF_FIELD_OFFSET(::secmng::v2::RequestPacket, header_),
   offsetof(::secmng::v2::RequestPacketDefaultTypeInternal, send_msg_req_),
   offsetof(::secmng::v2::RequestPacketDefaultTypeInternal, query_msg_req_),
+  offsetof(::secmng::v2::RequestPacketDefaultTypeInternal, query_msg_list_req_),
   PROTOBUF_FIELD_OFFSET(::secmng::v2::RequestPacket, body_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::secmng::v2::ResponsePacket, _internal_metadata_),
@@ -259,79 +349,102 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_MessageV2_2eproto::offsets[] P
   PROTOBUF_FIELD_OFFSET(::secmng::v2::ResponsePacket, header_),
   offsetof(::secmng::v2::ResponsePacketDefaultTypeInternal, send_msg_resp_),
   offsetof(::secmng::v2::ResponsePacketDefaultTypeInternal, query_msg_resp_),
+  offsetof(::secmng::v2::ResponsePacketDefaultTypeInternal, query_msg_list_resp_),
   PROTOBUF_FIELD_OFFSET(::secmng::v2::ResponsePacket, body_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, sizeof(::secmng::v2::Header)},
-  { 10, -1, sizeof(::secmng::v2::EncryptedMessage)},
-  { 21, -1, sizeof(::secmng::v2::SendMessageRequest)},
-  { 27, -1, sizeof(::secmng::v2::SendMessageResponse)},
-  { 37, -1, sizeof(::secmng::v2::QueryMessageRequest)},
-  { 43, -1, sizeof(::secmng::v2::QueryMessageResponse)},
-  { 57, -1, sizeof(::secmng::v2::RequestPacket)},
-  { 66, -1, sizeof(::secmng::v2::ResponsePacket)},
+  { 0, -1, sizeof(::secmng::v2::QueryMessageListRequest)},
+  { 7, -1, sizeof(::secmng::v2::Header)},
+  { 17, -1, sizeof(::secmng::v2::EncryptedMessage)},
+  { 28, -1, sizeof(::secmng::v2::SendMessageRequest)},
+  { 34, -1, sizeof(::secmng::v2::SendMessageResponse)},
+  { 44, -1, sizeof(::secmng::v2::QueryMessageRequest)},
+  { 50, -1, sizeof(::secmng::v2::QueryMessageResponse)},
+  { 64, -1, sizeof(::secmng::v2::MessageSummary)},
+  { 76, -1, sizeof(::secmng::v2::QueryMessageListResponse)},
+  { 84, -1, sizeof(::secmng::v2::RequestPacket)},
+  { 94, -1, sizeof(::secmng::v2::ResponsePacket)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_QueryMessageListRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_Header_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_EncryptedMessage_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_SendMessageRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_SendMessageResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_QueryMessageRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_QueryMessageResponse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_MessageSummary_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_QueryMessageListResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_RequestPacket_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_ResponsePacket_default_instance_),
 };
 
 const char descriptor_table_protodef_MessageV2_2eproto[] =
-  "\n\017MessageV2.proto\022\tsecmng.v2\"\200\001\n\006Header\022"
-  "\022\n\nmessage_id\030\001 \001(\t\022\'\n\007command\030\002 \001(\0162\026.s"
-  "ecmng.v2.CommandType\022\021\n\tsender_id\030\003 \001(\t\022"
-  "\023\n\013receiver_id\030\004 \001(\t\022\021\n\ttimestamp\030\005 \001(\003\""
-  "\217\001\n\020EncryptedMessage\022\016\n\006key_id\030\001 \001(\005\022(\n\010"
-  "msg_type\030\002 \001(\0162\026.secmng.v2.MessageType\022\022"
-  "\n\nciphertext\030\003 \001(\t\022\r\n\005nonce\030\004 \001(\t\022\013\n\003tag"
-  "\030\005 \001(\t\022\021\n\talgorithm\030\006 \001(\t\"B\n\022SendMessage"
-  "Request\022,\n\007message\030\001 \001(\0132\033.secmng.v2.Enc"
-  "ryptedMessage\"\257\001\n\023SendMessageResponse\022#\n"
-  "\004code\030\001 \001(\0162\025.secmng.v2.ResultCode\022\017\n\007me"
-  "ssage\030\002 \001(\t\022\031\n\021server_message_id\030\003 \001(\t\022\023"
-  "\n\013server_time\030\004 \001(\003\0222\n\017delivery_status\030\005"
-  " \001(\0162\031.secmng.v2.DeliveryStatus\"0\n\023Query"
-  "MessageRequest\022\031\n\021server_message_id\030\001 \001("
-  "\t\"\324\001\n\024QueryMessageResponse\022#\n\004code\030\001 \001(\016"
-  "2\025.secmng.v2.ResultCode\022\017\n\007message\030\002 \001(\t"
-  "\022\031\n\021server_message_id\030\003 \001(\t\022\021\n\tsender_id"
-  "\030\004 \001(\t\022\023\n\013receiver_id\030\005 \001(\t\022\016\n\006key_id\030\006 "
-  "\001(\005\022\020\n\010msg_type\030\007 \001(\t\022\021\n\tsend_time\030\010 \001(\003"
-  "\022\016\n\006status\030\t \001(\005\"\252\001\n\rRequestPacket\022!\n\006he"
-  "ader\030\001 \001(\0132\021.secmng.v2.Header\0225\n\014send_ms"
-  "g_req\030\002 \001(\0132\035.secmng.v2.SendMessageReque"
-  "stH\000\0227\n\rquery_msg_req\030\003 \001(\0132\036.secmng.v2."
-  "QueryMessageRequestH\000B\006\n\004body\"\257\001\n\016Respon"
-  "sePacket\022!\n\006header\030\001 \001(\0132\021.secmng.v2.Hea"
-  "der\0227\n\rsend_msg_resp\030\002 \001(\0132\036.secmng.v2.S"
-  "endMessageResponseH\000\0229\n\016query_msg_resp\030\003"
-  " \001(\0132\037.secmng.v2.QueryMessageResponseH\000B"
-  "\006\n\004body*z\n\013CommandType\022\017\n\013CMD_UNKNOWN\020\000\022"
-  "\024\n\020CMD_SEND_MSG_REQ\020\001\022\025\n\021CMD_SEND_MSG_RE"
-  "SP\020\002\022\025\n\021CMD_QUERY_MSG_REQ\020\003\022\026\n\022CMD_QUERY"
-  "_MSG_RESP\020\004*\312\001\n\nResultCode\022\022\n\016RESULT_UNK"
-  "NOWN\020\000\022\022\n\016RESULT_SUCCESS\020\001\022\021\n\rRESULT_FAI"
-  "LED\020\002\022\030\n\024RESULT_KEY_NOT_FOUND\020\003\022\026\n\022RESUL"
-  "T_KEY_INVALID\020\004\022\031\n\025RESULT_DECRYPT_FAILED"
-  "\020\005\022\032\n\026RESULT_INVALID_REQUEST\020\006\022\030\n\024RESULT"
-  "_MSG_NOT_FOUND\020\007*6\n\013MessageType\022\024\n\020MSG_T"
-  "YPE_UNKNOWN\020\000\022\021\n\rMSG_TYPE_TEXT\020\001*T\n\016Deli"
-  "veryStatus\022\024\n\020DELIVERY_UNKNOWN\020\000\022\025\n\021DELI"
-  "VERY_ACCEPTED\020\001\022\025\n\021DELIVERY_REJECTED\020\002b\006"
-  "proto3"
+  "\n\017MessageV2.proto\022\tsecmng.v2\";\n\027QueryMes"
+  "sageListRequest\022\021\n\tsender_id\030\001 \001(\t\022\r\n\005li"
+  "mit\030\002 \001(\005\"\200\001\n\006Header\022\022\n\nmessage_id\030\001 \001(\t"
+  "\022\'\n\007command\030\002 \001(\0162\026.secmng.v2.CommandTyp"
+  "e\022\021\n\tsender_id\030\003 \001(\t\022\023\n\013receiver_id\030\004 \001("
+  "\t\022\021\n\ttimestamp\030\005 \001(\003\"\217\001\n\020EncryptedMessag"
+  "e\022\016\n\006key_id\030\001 \001(\005\022(\n\010msg_type\030\002 \001(\0162\026.se"
+  "cmng.v2.MessageType\022\022\n\nciphertext\030\003 \001(\t\022"
+  "\r\n\005nonce\030\004 \001(\t\022\013\n\003tag\030\005 \001(\t\022\021\n\talgorithm"
+  "\030\006 \001(\t\"B\n\022SendMessageRequest\022,\n\007message\030"
+  "\001 \001(\0132\033.secmng.v2.EncryptedMessage\"\257\001\n\023S"
+  "endMessageResponse\022#\n\004code\030\001 \001(\0162\025.secmn"
+  "g.v2.ResultCode\022\017\n\007message\030\002 \001(\t\022\031\n\021serv"
+  "er_message_id\030\003 \001(\t\022\023\n\013server_time\030\004 \001(\003"
+  "\0222\n\017delivery_status\030\005 \001(\0162\031.secmng.v2.De"
+  "liveryStatus\"0\n\023QueryMessageRequest\022\031\n\021s"
+  "erver_message_id\030\001 \001(\t\"\324\001\n\024QueryMessageR"
+  "esponse\022#\n\004code\030\001 \001(\0162\025.secmng.v2.Result"
+  "Code\022\017\n\007message\030\002 \001(\t\022\031\n\021server_message_"
+  "id\030\003 \001(\t\022\021\n\tsender_id\030\004 \001(\t\022\023\n\013receiver_"
+  "id\030\005 \001(\t\022\016\n\006key_id\030\006 \001(\005\022\020\n\010msg_type\030\007 \001"
+  "(\t\022\021\n\tsend_time\030\010 \001(\003\022\016\n\006status\030\t \001(\005\"\230\001"
+  "\n\016MessageSummary\022\031\n\021server_message_id\030\001 "
+  "\001(\t\022\021\n\tsender_id\030\002 \001(\t\022\023\n\013receiver_id\030\003 "
+  "\001(\t\022\016\n\006key_id\030\004 \001(\005\022\020\n\010msg_type\030\005 \001(\t\022\021\n"
+  "\tsend_time\030\006 \001(\003\022\016\n\006status\030\007 \001(\005\"}\n\030Quer"
+  "yMessageListResponse\022#\n\004code\030\001 \001(\0162\025.sec"
+  "mng.v2.ResultCode\022\017\n\007message\030\002 \001(\t\022+\n\010me"
+  "ssages\030\003 \003(\0132\031.secmng.v2.MessageSummary\""
+  "\354\001\n\rRequestPacket\022!\n\006header\030\001 \001(\0132\021.secm"
+  "ng.v2.Header\0225\n\014send_msg_req\030\002 \001(\0132\035.sec"
+  "mng.v2.SendMessageRequestH\000\0227\n\rquery_msg"
+  "_req\030\003 \001(\0132\036.secmng.v2.QueryMessageReque"
+  "stH\000\022@\n\022query_msg_list_req\030\004 \001(\0132\".secmn"
+  "g.v2.QueryMessageListRequestH\000B\006\n\004body\"\363"
+  "\001\n\016ResponsePacket\022!\n\006header\030\001 \001(\0132\021.secm"
+  "ng.v2.Header\0227\n\rsend_msg_resp\030\002 \001(\0132\036.se"
+  "cmng.v2.SendMessageResponseH\000\0229\n\016query_m"
+  "sg_resp\030\003 \001(\0132\037.secmng.v2.QueryMessageRe"
+  "sponseH\000\022B\n\023query_msg_list_resp\030\004 \001(\0132#."
+  "secmng.v2.QueryMessageListResponseH\000B\006\n\004"
+  "body*\263\001\n\013CommandType\022\017\n\013CMD_UNKNOWN\020\000\022\024\n"
+  "\020CMD_SEND_MSG_REQ\020\001\022\025\n\021CMD_SEND_MSG_RESP"
+  "\020\002\022\025\n\021CMD_QUERY_MSG_REQ\020\003\022\026\n\022CMD_QUERY_M"
+  "SG_RESP\020\004\022\032\n\026CMD_QUERY_MSG_LIST_REQ\020\005\022\033\n"
+  "\027CMD_QUERY_MSG_LIST_RESP\020\006*\312\001\n\nResultCod"
+  "e\022\022\n\016RESULT_UNKNOWN\020\000\022\022\n\016RESULT_SUCCESS\020"
+  "\001\022\021\n\rRESULT_FAILED\020\002\022\030\n\024RESULT_KEY_NOT_F"
+  "OUND\020\003\022\026\n\022RESULT_KEY_INVALID\020\004\022\031\n\025RESULT"
+  "_DECRYPT_FAILED\020\005\022\032\n\026RESULT_INVALID_REQU"
+  "EST\020\006\022\030\n\024RESULT_MSG_NOT_FOUND\020\007*6\n\013Messa"
+  "geType\022\024\n\020MSG_TYPE_UNKNOWN\020\000\022\021\n\rMSG_TYPE"
+  "_TEXT\020\001*T\n\016DeliveryStatus\022\024\n\020DELIVERY_UN"
+  "KNOWN\020\000\022\025\n\021DELIVERY_ACCEPTED\020\001\022\025\n\021DELIVE"
+  "RY_REJECTED\020\002b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_MessageV2_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_MessageV2_2eproto_sccs[8] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_MessageV2_2eproto_sccs[11] = {
   &scc_info_EncryptedMessage_MessageV2_2eproto.base,
   &scc_info_Header_MessageV2_2eproto.base,
+  &scc_info_MessageSummary_MessageV2_2eproto.base,
+  &scc_info_QueryMessageListRequest_MessageV2_2eproto.base,
+  &scc_info_QueryMessageListResponse_MessageV2_2eproto.base,
   &scc_info_QueryMessageRequest_MessageV2_2eproto.base,
   &scc_info_QueryMessageResponse_MessageV2_2eproto.base,
   &scc_info_RequestPacket_MessageV2_2eproto.base,
@@ -342,10 +455,10 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Mes
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_MessageV2_2eproto_once;
 static bool descriptor_table_MessageV2_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_MessageV2_2eproto = {
-  &descriptor_table_MessageV2_2eproto_initialized, descriptor_table_protodef_MessageV2_2eproto, "MessageV2.proto", 1646,
-  &descriptor_table_MessageV2_2eproto_once, descriptor_table_MessageV2_2eproto_sccs, descriptor_table_MessageV2_2eproto_deps, 8, 0,
+  &descriptor_table_MessageV2_2eproto_initialized, descriptor_table_protodef_MessageV2_2eproto, "MessageV2.proto", 2181,
+  &descriptor_table_MessageV2_2eproto_once, descriptor_table_MessageV2_2eproto_sccs, descriptor_table_MessageV2_2eproto_deps, 11, 0,
   schemas, file_default_instances, TableStruct_MessageV2_2eproto::offsets,
-  file_level_metadata_MessageV2_2eproto, 8, file_level_enum_descriptors_MessageV2_2eproto, file_level_service_descriptors_MessageV2_2eproto,
+  file_level_metadata_MessageV2_2eproto, 11, file_level_enum_descriptors_MessageV2_2eproto, file_level_service_descriptors_MessageV2_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -363,6 +476,8 @@ bool CommandType_IsValid(int value) {
     case 2:
     case 3:
     case 4:
+    case 5:
+    case 6:
       return true;
     default:
       return false;
@@ -416,6 +531,328 @@ bool DeliveryStatus_IsValid(int value) {
     default:
       return false;
   }
+}
+
+
+// ===================================================================
+
+void QueryMessageListRequest::InitAsDefaultInstance() {
+}
+class QueryMessageListRequest::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int QueryMessageListRequest::kSenderIdFieldNumber;
+const int QueryMessageListRequest::kLimitFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+QueryMessageListRequest::QueryMessageListRequest()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:secmng.v2.QueryMessageListRequest)
+}
+QueryMessageListRequest::QueryMessageListRequest(const QueryMessageListRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  sender_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.sender_id().size() > 0) {
+    sender_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.sender_id_);
+  }
+  limit_ = from.limit_;
+  // @@protoc_insertion_point(copy_constructor:secmng.v2.QueryMessageListRequest)
+}
+
+void QueryMessageListRequest::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_QueryMessageListRequest_MessageV2_2eproto.base);
+  sender_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  limit_ = 0;
+}
+
+QueryMessageListRequest::~QueryMessageListRequest() {
+  // @@protoc_insertion_point(destructor:secmng.v2.QueryMessageListRequest)
+  SharedDtor();
+}
+
+void QueryMessageListRequest::SharedDtor() {
+  sender_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void QueryMessageListRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const QueryMessageListRequest& QueryMessageListRequest::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_QueryMessageListRequest_MessageV2_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void QueryMessageListRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:secmng.v2.QueryMessageListRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  sender_id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  limit_ = 0;
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* QueryMessageListRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // string sender_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_sender_id(), ptr, ctx, "secmng.v2.QueryMessageListRequest.sender_id");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 limit = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          limit_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool QueryMessageListRequest::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:secmng.v2.QueryMessageListRequest)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string sender_id = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (10 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_sender_id()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->sender_id().data(), static_cast<int>(this->sender_id().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.QueryMessageListRequest.sender_id"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 limit = 2;
+      case 2: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (16 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                 input, &limit_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:secmng.v2.QueryMessageListRequest)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:secmng.v2.QueryMessageListRequest)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void QueryMessageListRequest::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:secmng.v2.QueryMessageListRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string sender_id = 1;
+  if (this->sender_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->sender_id().data(), static_cast<int>(this->sender_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageListRequest.sender_id");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->sender_id(), output);
+  }
+
+  // int32 limit = 2;
+  if (this->limit() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(2, this->limit(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:secmng.v2.QueryMessageListRequest)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* QueryMessageListRequest::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:secmng.v2.QueryMessageListRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string sender_id = 1;
+  if (this->sender_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->sender_id().data(), static_cast<int>(this->sender_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageListRequest.sender_id");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        1, this->sender_id(), target);
+  }
+
+  // int32 limit = 2;
+  if (this->limit() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->limit(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:secmng.v2.QueryMessageListRequest)
+  return target;
+}
+
+size_t QueryMessageListRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:secmng.v2.QueryMessageListRequest)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string sender_id = 1;
+  if (this->sender_id().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->sender_id());
+  }
+
+  // int32 limit = 2;
+  if (this->limit() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->limit());
+  }
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void QueryMessageListRequest::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:secmng.v2.QueryMessageListRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  const QueryMessageListRequest* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<QueryMessageListRequest>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:secmng.v2.QueryMessageListRequest)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:secmng.v2.QueryMessageListRequest)
+    MergeFrom(*source);
+  }
+}
+
+void QueryMessageListRequest::MergeFrom(const QueryMessageListRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:secmng.v2.QueryMessageListRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.sender_id().size() > 0) {
+
+    sender_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.sender_id_);
+  }
+  if (from.limit() != 0) {
+    set_limit(from.limit());
+  }
+}
+
+void QueryMessageListRequest::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:secmng.v2.QueryMessageListRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void QueryMessageListRequest::CopyFrom(const QueryMessageListRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:secmng.v2.QueryMessageListRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool QueryMessageListRequest::IsInitialized() const {
+  return true;
+}
+
+void QueryMessageListRequest::Swap(QueryMessageListRequest* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void QueryMessageListRequest::InternalSwap(QueryMessageListRequest* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  sender_id_.Swap(&other->sender_id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(limit_, other->limit_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata QueryMessageListRequest::GetMetadata() const {
+  return GetMetadataStatic();
 }
 
 
@@ -3233,6 +3670,991 @@ void QueryMessageResponse::InternalSwap(QueryMessageResponse* other) {
 
 // ===================================================================
 
+void MessageSummary::InitAsDefaultInstance() {
+}
+class MessageSummary::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int MessageSummary::kServerMessageIdFieldNumber;
+const int MessageSummary::kSenderIdFieldNumber;
+const int MessageSummary::kReceiverIdFieldNumber;
+const int MessageSummary::kKeyIdFieldNumber;
+const int MessageSummary::kMsgTypeFieldNumber;
+const int MessageSummary::kSendTimeFieldNumber;
+const int MessageSummary::kStatusFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+MessageSummary::MessageSummary()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:secmng.v2.MessageSummary)
+}
+MessageSummary::MessageSummary(const MessageSummary& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  server_message_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.server_message_id().size() > 0) {
+    server_message_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.server_message_id_);
+  }
+  sender_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.sender_id().size() > 0) {
+    sender_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.sender_id_);
+  }
+  receiver_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.receiver_id().size() > 0) {
+    receiver_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.receiver_id_);
+  }
+  msg_type_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.msg_type().size() > 0) {
+    msg_type_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.msg_type_);
+  }
+  ::memcpy(&key_id_, &from.key_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&send_time_) -
+    reinterpret_cast<char*>(&key_id_)) + sizeof(send_time_));
+  // @@protoc_insertion_point(copy_constructor:secmng.v2.MessageSummary)
+}
+
+void MessageSummary::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_MessageSummary_MessageV2_2eproto.base);
+  server_message_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  sender_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  receiver_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  msg_type_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::memset(&key_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&send_time_) -
+      reinterpret_cast<char*>(&key_id_)) + sizeof(send_time_));
+}
+
+MessageSummary::~MessageSummary() {
+  // @@protoc_insertion_point(destructor:secmng.v2.MessageSummary)
+  SharedDtor();
+}
+
+void MessageSummary::SharedDtor() {
+  server_message_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  sender_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  receiver_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  msg_type_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void MessageSummary::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const MessageSummary& MessageSummary::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_MessageSummary_MessageV2_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void MessageSummary::Clear() {
+// @@protoc_insertion_point(message_clear_start:secmng.v2.MessageSummary)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  server_message_id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  sender_id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  receiver_id_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  msg_type_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::memset(&key_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&send_time_) -
+      reinterpret_cast<char*>(&key_id_)) + sizeof(send_time_));
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* MessageSummary::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // string server_message_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_server_message_id(), ptr, ctx, "secmng.v2.MessageSummary.server_message_id");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string sender_id = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_sender_id(), ptr, ctx, "secmng.v2.MessageSummary.sender_id");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string receiver_id = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_receiver_id(), ptr, ctx, "secmng.v2.MessageSummary.receiver_id");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 key_id = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
+          key_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string msg_type = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_msg_type(), ptr, ctx, "secmng.v2.MessageSummary.msg_type");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int64 send_time = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
+          send_time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 status = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 56)) {
+          status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool MessageSummary::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:secmng.v2.MessageSummary)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string server_message_id = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (10 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_server_message_id()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->server_message_id().data(), static_cast<int>(this->server_message_id().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.MessageSummary.server_message_id"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string sender_id = 2;
+      case 2: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_sender_id()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->sender_id().data(), static_cast<int>(this->sender_id().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.MessageSummary.sender_id"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string receiver_id = 3;
+      case 3: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (26 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_receiver_id()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->receiver_id().data(), static_cast<int>(this->receiver_id().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.MessageSummary.receiver_id"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 key_id = 4;
+      case 4: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (32 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                 input, &key_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string msg_type = 5;
+      case 5: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (42 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_msg_type()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->msg_type().data(), static_cast<int>(this->msg_type().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.MessageSummary.msg_type"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int64 send_time = 6;
+      case 6: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (48 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int64, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT64>(
+                 input, &send_time_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 status = 7;
+      case 7: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (56 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                 input, &status_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:secmng.v2.MessageSummary)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:secmng.v2.MessageSummary)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void MessageSummary::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:secmng.v2.MessageSummary)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string server_message_id = 1;
+  if (this->server_message_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->server_message_id().data(), static_cast<int>(this->server_message_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.MessageSummary.server_message_id");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->server_message_id(), output);
+  }
+
+  // string sender_id = 2;
+  if (this->sender_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->sender_id().data(), static_cast<int>(this->sender_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.MessageSummary.sender_id");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->sender_id(), output);
+  }
+
+  // string receiver_id = 3;
+  if (this->receiver_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->receiver_id().data(), static_cast<int>(this->receiver_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.MessageSummary.receiver_id");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->receiver_id(), output);
+  }
+
+  // int32 key_id = 4;
+  if (this->key_id() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(4, this->key_id(), output);
+  }
+
+  // string msg_type = 5;
+  if (this->msg_type().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->msg_type().data(), static_cast<int>(this->msg_type().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.MessageSummary.msg_type");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->msg_type(), output);
+  }
+
+  // int64 send_time = 6;
+  if (this->send_time() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64(6, this->send_time(), output);
+  }
+
+  // int32 status = 7;
+  if (this->status() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(7, this->status(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:secmng.v2.MessageSummary)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* MessageSummary::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:secmng.v2.MessageSummary)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string server_message_id = 1;
+  if (this->server_message_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->server_message_id().data(), static_cast<int>(this->server_message_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.MessageSummary.server_message_id");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        1, this->server_message_id(), target);
+  }
+
+  // string sender_id = 2;
+  if (this->sender_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->sender_id().data(), static_cast<int>(this->sender_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.MessageSummary.sender_id");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        2, this->sender_id(), target);
+  }
+
+  // string receiver_id = 3;
+  if (this->receiver_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->receiver_id().data(), static_cast<int>(this->receiver_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.MessageSummary.receiver_id");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        3, this->receiver_id(), target);
+  }
+
+  // int32 key_id = 4;
+  if (this->key_id() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->key_id(), target);
+  }
+
+  // string msg_type = 5;
+  if (this->msg_type().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->msg_type().data(), static_cast<int>(this->msg_type().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.MessageSummary.msg_type");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        5, this->msg_type(), target);
+  }
+
+  // int64 send_time = 6;
+  if (this->send_time() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(6, this->send_time(), target);
+  }
+
+  // int32 status = 7;
+  if (this->status() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(7, this->status(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:secmng.v2.MessageSummary)
+  return target;
+}
+
+size_t MessageSummary::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:secmng.v2.MessageSummary)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string server_message_id = 1;
+  if (this->server_message_id().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->server_message_id());
+  }
+
+  // string sender_id = 2;
+  if (this->sender_id().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->sender_id());
+  }
+
+  // string receiver_id = 3;
+  if (this->receiver_id().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->receiver_id());
+  }
+
+  // string msg_type = 5;
+  if (this->msg_type().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->msg_type());
+  }
+
+  // int32 key_id = 4;
+  if (this->key_id() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->key_id());
+  }
+
+  // int32 status = 7;
+  if (this->status() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->status());
+  }
+
+  // int64 send_time = 6;
+  if (this->send_time() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
+        this->send_time());
+  }
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void MessageSummary::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:secmng.v2.MessageSummary)
+  GOOGLE_DCHECK_NE(&from, this);
+  const MessageSummary* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<MessageSummary>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:secmng.v2.MessageSummary)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:secmng.v2.MessageSummary)
+    MergeFrom(*source);
+  }
+}
+
+void MessageSummary::MergeFrom(const MessageSummary& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:secmng.v2.MessageSummary)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.server_message_id().size() > 0) {
+
+    server_message_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.server_message_id_);
+  }
+  if (from.sender_id().size() > 0) {
+
+    sender_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.sender_id_);
+  }
+  if (from.receiver_id().size() > 0) {
+
+    receiver_id_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.receiver_id_);
+  }
+  if (from.msg_type().size() > 0) {
+
+    msg_type_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.msg_type_);
+  }
+  if (from.key_id() != 0) {
+    set_key_id(from.key_id());
+  }
+  if (from.status() != 0) {
+    set_status(from.status());
+  }
+  if (from.send_time() != 0) {
+    set_send_time(from.send_time());
+  }
+}
+
+void MessageSummary::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:secmng.v2.MessageSummary)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void MessageSummary::CopyFrom(const MessageSummary& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:secmng.v2.MessageSummary)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MessageSummary::IsInitialized() const {
+  return true;
+}
+
+void MessageSummary::Swap(MessageSummary* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void MessageSummary::InternalSwap(MessageSummary* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  server_message_id_.Swap(&other->server_message_id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  sender_id_.Swap(&other->sender_id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  receiver_id_.Swap(&other->receiver_id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  msg_type_.Swap(&other->msg_type_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(key_id_, other->key_id_);
+  swap(status_, other->status_);
+  swap(send_time_, other->send_time_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata MessageSummary::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void QueryMessageListResponse::InitAsDefaultInstance() {
+}
+class QueryMessageListResponse::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int QueryMessageListResponse::kCodeFieldNumber;
+const int QueryMessageListResponse::kMessageFieldNumber;
+const int QueryMessageListResponse::kMessagesFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+QueryMessageListResponse::QueryMessageListResponse()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:secmng.v2.QueryMessageListResponse)
+}
+QueryMessageListResponse::QueryMessageListResponse(const QueryMessageListResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr),
+      messages_(from.messages_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.message().size() > 0) {
+    message_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.message_);
+  }
+  code_ = from.code_;
+  // @@protoc_insertion_point(copy_constructor:secmng.v2.QueryMessageListResponse)
+}
+
+void QueryMessageListResponse::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_QueryMessageListResponse_MessageV2_2eproto.base);
+  message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  code_ = 0;
+}
+
+QueryMessageListResponse::~QueryMessageListResponse() {
+  // @@protoc_insertion_point(destructor:secmng.v2.QueryMessageListResponse)
+  SharedDtor();
+}
+
+void QueryMessageListResponse::SharedDtor() {
+  message_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void QueryMessageListResponse::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const QueryMessageListResponse& QueryMessageListResponse::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_QueryMessageListResponse_MessageV2_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void QueryMessageListResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:secmng.v2.QueryMessageListResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  messages_.Clear();
+  message_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  code_ = 0;
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* QueryMessageListResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // .secmng.v2.ResultCode code = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+          set_code(static_cast<::secmng::v2::ResultCode>(val));
+        } else goto handle_unusual;
+        continue;
+      // string message = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_message(), ptr, ctx, "secmng.v2.QueryMessageListResponse.message");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // repeated .secmng.v2.MessageSummary messages = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(add_messages(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<::PROTOBUF_NAMESPACE_ID::uint8>(ptr) == 26);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool QueryMessageListResponse::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:secmng.v2.QueryMessageListResponse)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // .secmng.v2.ResultCode code = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
+          int value = 0;
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   int, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_code(static_cast< ::secmng::v2::ResultCode >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string message = 2;
+      case 2: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_message()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->message().data(), static_cast<int>(this->message().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.QueryMessageListResponse.message"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .secmng.v2.MessageSummary messages = 3;
+      case 3: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (26 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
+                input, add_messages()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:secmng.v2.QueryMessageListResponse)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:secmng.v2.QueryMessageListResponse)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void QueryMessageListResponse::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:secmng.v2.QueryMessageListResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .secmng.v2.ResultCode code = 1;
+  if (this->code() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnum(
+      1, this->code(), output);
+  }
+
+  // string message = 2;
+  if (this->message().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->message().data(), static_cast<int>(this->message().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageListResponse.message");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->message(), output);
+  }
+
+  // repeated .secmng.v2.MessageSummary messages = 3;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->messages_size()); i < n; i++) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3,
+      this->messages(static_cast<int>(i)),
+      output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:secmng.v2.QueryMessageListResponse)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* QueryMessageListResponse::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:secmng.v2.QueryMessageListResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .secmng.v2.ResultCode code = 1;
+  if (this->code() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      1, this->code(), target);
+  }
+
+  // string message = 2;
+  if (this->message().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->message().data(), static_cast<int>(this->message().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.QueryMessageListResponse.message");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        2, this->message(), target);
+  }
+
+  // repeated .secmng.v2.MessageSummary messages = 3;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->messages_size()); i < n; i++) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        3, this->messages(static_cast<int>(i)), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:secmng.v2.QueryMessageListResponse)
+  return target;
+}
+
+size_t QueryMessageListResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:secmng.v2.QueryMessageListResponse)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .secmng.v2.MessageSummary messages = 3;
+  {
+    unsigned int count = static_cast<unsigned int>(this->messages_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          this->messages(static_cast<int>(i)));
+    }
+  }
+
+  // string message = 2;
+  if (this->message().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->message());
+  }
+
+  // .secmng.v2.ResultCode code = 1;
+  if (this->code() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->code());
+  }
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void QueryMessageListResponse::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:secmng.v2.QueryMessageListResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  const QueryMessageListResponse* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<QueryMessageListResponse>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:secmng.v2.QueryMessageListResponse)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:secmng.v2.QueryMessageListResponse)
+    MergeFrom(*source);
+  }
+}
+
+void QueryMessageListResponse::MergeFrom(const QueryMessageListResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:secmng.v2.QueryMessageListResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  messages_.MergeFrom(from.messages_);
+  if (from.message().size() > 0) {
+
+    message_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.message_);
+  }
+  if (from.code() != 0) {
+    set_code(from.code());
+  }
+}
+
+void QueryMessageListResponse::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:secmng.v2.QueryMessageListResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void QueryMessageListResponse::CopyFrom(const QueryMessageListResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:secmng.v2.QueryMessageListResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool QueryMessageListResponse::IsInitialized() const {
+  return true;
+}
+
+void QueryMessageListResponse::Swap(QueryMessageListResponse* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void QueryMessageListResponse::InternalSwap(QueryMessageListResponse* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  CastToBase(&messages_)->InternalSwap(CastToBase(&other->messages_));
+  message_.Swap(&other->message_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(code_, other->code_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata QueryMessageListResponse::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
 void RequestPacket::InitAsDefaultInstance() {
   ::secmng::v2::_RequestPacket_default_instance_._instance.get_mutable()->header_ = const_cast< ::secmng::v2::Header*>(
       ::secmng::v2::Header::internal_default_instance());
@@ -3240,12 +4662,15 @@ void RequestPacket::InitAsDefaultInstance() {
       ::secmng::v2::SendMessageRequest::internal_default_instance());
   ::secmng::v2::_RequestPacket_default_instance_.query_msg_req_ = const_cast< ::secmng::v2::QueryMessageRequest*>(
       ::secmng::v2::QueryMessageRequest::internal_default_instance());
+  ::secmng::v2::_RequestPacket_default_instance_.query_msg_list_req_ = const_cast< ::secmng::v2::QueryMessageListRequest*>(
+      ::secmng::v2::QueryMessageListRequest::internal_default_instance());
 }
 class RequestPacket::HasBitSetters {
  public:
   static const ::secmng::v2::Header& header(const RequestPacket* msg);
   static const ::secmng::v2::SendMessageRequest& send_msg_req(const RequestPacket* msg);
   static const ::secmng::v2::QueryMessageRequest& query_msg_req(const RequestPacket* msg);
+  static const ::secmng::v2::QueryMessageListRequest& query_msg_list_req(const RequestPacket* msg);
 };
 
 const ::secmng::v2::Header&
@@ -3259,6 +4684,10 @@ RequestPacket::HasBitSetters::send_msg_req(const RequestPacket* msg) {
 const ::secmng::v2::QueryMessageRequest&
 RequestPacket::HasBitSetters::query_msg_req(const RequestPacket* msg) {
   return *msg->body_.query_msg_req_;
+}
+const ::secmng::v2::QueryMessageListRequest&
+RequestPacket::HasBitSetters::query_msg_list_req(const RequestPacket* msg) {
+  return *msg->body_.query_msg_list_req_;
 }
 void RequestPacket::set_allocated_send_msg_req(::secmng::v2::SendMessageRequest* send_msg_req) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
@@ -3288,10 +4717,25 @@ void RequestPacket::set_allocated_query_msg_req(::secmng::v2::QueryMessageReques
   }
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.RequestPacket.query_msg_req)
 }
+void RequestPacket::set_allocated_query_msg_list_req(::secmng::v2::QueryMessageListRequest* query_msg_list_req) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  clear_body();
+  if (query_msg_list_req) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      query_msg_list_req = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, query_msg_list_req, submessage_arena);
+    }
+    set_has_query_msg_list_req();
+    body_.query_msg_list_req_ = query_msg_list_req;
+  }
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.RequestPacket.query_msg_list_req)
+}
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int RequestPacket::kHeaderFieldNumber;
 const int RequestPacket::kSendMsgReqFieldNumber;
 const int RequestPacket::kQueryMsgReqFieldNumber;
+const int RequestPacket::kQueryMsgListReqFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 RequestPacket::RequestPacket()
@@ -3316,6 +4760,10 @@ RequestPacket::RequestPacket(const RequestPacket& from)
     }
     case kQueryMsgReq: {
       mutable_query_msg_req()->::secmng::v2::QueryMessageRequest::MergeFrom(from.query_msg_req());
+      break;
+    }
+    case kQueryMsgListReq: {
+      mutable_query_msg_list_req()->::secmng::v2::QueryMessageListRequest::MergeFrom(from.query_msg_list_req());
       break;
     }
     case BODY_NOT_SET: {
@@ -3361,6 +4809,10 @@ void RequestPacket::clear_body() {
     }
     case kQueryMsgReq: {
       delete body_.query_msg_req_;
+      break;
+    }
+    case kQueryMsgListReq: {
+      delete body_.query_msg_list_req_;
       break;
     }
     case BODY_NOT_SET: {
@@ -3411,6 +4863,13 @@ const char* RequestPacket::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           ptr = ctx->ParseMessage(mutable_query_msg_req(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .secmng.v2.QueryMessageListRequest query_msg_list_req = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+          ptr = ctx->ParseMessage(mutable_query_msg_list_req(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -3477,6 +4936,17 @@ bool RequestPacket::MergePartialFromCodedStream(
         break;
       }
 
+      // .secmng.v2.QueryMessageListRequest query_msg_list_req = 4;
+      case 4: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (34 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
+               input, mutable_query_msg_list_req()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -3522,6 +4992,12 @@ void RequestPacket::SerializeWithCachedSizes(
       3, HasBitSetters::query_msg_req(this), output);
   }
 
+  // .secmng.v2.QueryMessageListRequest query_msg_list_req = 4;
+  if (has_query_msg_list_req()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
+      4, HasBitSetters::query_msg_list_req(this), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -3554,6 +5030,13 @@ void RequestPacket::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessageToArray(
         3, HasBitSetters::query_msg_req(this), target);
+  }
+
+  // .secmng.v2.QueryMessageListRequest query_msg_list_req = 4;
+  if (has_query_msg_list_req()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        4, HasBitSetters::query_msg_list_req(this), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -3599,6 +5082,13 @@ size_t RequestPacket::ByteSizeLong() const {
           *body_.query_msg_req_);
       break;
     }
+    // .secmng.v2.QueryMessageListRequest query_msg_list_req = 4;
+    case kQueryMsgListReq: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *body_.query_msg_list_req_);
+      break;
+    }
     case BODY_NOT_SET: {
       break;
     }
@@ -3640,6 +5130,10 @@ void RequestPacket::MergeFrom(const RequestPacket& from) {
     }
     case kQueryMsgReq: {
       mutable_query_msg_req()->::secmng::v2::QueryMessageRequest::MergeFrom(from.query_msg_req());
+      break;
+    }
+    case kQueryMsgListReq: {
+      mutable_query_msg_list_req()->::secmng::v2::QueryMessageListRequest::MergeFrom(from.query_msg_list_req());
       break;
     }
     case BODY_NOT_SET: {
@@ -3692,12 +5186,15 @@ void ResponsePacket::InitAsDefaultInstance() {
       ::secmng::v2::SendMessageResponse::internal_default_instance());
   ::secmng::v2::_ResponsePacket_default_instance_.query_msg_resp_ = const_cast< ::secmng::v2::QueryMessageResponse*>(
       ::secmng::v2::QueryMessageResponse::internal_default_instance());
+  ::secmng::v2::_ResponsePacket_default_instance_.query_msg_list_resp_ = const_cast< ::secmng::v2::QueryMessageListResponse*>(
+      ::secmng::v2::QueryMessageListResponse::internal_default_instance());
 }
 class ResponsePacket::HasBitSetters {
  public:
   static const ::secmng::v2::Header& header(const ResponsePacket* msg);
   static const ::secmng::v2::SendMessageResponse& send_msg_resp(const ResponsePacket* msg);
   static const ::secmng::v2::QueryMessageResponse& query_msg_resp(const ResponsePacket* msg);
+  static const ::secmng::v2::QueryMessageListResponse& query_msg_list_resp(const ResponsePacket* msg);
 };
 
 const ::secmng::v2::Header&
@@ -3711,6 +5208,10 @@ ResponsePacket::HasBitSetters::send_msg_resp(const ResponsePacket* msg) {
 const ::secmng::v2::QueryMessageResponse&
 ResponsePacket::HasBitSetters::query_msg_resp(const ResponsePacket* msg) {
   return *msg->body_.query_msg_resp_;
+}
+const ::secmng::v2::QueryMessageListResponse&
+ResponsePacket::HasBitSetters::query_msg_list_resp(const ResponsePacket* msg) {
+  return *msg->body_.query_msg_list_resp_;
 }
 void ResponsePacket::set_allocated_send_msg_resp(::secmng::v2::SendMessageResponse* send_msg_resp) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
@@ -3740,10 +5241,25 @@ void ResponsePacket::set_allocated_query_msg_resp(::secmng::v2::QueryMessageResp
   }
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.ResponsePacket.query_msg_resp)
 }
+void ResponsePacket::set_allocated_query_msg_list_resp(::secmng::v2::QueryMessageListResponse* query_msg_list_resp) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  clear_body();
+  if (query_msg_list_resp) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      query_msg_list_resp = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, query_msg_list_resp, submessage_arena);
+    }
+    set_has_query_msg_list_resp();
+    body_.query_msg_list_resp_ = query_msg_list_resp;
+  }
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.ResponsePacket.query_msg_list_resp)
+}
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ResponsePacket::kHeaderFieldNumber;
 const int ResponsePacket::kSendMsgRespFieldNumber;
 const int ResponsePacket::kQueryMsgRespFieldNumber;
+const int ResponsePacket::kQueryMsgListRespFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ResponsePacket::ResponsePacket()
@@ -3768,6 +5284,10 @@ ResponsePacket::ResponsePacket(const ResponsePacket& from)
     }
     case kQueryMsgResp: {
       mutable_query_msg_resp()->::secmng::v2::QueryMessageResponse::MergeFrom(from.query_msg_resp());
+      break;
+    }
+    case kQueryMsgListResp: {
+      mutable_query_msg_list_resp()->::secmng::v2::QueryMessageListResponse::MergeFrom(from.query_msg_list_resp());
       break;
     }
     case BODY_NOT_SET: {
@@ -3813,6 +5333,10 @@ void ResponsePacket::clear_body() {
     }
     case kQueryMsgResp: {
       delete body_.query_msg_resp_;
+      break;
+    }
+    case kQueryMsgListResp: {
+      delete body_.query_msg_list_resp_;
       break;
     }
     case BODY_NOT_SET: {
@@ -3863,6 +5387,13 @@ const char* ResponsePacket::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           ptr = ctx->ParseMessage(mutable_query_msg_resp(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .secmng.v2.QueryMessageListResponse query_msg_list_resp = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+          ptr = ctx->ParseMessage(mutable_query_msg_list_resp(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -3929,6 +5460,17 @@ bool ResponsePacket::MergePartialFromCodedStream(
         break;
       }
 
+      // .secmng.v2.QueryMessageListResponse query_msg_list_resp = 4;
+      case 4: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (34 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
+               input, mutable_query_msg_list_resp()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -3974,6 +5516,12 @@ void ResponsePacket::SerializeWithCachedSizes(
       3, HasBitSetters::query_msg_resp(this), output);
   }
 
+  // .secmng.v2.QueryMessageListResponse query_msg_list_resp = 4;
+  if (has_query_msg_list_resp()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
+      4, HasBitSetters::query_msg_list_resp(this), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -4006,6 +5554,13 @@ void ResponsePacket::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessageToArray(
         3, HasBitSetters::query_msg_resp(this), target);
+  }
+
+  // .secmng.v2.QueryMessageListResponse query_msg_list_resp = 4;
+  if (has_query_msg_list_resp()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        4, HasBitSetters::query_msg_list_resp(this), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -4051,6 +5606,13 @@ size_t ResponsePacket::ByteSizeLong() const {
           *body_.query_msg_resp_);
       break;
     }
+    // .secmng.v2.QueryMessageListResponse query_msg_list_resp = 4;
+    case kQueryMsgListResp: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *body_.query_msg_list_resp_);
+      break;
+    }
     case BODY_NOT_SET: {
       break;
     }
@@ -4092,6 +5654,10 @@ void ResponsePacket::MergeFrom(const ResponsePacket& from) {
     }
     case kQueryMsgResp: {
       mutable_query_msg_resp()->::secmng::v2::QueryMessageResponse::MergeFrom(from.query_msg_resp());
+      break;
+    }
+    case kQueryMsgListResp: {
+      mutable_query_msg_list_resp()->::secmng::v2::QueryMessageListResponse::MergeFrom(from.query_msg_list_resp());
       break;
     }
     case BODY_NOT_SET: {
@@ -4139,6 +5705,9 @@ void ResponsePacket::InternalSwap(ResponsePacket* other) {
 }  // namespace v2
 }  // namespace secmng
 PROTOBUF_NAMESPACE_OPEN
+template<> PROTOBUF_NOINLINE ::secmng::v2::QueryMessageListRequest* Arena::CreateMaybeMessage< ::secmng::v2::QueryMessageListRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::secmng::v2::QueryMessageListRequest >(arena);
+}
 template<> PROTOBUF_NOINLINE ::secmng::v2::Header* Arena::CreateMaybeMessage< ::secmng::v2::Header >(Arena* arena) {
   return Arena::CreateInternal< ::secmng::v2::Header >(arena);
 }
@@ -4156,6 +5725,12 @@ template<> PROTOBUF_NOINLINE ::secmng::v2::QueryMessageRequest* Arena::CreateMay
 }
 template<> PROTOBUF_NOINLINE ::secmng::v2::QueryMessageResponse* Arena::CreateMaybeMessage< ::secmng::v2::QueryMessageResponse >(Arena* arena) {
   return Arena::CreateInternal< ::secmng::v2::QueryMessageResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::secmng::v2::MessageSummary* Arena::CreateMaybeMessage< ::secmng::v2::MessageSummary >(Arena* arena) {
+  return Arena::CreateInternal< ::secmng::v2::MessageSummary >(arena);
+}
+template<> PROTOBUF_NOINLINE ::secmng::v2::QueryMessageListResponse* Arena::CreateMaybeMessage< ::secmng::v2::QueryMessageListResponse >(Arena* arena) {
+  return Arena::CreateInternal< ::secmng::v2::QueryMessageListResponse >(arena);
 }
 template<> PROTOBUF_NOINLINE ::secmng::v2::RequestPacket* Arena::CreateMaybeMessage< ::secmng::v2::RequestPacket >(Arena* arena) {
   return Arena::CreateInternal< ::secmng::v2::RequestPacket >(arena);
