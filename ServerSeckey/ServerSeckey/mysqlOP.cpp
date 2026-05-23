@@ -245,18 +245,56 @@ std::string mysqlOP::getCurTime()
 	return buf;
 }
 
-bool mysqlOP::insertMessageLog(const std::string& msgId, const std::string& senderId, const std::string& receiverId, int keyId, const std::string& msgType, const std::string& ciphertext, const std::string& nonce, const std::string& tag, const std::string& sendTime, int status)
+bool mysqlOP::insertMessageLog(const std::string& msgId,
+	const std::string& senderId,
+	const std::string& receiverId,
+	int senderKeyId,
+	int receiverKeyId,
+	const std::string& msgType,
+	const std::string& senderCiphertext,
+	const std::string& senderNonce,
+	const std::string& senderTag,
+	const std::string& receiverCiphertext,
+	const std::string& receiverNonce,
+	const std::string& receiverTag,
+	const std::string& algorithm,
+	const std::string& sendTime,
+	int status)
 {
-	char sql[2048]{ 0 };
+	char sql[8192]{ 0 };
 	// 这里仍然沿用你当前项目“sprintf 拼 SQL”的风格，
 	// 后面建议升级成参数化 SQL，避免注入风险。
 	sprintf(sql,
-		"insert into message_log(msg_id,sender_id,receiver_id,key_id,msg_type,"
-		"ciphertext,nonce,tag_value,send_time,status) "
-		"values('%s','%s','%s',%d,'%s','%s','%s','%s','%s',%d)",
-		msgId.c_str(),senderId.c_str(),receiverId.c_str(),keyId,msgType.c_str(),
-		ciphertext.c_str(),nonce.c_str(),
-		tag.c_str(),sendTime.c_str(),status
+		"insert into message_log("
+		"msg_id,sender_id,receiver_id,"
+		"sender_key_id,receiver_key_id,"
+		"msg_type,"
+		"sender_ciphertext,sender_nonce,sender_tag,"
+		"receiver_ciphertext,receiver_nonce,receiver_tag,"
+		"algorithm,send_time,status"
+		") values("
+		"'%s','%s','%s',"
+		"%d,%d,"
+		"'%s',"
+		"'%s','%s','%s',"
+		"'%s','%s','%s',"
+		"'%s','%s',%d"
+		")",
+		msgId.c_str(),
+		senderId.c_str(),
+		receiverId.c_str(),
+		senderKeyId,
+		receiverKeyId,
+		msgType.c_str(),
+		senderCiphertext.c_str(),
+		senderNonce.c_str(),
+		senderTag.c_str(),
+		receiverCiphertext.c_str(),
+		receiverNonce.c_str(),
+		receiverTag.c_str(),
+		algorithm.c_str(),
+		sendTime.c_str(),
+		status
 	);
 	if(mysql_query(m_conn, sql))
 	{
@@ -321,7 +359,8 @@ bool mysqlOP::queryMessageLogById(const std::string& msgId, std::string& senderI
 
 	// 按 msg_id 查询单条消息记录。
 	sprintf(sql,
-		"select sender_id, receiver_id, key_id, msg_type, ciphertext, nonce, tag_value, send_time, status "
+		"select sender_id, receiver_id, sender_key_id, msg_type, "
+		"sender_ciphertext, sender_nonce, sender_tag, send_time, status "
 		"from message_log where msg_id = '%s'",
 		msgId.c_str());
 
@@ -364,6 +403,66 @@ bool mysqlOP::queryMessageLogById(const std::string& msgId, std::string& senderI
 
 	mysql_free_result(res);
 	
+	return true;
+}
+
+bool mysqlOP::queryRecentMessagesBySender(const std::string& senderId, int limit, std::vector<std::vector<std::string>>& rows)
+{
+	rows.clear();
+
+	// limit 不合法时直接失败，避免查出异常数量数据
+	if (limit <= 0)
+	{
+		Logger::error("queryRecentMessagesBySender failed: invalid limit");
+		return false;
+	}
+
+	char sql[2048]{ 0 };
+
+	// 这里按 send_time 倒序查最近 N 条消息。
+	// 当前阶段只查消息摘要相关字段，不查 ciphertext / nonce / tag，
+	// 因为列表页主要用于展示元数据。
+	sprintf(sql,
+		"select msg_id, sender_id, receiver_id, sender_key_id, msg_type, send_time, status "
+		"from message_log where sender_id = '%s' "
+		"order by send_time desc limit %d",
+		senderId.c_str(),
+		limit);
+
+	if (mysql_query(m_conn, sql))
+	{
+		Logger::info("queryRecentMessagesBySender sql: " + std::string(sql));
+		Logger::error("queryRecentMessagesBySender failed: " + std::string(mysql_error(m_conn)));
+		return false;
+	}
+
+	MYSQL_RES* res = mysql_store_result(m_conn);
+	if (res == nullptr)
+	{
+		Logger::error("queryRecentMessagesBySender get result failed: " + std::string(mysql_error(m_conn)));
+		return false;
+	}
+
+	MYSQL_ROW row = nullptr;
+
+	// 逐行读取结果集
+	while ((row = mysql_fetch_row(res)) != nullptr)
+	{
+		std::vector<std::string> oneRow;
+
+		// select 出来的列顺序必须和下面读取顺序一致
+		oneRow.push_back(row[0] ? row[0] : ""); // msg_id
+		oneRow.push_back(row[1] ? row[1] : ""); // sender_id
+		oneRow.push_back(row[2] ? row[2] : ""); // receiver_id
+		oneRow.push_back(row[3] ? row[3] : ""); // key_id
+		oneRow.push_back(row[4] ? row[4] : ""); // msg_type
+		oneRow.push_back(row[5] ? row[5] : ""); // send_time
+		oneRow.push_back(row[6] ? row[6] : ""); // status
+
+		rows.push_back(oneRow);
+	}
+
+	mysql_free_result(res);
 	return true;
 }
 

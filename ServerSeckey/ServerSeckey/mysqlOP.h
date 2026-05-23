@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include <vector>
 #include <mysql/mysql.h>
 #include "SeckKeyNodeInfo.h"
 
@@ -29,15 +30,21 @@ public:
 	bool logoutSecKey(std::string clientID, std::string serverID, int keyID);
 	// 获得当前时间
 	std::string getCurTime();
-	// 向 message_log 插入消息记录
+	// 向 message_log 插入消息记录。
+	// 新版本同时保存发送方密文和接收方密文，用于支持多客户端消息投递。
 	bool insertMessageLog(const std::string& msgId,
 		const std::string& senderId,
 		const std::string& receiverId,
-		int keyId,
+		int senderKeyId,
+		int receiverKeyId,
 		const std::string& msgType,
-		const std::string& ciphertext,
-		const std::string& nonce,
-		const std::string& tag,
+		const std::string& senderCiphertext,
+		const std::string& senderNonce,
+		const std::string& senderTag,
+		const std::string& receiverCiphertext,
+		const std::string& receiverNonce,
+		const std::string& receiverTag,
+		const std::string& algorithm,
 		const std::string& sendTime,
 		int status);
 	// 向 audit_log 插入审计记录
@@ -60,6 +67,11 @@ public:
 		std::string& tag,
 		std::string& sendTime,
 		int& status);
+
+	// 根据 sender_id 查询最近 N 条消息
+	bool queryRecentMessagesBySender(const std::string& senderId,
+		int limit,
+		std::vector<std::vector<std::string>>& rows);
 
 private:
 	MYSQL* m_conn;

@@ -452,20 +452,76 @@ std::string ServerOP::processV2Request(const std::string& recvData)
 		return "";
 	}
 
-	Logger::info("v2 has_send_msg_req = " + std::to_string(packet->has_send_msg_req()));
-	// 第 2 步：这里只处理 send_msg_req
-	if (!packet->has_send_msg_req())
-	{
-		Logger::error("不是支持的 v2 请求类型。");
-		return "";
-	}
+	// 记录 body_case，便于后续排查请求体类型问题
+	Logger::info("v2 packet body_case = " + std::to_string(packet->body_case()));
 
-	// 第 3 步：交给 MessageService 处理业务
+	// 创建消息服务对象
 	MessageService msgService(m_serverID, mySQL.get(), m_shm.get());
-	V2SendMessageResponseInfo respInfo = msgService.handleSendMessage(*packet);
 
-	// 第 4 步：编码响应并返回	
-	V2RespondCodec rspCodec(&respInfo);
-	return rspCodec.encodeMsg();
+	// 第 2 步：根据 oneof body 分发业务
+	switch (packet->body_case())
+	{
+		case secmng::v2::RequestPacket::kSendMsgReq:
+		{
+			Logger::info("处理 v2 发送消息请求。");
+			// 调用服务层处理发送消息业务
+			V2SendMessageResponseInfo respInfo = msgService.handleSendMessage(*packet);
+
+			// 使用 v2 响应 codec 进行编码
+			V2RespondCodec rspCodec(&respInfo);
+			return rspCodec.encodeMsg();
+		}
+		case secmng::v2::RequestPacket::kQueryMsgReq:
+		{
+			Logger::info("处理 v2 查询消息请求。");
+
+			V2QueryMessageResponseInfo respInfo = msgService.handleQueryMessage(*packet);
+
+			V2RespondCodec rspCodec(&respInfo);
+			return rspCodec.encodeMsg();
+		}
+		case secmng::v2::RequestPacket::kQueryMsgListReq:
+		{
+			Logger::info("处理 v2 查询消息列表请求。");
+
+			V2QueryMessageListResponseInfo respInfo =
+				msgService.handleQueryMessageList(*packet);
+
+			V2RespondCodec rspCodec(&respInfo);
+			return rspCodec.encodeMsg();
+		}
+	default:
+		{
+			Logger::error("不支持的 v2 请求类型。");
+			// 即便 body 不支持，也尽量返回一个合法的 v2 响应，
+			// 避免客户端收到空串后无法判断发生了什么。
+			V2SendMessageResponseInfo respInfo;
+			respInfo.header = {};
+
+			if (packet->has_header())
+			{
+				respInfo.header.messageId = packet->header().message_id();
+				respInfo.header.receiverId = packet->header().sender_id();
+			}
+			else
+			{
+				respInfo.header.messageId = "";
+				respInfo.header.receiverId = "";
+			}
+
+			respInfo.header.command = secmng::v2::CMD_SEND_MSG_RESP;
+			respInfo.header.senderId = m_serverID;
+			respInfo.header.timestamp = static_cast<long long>(time(nullptr));
+
+			respInfo.code = secmng::v2::RESULT_INVALID_REQUEST;
+			respInfo.message = "unsupported v2 request type";
+			respInfo.serverMessageId = "";
+			respInfo.serverTime = static_cast<long long>(time(nullptr));
+			respInfo.deliveryStatus = secmng::v2::DELIVERY_REJECTED;
+
+			V2RespondCodec rspCodec(&respInfo);
+			return rspCodec.encodeMsg();
+		}
+	}
 }
 

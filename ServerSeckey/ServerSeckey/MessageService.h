@@ -30,6 +30,17 @@ struct DecryptMessageResult
     std::string errorMsg;      // 错误信息
 };
 
+// 这个结构体表示服务端重新加密消息后的结果。
+struct EncryptMessageResult
+{
+    bool success;              // 重新加密是否成功
+    std::string ciphertext;    // base64 编码后的密文
+    std::string nonce;         // base64 编码后的 nonce
+    std::string tag;           // base64 编码后的 GCM tag
+    std::string algorithm;     // 算法名称，例如 AES-128-GCM
+    std::string errorMsg;      // 失败原因
+};
+
 // MessageService 的职责是处理“发送加密消息”这个新业务。
 // 它不负责 socket 收发，也不负责 protobuf 编解码细节。
 // 它只关心业务本身：
@@ -55,10 +66,21 @@ public:
     V2QueryMessageResponseInfo handleQueryMessage(
         const secmng::v2::RequestPacket& packet
     );
+
+    // 处理“查询最近 N 条消息请求”
+    V2QueryMessageListResponseInfo handleQueryMessageList(
+        const secmng::v2::RequestPacket& packet
+    );
 private:
     // 校验查询消息请求是否合法
     bool validateQueryRequest(const secmng::v2::RequestPacket& packet,
         std::string& errorMsg);
+
+    // 校验查询消息列表请求是否合法
+    bool validateQueryListRequest(
+        const secmng::v2::RequestPacket& packet,
+        std::string& errorMsg
+    );
 
 private:
     // 校验请求包字段是否合法。
@@ -72,12 +94,18 @@ private:
     ActiveKeyResult getActiveKey(const std::string& senderId,const std::string& receiverId,int keyId);
 
     // 使用当前项目已有的 AesCrypto 解密密文。
-    // 注意：当前 AesCrypto 并不使用外部 nonce，而是内部用 key 派生固定 IV。
     DecryptMessageResult decryptMessage(const std::string& base64Key,
         const std::string& base64Ciphertext,
         const std::string& base64Nonce,
         const std::string& base64Tag,
         const std::string& algorithm);
+
+    // 使用指定 base64 key 对明文重新加密。
+    // 主要用于服务端给接收方生成 receiver_ciphertext。
+    EncryptMessageResult encryptMessage(
+        const std::string& base64Key,
+        const std::string& plaintext
+    );
 
 
     // 生成服务端响应头
@@ -89,6 +117,9 @@ private:
 
     // 生成审计日志 ID
 	std::string generateAuditLogId();
+
+    // 把数据库中的时间字符串（YYYY-MM-DD HH:MM:SS）转换成 Unix 时间戳
+    long long parseDateTimeToTimestamp(const std::string& dateTimeStr);
 
 private:
     std::string m_serverId;   // 当前服务端 ID

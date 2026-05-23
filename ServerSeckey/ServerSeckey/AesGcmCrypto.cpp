@@ -20,6 +20,11 @@ GcmEncryptResult AesGcmCrypto::encrypt(const std::string& plaintext)
 {
 	GcmEncryptResult result;
 	result.success = false;
+	result.ciphertext.clear();
+	result.nonce.clear();
+	result.tag.clear();
+	result.errorMsg.clear();
+
 
 	const EVP_CIPHER* cipher = getCipherByKeyLen();
 	if (cipher == nullptr)
@@ -80,6 +85,13 @@ GcmEncryptResult AesGcmCrypto::encrypt(const std::string& plaintext)
 			&len, reinterpret_cast<const unsigned char*>(plaintext.data()), plaintext.size()) != 1)
 		{
 			result.errorMsg = "EVP_EncryptUpdate failed";
+			break;
+		}
+		ciphertextLen += len;
+
+		if (EVP_EncryptFinal_ex(ctx,reinterpret_cast<unsigned char*>(&ciphertext[0]) + ciphertextLen,&len) != 1)
+		{
+			result.errorMsg = "EVP_EncryptFinal_ex failed";
 			break;
 		}
 

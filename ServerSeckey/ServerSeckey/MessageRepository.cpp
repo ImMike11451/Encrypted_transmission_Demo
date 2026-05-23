@@ -27,11 +27,16 @@ bool MessageRepository::insertMessage(const MessageLogRecord& record)
         record.msgId,
         record.senderId,
         record.receiverId,
-        record.keyId,
+        record.senderKeyId,
+        record.receiverKeyId,
         record.msgType,
-        record.ciphertext,
-        record.nonce,
-        record.tag,
+        record.senderCiphertext,
+        record.senderNonce,
+        record.senderTag,
+        record.receiverCiphertext,
+        record.receiverNonce,
+        record.receiverTag,
+        record.algorithm,
         record.sendTime,
         record.status
     );
@@ -84,3 +89,49 @@ bool MessageRepository::queryMessageById(const std::string& msgId, MessageQueryR
     result.found = true;
     return true;
 }
+bool MessageRepository::queryRecentMessagesBySender(const std::string& senderId,
+    int limit,
+    std::vector<MessageSummaryInfo>& results)
+{
+    results.clear();
+
+    if (m_db == nullptr)
+    {
+        Logger::error("MessageRepository queryRecentMessagesBySender failed: m_db is nullptr");
+        return false;
+    }
+
+    // 先从 mysqlOP 拿到底层原始行数据
+    std::vector<std::vector<std::string>> rows;
+    bool ret = m_db->queryRecentMessagesBySender(senderId, limit, rows);
+    if (!ret)
+    {
+        return false;
+    }
+
+    // 把原始行数据转换成结构化结果
+    for (const auto& row : rows)
+    {
+        // 每一行应该有 7 列：
+        // msg_id, sender_id, receiver_id, sender_key_id, msg_type, send_time, status
+        if (row.size() != 7)
+        {
+            Logger::error("MessageRepository queryRecentMessagesBySender: unexpected row size");
+            continue;
+        }
+
+        MessageSummaryInfo info;
+        info.msgId = row[0];
+        info.senderId = row[1];
+        info.receiverId = row[2];
+        info.keyId = row[3].empty() ? 0 : atoi(row[3].c_str());
+        info.msgType = row[4];
+        info.sendTime = row[5];
+        info.status = row[6].empty() ? 0 : atoi(row[6].c_str());
+
+        results.push_back(info);
+    }
+
+    return true;
+}
+
