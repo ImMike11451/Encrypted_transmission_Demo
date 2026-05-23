@@ -13,6 +13,8 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <limits>
+#include <cstring>
 
 
 ClientOP::ClientOP(std::string fileName)
@@ -113,6 +115,7 @@ bool ClientOP::keyAgreement()
 	if (!resData->status())
 	{
 		Logger::error("秘钥协商失败！");
+		Logger::error("server msg: " + resData->data());
 		return false;
 	}
 
@@ -125,15 +128,44 @@ bool ClientOP::keyAgreement()
 	std::string base64Key = Base64Util::encode((const unsigned char*)key.data(), key.size());
 	Logger::info("协商得到的对称加密的密钥:" + base64Key);
 
-	//秘钥写入共享内存中
-	NodeSHMInfo info;
-	strcpy(info.clientID, m_info.clientId.data());
-	strcpy(info.serverID, m_info.serverId.data());
-	strcpy(info.seckey, base64Key.data());
+	////秘钥写入共享内存中
+	//NodeSHMInfo info;
+	//strcpy(info.clientID, m_info.clientId.data());
+	//strcpy(info.serverID, m_info.serverId.data());
+	//strcpy(info.seckey, base64Key.data());
+	//info.seckeyID = resData->seckeyid();
+	//info.status = 1;
+
+	//m_shm->shmWrite(&info);
+
+	//return true;
+	// 秘钥写入共享内存中
+	NodeSHMInfo info{};
+	memset(&info, 0, sizeof(NodeSHMInfo));
+
+	strncpy(info.clientID, m_info.clientId.c_str(), sizeof(info.clientID) - 1);
+	strncpy(info.serverID, m_info.serverId.c_str(), sizeof(info.serverID) - 1);
+	strncpy(info.seckey, base64Key.c_str(), sizeof(info.seckey) - 1);
+
 	info.seckeyID = resData->seckeyid();
 	info.status = 1;
 
 	m_shm->shmWrite(&info);
+
+	// 写完立刻回读，确认是否真的写进去了
+	NodeSHMInfo checkInfo = m_shm->shmRead(m_info.clientId, m_info.serverId);
+
+	if (strlen(checkInfo.clientID) == 0 || strlen(checkInfo.serverID) == 0)
+	{
+		Logger::error("密钥协商成功，但写入共享内存后回读失败！");
+		Logger::error("请检查 ShmKey 路径是否存在、ftok 是否成功、ShmMaxNode 是否太小、shmWrite 是否真的写入。");
+		return false;
+	}
+
+	Logger::info("密钥已成功写入本地共享内存。");
+	Logger::info("clientID: " + std::string(checkInfo.clientID));
+	Logger::info("serverID: " + std::string(checkInfo.serverID));
+	Logger::info("seckeyID: " + std::to_string(checkInfo.seckeyID));
 
 	return true;
 }
@@ -301,12 +333,102 @@ void ClientOP::sendEncryptedMessage()
 
 	// 第 2 步：创建 MessageClient 并发送
 	MessageClient msgClient(m_info,m_shm.get());
-	bool ret = msgClient.sendTextMessage(msgInfo);
+	SendMessageResult result = msgClient.sendTextMessage(msgInfo);
 
-	if (!ret)
+	if (!result.success)
 	{
 		Logger::error("发送加密消息失败。");
 		return;
 	}
+
+	// 第 3 步：缓存最近一次 server_message_id
+	m_lastServerMessageId = result.serverMessageId;
+
 	Logger::info("发送加密消息完成。");
+	Logger::info("已缓存最近一次 server_message_id: " + m_lastServerMessageId);
+}
+
+void ClientOP::queryMessage()
+{
+
+	std::string serverMessageId;
+
+	if (!m_lastServerMessageId.empty())
+	{
+		std::cout << "最近一次 server_message_id: " << m_lastServerMessageId << "\n";
+		std::cout << "请输入要查询的 server_message_id（直接回车使用最近一次）: ";
+
+		std::cin.ignore();
+		std::getline(std::cin, serverMessageId);
+
+		if(serverMessageId.empty())
+		{
+			serverMessageId = m_lastServerMessageId;
+		}
+	}
+	else
+	{
+		std::cout << "请输入 server_message_id: ";
+		std::cin >> serverMessageId;
+	}
+
+	if (serverMessageId.empty())
+	{
+		Logger::error("server_message_id 不能为空。");
+		return;
+	}
+
+
+	// 第 2 步：创建 MessageClient 并发起查询
+	MessageClient msgClient(m_info, m_shm.get());
+
+	bool ret = msgClient.queryMessageById(serverMessageId);
+	if (!ret)
+	{
+		Logger::error("查询消息失败。");
+		return;
+	}
+	Logger::info("查询消息完成。");
+}
+
+void ClientOP::queryRecentMessages()
+{
+	std::string senderId;
+	int limit = 10;
+
+	std::cout << "请输入要查询的发送方节点 ID（直接回车使用当前客户端）: ";
+
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	std::getline(std::cin, senderId);
+
+	if (senderId.empty())
+	{
+		senderId = m_info.clientId;
+	}
+
+	std::cout << "请输入最多查询多少条消息（建议 10）: ";
+	std::cin >> limit;
+
+	if (limit <= 0)
+	{
+		Logger::error("查询数量必须大于 0。");
+		return;
+	}
+
+	if (limit > 100)
+	{
+		Logger::error("查询数量不能超过 100。");
+		return;
+	}
+
+	MessageClient msgClient(m_info, m_shm.get());
+
+	bool ret = msgClient.queryRecentMessagesBySender(senderId, limit);
+	if (!ret)
+	{
+		Logger::error("查询消息列表失败。");
+		return;
+	}
+
+	Logger::info("查询消息列表完成。");
 }

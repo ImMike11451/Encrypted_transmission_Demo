@@ -30,6 +30,16 @@ struct EncryptTextResult
     std::string errorMsg;     // 如果失败，记录错误原因
 };
 
+// 发送消息后的结果
+// 之所以单独定义，是因为发送结果不只是成功/失败，
+// 还需要把服务端返回的 server_message_id 带回给上层。
+struct SendMessageResult
+{
+    bool success;                    // 是否发送成功
+    std::string serverMessageId;     // 服务端返回的消息 ID
+    std::string errorMsg;            // 失败原因
+};
+
 // MessageClient 是客户端“发送加密消息”业务类。
 // 它不负责密钥协商，也不负责菜单显示；
 // 它只负责：
@@ -50,7 +60,13 @@ public:
 
     // 对外暴露的主业务接口：
     // 发送一条文本消息到 receiverId
-	bool sendTextMessage(const SendTextMessageInfo& msgInfo);
+    SendMessageResult  sendTextMessage(const SendTextMessageInfo& msgInfo);
+
+    // 根据服务端消息 ID 查询单条消息记录
+    bool queryMessageById(const std::string& serverMessageId);
+
+    // 根据 sender_id 查询最近 N 条消息
+    bool queryRecentMessagesBySender(const std::string& senderId, int limit);
 
 private:
 
@@ -68,6 +84,8 @@ private:
     // 生成消息唯一 ID。
     // 第一阶段我们可以先用“时间戳 + 发送方ID”这种简单方案。
 	std::string generateMessageId();
+
+    static std::string deliveryStatusToString(int status);
 
 private:
     ClientInfo m_info;   // 客户端基础配置

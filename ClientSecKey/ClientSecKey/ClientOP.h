@@ -33,9 +33,14 @@ public:
 	void keyLogout();
 	// 发送加密消息
 	void sendEncryptedMessage();
+	//查询消息
+	void queryMessage();
+	// 查询最近 N 条消息
+	void queryRecentMessages();
 
 
 private:
 	ClientInfo m_info;
 	std::unique_ptr<SecKeyShm> m_shm;
+	std::string m_lastServerMessageId;   // 最近一次发送成功后返回的 server_message_id
 };
