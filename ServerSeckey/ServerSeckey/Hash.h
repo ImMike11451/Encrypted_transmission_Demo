@@ -14,13 +14,17 @@ enum HashType
 	T_SHA512
 };
 
+// 职责：封装 OpenSSL 摘要算法。
+// 当前主要用于对公钥内容计算 SHA-256 摘要，再交给 RSA 做签名/验签。
 class Hash
 {
 public:
 	Hash(HashType type);
 	~Hash();
 
+	// 追加待摘要数据，可多次调用。
 	void addData(std::string data);
+	// 生成十六进制摘要字符串。调用后 OpenSSL 上下文会完成 Final。
 	std::string result();
 
 private:

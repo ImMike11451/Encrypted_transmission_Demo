@@ -11,6 +11,8 @@
 
 static const int TIMEOUT = 3;  //秒
 
+// 职责：封装 TCP 连接、超时控制和长度帧收发。
+// 协议：每个应用层消息都以 4 字节网络序长度开头，后面跟 protobuf payload。
 class TcpSocket
 {
 public:
@@ -23,15 +25,15 @@ public:
 		SyscallError            // 系统调用错误（补一个更通用）
 	};
 	TcpSocket();
-	//使用已经创建的套接字描述符来构造TcpSocket对象
+	// 使用已经 accept 出来的套接字构造对象，服务端处理客户端 fd 时使用。
 	TcpSocket(int sockfd);
-	//连接到指定的IP地址和端口号服务器
+	// 连接到指定 IP 和端口，timeout 表示连接超时时间。
 	int connectToHost(std::string ip,unsigned short port,int timeout = TIMEOUT);
-	//发送数据
+	// 发送一帧完整应用层消息。
 	int sendMsg(const std::string& sendData, int timeout = TIMEOUT);
-	//接收数据
+	// 接收一帧完整应用层消息。
 	int recvMsg(std::string& recvData, int timeout = TIMEOUT);
-	//断开连接
+	// 关闭当前 socket。
 	int disconnect();
 	~TcpSocket();
 	
@@ -40,15 +42,15 @@ private:
 	int setNonBlock(int fd);
 	//设置套接字为阻塞模式
 	int setBlock(int fd);
-	//使用select函数 读超时检测函数，不含读操作
+	// 使用 select 做读超时检测，不执行实际读操作。
 	int readWithTimeout(unsigned int wait_time);
-	//使用select函数 写超时检测函数, 不包含写操作
+	// 使用 select 做写超时检测，不执行实际写操作。
 	int writeWithTimeout(unsigned int wait_time);
-	//使用select函数 连接超时的connect函数
+	// 非阻塞 connect + select，用于实现连接超时。
 	int connectTimeout(struct sockaddr_in* addr,unsigned int wait_time);
-	//每次从缓冲区中读取n个字符
+	// 循环读取指定字节数，解决 TCP 半包问题。
 	int readn(std::string& recvData, int len);
-	//每次向缓冲区中写入n个字符
+	// 循环写入指定字节数，解决 send 一次写不完的问题。
 	int writen(const std::string& sendData, int len);
 
 private:

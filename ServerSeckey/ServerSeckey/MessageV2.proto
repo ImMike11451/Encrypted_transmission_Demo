@@ -23,6 +23,21 @@ enum CommandType {
   CMD_QUERY_MSG_LIST_REQ = 5;
 
   CMD_QUERY_MSG_LIST_RESP = 6;
+
+  // 密钥协商
+  CMD_KEY_AGREE_REQ = 7;
+
+  CMD_KEY_AGREE_RESP = 8;
+
+  // 密钥校验
+  CMD_KEY_CHECK_REQ = 9;
+
+  CMD_KEY_CHECK_RESP = 10;
+
+  // 密钥注销
+  CMD_KEY_LOGOUT_REQ = 11;
+
+  CMD_KEY_LOGOUT_RESP = 12;
 }
 
 //列表查询
@@ -57,6 +72,36 @@ enum ResultCode {
   RESULT_INVALID_REQUEST = 6;
 
   RESULT_MSG_NOT_FOUND = 7;
+
+  RESULT_KEY_AGREE_FAILED = 8;
+
+  RESULT_KEY_CHECK_FAILED = 9;
+
+  RESULT_KEY_LOGOUT_FAILED = 10;
+}
+
+// 密钥协商请求。
+message KeyAgreementRequest {
+  string public_key = 1;
+  string sign = 2;
+}
+
+// 密钥校验请求。
+message KeyCheckRequest {
+  int32 key_id = 1;
+}
+
+// 密钥注销请求。
+message KeyLogoutRequest {
+  int32 key_id = 1;
+}
+
+// 密钥业务统一响应。
+message KeyOperationResponse {
+  ResultCode code = 1;
+  string message = 2;
+  int32 key_id = 3;
+  string data = 4;
 }
 
 // 消息类型：第一阶段只做文本消息。
@@ -221,6 +266,15 @@ message RequestPacket {
     
     // 查询最近 N 条消息请求
     QueryMessageListRequest query_msg_list_req = 4;
+
+    // 密钥协商请求
+    KeyAgreementRequest key_agree_req = 5;
+
+    // 密钥校验请求
+    KeyCheckRequest key_check_req = 6;
+
+    // 密钥注销请求
+    KeyLogoutRequest key_logout_req = 7;
   }
 }
 
@@ -238,5 +292,8 @@ message ResponsePacket {
 
     // 查询最近 N 条消息响应
     QueryMessageListResponse query_msg_list_resp = 4;
+
+    // 密钥业务响应
+    KeyOperationResponse key_op_resp = 5;
   }
 }

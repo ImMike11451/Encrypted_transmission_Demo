@@ -53,9 +53,18 @@ struct V2QueryMessageListResponseInfo
     std::vector<V2MessageSummaryInfo> messages; // 消息摘要列表
 };
 
-// 响应编解码器：
-// 负责把服务端业务层的响应结构体编码成 protobuf 字节流，
-// 以及把收到的响应字节流还原成 protobuf 对象。
+// 密钥协商、校验、注销的统一响应
+struct V2KeyOperationResponseInfo
+{
+    V2HeaderInfo header;
+    int code;
+    std::string message;
+    int keyId;
+    std::string data;
+};
+
+// 职责：完成 C++ 响应结构体与 protobuf ResponsePacket 之间的转换。
+// 边界：不做业务判断、不做网络收发、不做加解密。
 class V2RespondCodec : public Codec
 {
 public:
@@ -64,13 +73,16 @@ public:
     V2RespondCodec(V2SendMessageResponseInfo* info);
     V2RespondCodec(V2QueryMessageListResponseInfo* info);
 
-    // 查询消息响应编码
+    // 查询消息响应编码。
     V2RespondCodec(V2QueryMessageResponseInfo* info);
+
+    V2RespondCodec(V2KeyOperationResponseInfo* info);
 
     void initMessage(const std::string& encStr);
     void initMessage(V2SendMessageResponseInfo* info);
     void initMessage(V2QueryMessageResponseInfo* info);
     void initMessage(V2QueryMessageListResponseInfo* info);
+    void initMessage(V2KeyOperationResponseInfo* info);
 
     std::string encodeMsg() override;
     void* decodeMsg() override;
@@ -78,9 +90,9 @@ public:
     ~V2RespondCodec();
 
 private:
-    // protobuf 响应对象
+    // protobuf 响应对象。
     secmng::v2::ResponsePacket m_msg;
 
-    // 保存待解码的原始字符串
+    // 保存待解码的原始字符串。
     std::string m_encStr;
 };

@@ -8,29 +8,29 @@
 #include <condition_variable>
 #include <iostream>
 
-// =======================================================
-// 线程池类
-// =======================================================
+// 职责：维护一组工作线程，异步执行 ServerOP 投递的客户端请求任务。
+// 边界：线程池只负责调度任务，不关心任务里的 socket、protobuf 或业务细节。
 class ThreadPool
 {
 public:
-	// 构造函数，创建指定数量的线程
+	// 构造时创建固定数量的工作线程。
 	explicit ThreadPool(size_t threadCount = 4);
 
-	// 析构函数，停止所有线程并清理资源
+	// 析构时停止接收新任务，唤醒并回收所有工作线程。
 	~ThreadPool();
 
-	//提交任务
+	// 提交一个待执行任务。
 	void enqueue(const std::function<void()>& task);
 
 private:
-	void worker(); // 工作线程函数
+	// 工作线程主循环：等待任务、取出任务、执行任务。
+	void worker();
 
 private:
-	std::vector<std::thread> m_workers; // 工作线程列表
-	std::queue<std::function<void()>> m_tasks; // 任务队列
-	std::mutex m_mutex; // 互斥锁
-	std::condition_variable m_cond; // 条件变量
-	std::atomic<bool> m_stop; // 停止标志
+	std::vector<std::thread> m_workers;
+	std::queue<std::function<void()>> m_tasks;
+	std::mutex m_mutex;
+	std::condition_variable m_cond;
+	std::atomic<bool> m_stop;
 };
 

@@ -17,6 +17,10 @@
 #include <google/protobuf/port_def.inc>
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_EncryptedMessage_MessageV2_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Header_MessageV2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_KeyAgreementRequest_MessageV2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_KeyCheckRequest_MessageV2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_KeyLogoutRequest_MessageV2_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_KeyOperationResponse_MessageV2_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_MessageSummary_MessageV2_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_QueryMessageListRequest_MessageV2_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_MessageV2_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_QueryMessageListResponse_MessageV2_2eproto;
@@ -30,6 +34,22 @@ class QueryMessageListRequestDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<QueryMessageListRequest> _instance;
 } _QueryMessageListRequest_default_instance_;
+class KeyAgreementRequestDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<KeyAgreementRequest> _instance;
+} _KeyAgreementRequest_default_instance_;
+class KeyCheckRequestDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<KeyCheckRequest> _instance;
+} _KeyCheckRequest_default_instance_;
+class KeyLogoutRequestDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<KeyLogoutRequest> _instance;
+} _KeyLogoutRequest_default_instance_;
+class KeyOperationResponseDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<KeyOperationResponse> _instance;
+} _KeyOperationResponse_default_instance_;
 class HeaderDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Header> _instance;
@@ -68,6 +88,9 @@ class RequestPacketDefaultTypeInternal {
   const ::secmng::v2::SendMessageRequest* send_msg_req_;
   const ::secmng::v2::QueryMessageRequest* query_msg_req_;
   const ::secmng::v2::QueryMessageListRequest* query_msg_list_req_;
+  const ::secmng::v2::KeyAgreementRequest* key_agree_req_;
+  const ::secmng::v2::KeyCheckRequest* key_check_req_;
+  const ::secmng::v2::KeyLogoutRequest* key_logout_req_;
 } _RequestPacket_default_instance_;
 class ResponsePacketDefaultTypeInternal {
  public:
@@ -75,6 +98,7 @@ class ResponsePacketDefaultTypeInternal {
   const ::secmng::v2::SendMessageResponse* send_msg_resp_;
   const ::secmng::v2::QueryMessageResponse* query_msg_resp_;
   const ::secmng::v2::QueryMessageListResponse* query_msg_list_resp_;
+  const ::secmng::v2::KeyOperationResponse* key_op_resp_;
 } _ResponsePacket_default_instance_;
 }  // namespace v2
 }  // namespace secmng
@@ -105,6 +129,62 @@ static void InitDefaultsscc_info_Header_MessageV2_2eproto() {
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Header_MessageV2_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_Header_MessageV2_2eproto}, {}};
+
+static void InitDefaultsscc_info_KeyAgreementRequest_MessageV2_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::secmng::v2::_KeyAgreementRequest_default_instance_;
+    new (ptr) ::secmng::v2::KeyAgreementRequest();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::secmng::v2::KeyAgreementRequest::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_KeyAgreementRequest_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_KeyAgreementRequest_MessageV2_2eproto}, {}};
+
+static void InitDefaultsscc_info_KeyCheckRequest_MessageV2_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::secmng::v2::_KeyCheckRequest_default_instance_;
+    new (ptr) ::secmng::v2::KeyCheckRequest();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::secmng::v2::KeyCheckRequest::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_KeyCheckRequest_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_KeyCheckRequest_MessageV2_2eproto}, {}};
+
+static void InitDefaultsscc_info_KeyLogoutRequest_MessageV2_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::secmng::v2::_KeyLogoutRequest_default_instance_;
+    new (ptr) ::secmng::v2::KeyLogoutRequest();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::secmng::v2::KeyLogoutRequest::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_KeyLogoutRequest_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_KeyLogoutRequest_MessageV2_2eproto}, {}};
+
+static void InitDefaultsscc_info_KeyOperationResponse_MessageV2_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::secmng::v2::_KeyOperationResponse_default_instance_;
+    new (ptr) ::secmng::v2::KeyOperationResponse();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::secmng::v2::KeyOperationResponse::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_KeyOperationResponse_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_KeyOperationResponse_MessageV2_2eproto}, {}};
 
 static void InitDefaultsscc_info_MessageSummary_MessageV2_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -188,12 +268,15 @@ static void InitDefaultsscc_info_RequestPacket_MessageV2_2eproto() {
   ::secmng::v2::RequestPacket::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<4> scc_info_RequestPacket_MessageV2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 4, InitDefaultsscc_info_RequestPacket_MessageV2_2eproto}, {
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<7> scc_info_RequestPacket_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 7, InitDefaultsscc_info_RequestPacket_MessageV2_2eproto}, {
       &scc_info_Header_MessageV2_2eproto.base,
       &scc_info_SendMessageRequest_MessageV2_2eproto.base,
       &scc_info_QueryMessageRequest_MessageV2_2eproto.base,
-      &scc_info_QueryMessageListRequest_MessageV2_2eproto.base,}};
+      &scc_info_QueryMessageListRequest_MessageV2_2eproto.base,
+      &scc_info_KeyAgreementRequest_MessageV2_2eproto.base,
+      &scc_info_KeyCheckRequest_MessageV2_2eproto.base,
+      &scc_info_KeyLogoutRequest_MessageV2_2eproto.base,}};
 
 static void InitDefaultsscc_info_ResponsePacket_MessageV2_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -206,12 +289,13 @@ static void InitDefaultsscc_info_ResponsePacket_MessageV2_2eproto() {
   ::secmng::v2::ResponsePacket::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<4> scc_info_ResponsePacket_MessageV2_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 4, InitDefaultsscc_info_ResponsePacket_MessageV2_2eproto}, {
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<5> scc_info_ResponsePacket_MessageV2_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 5, InitDefaultsscc_info_ResponsePacket_MessageV2_2eproto}, {
       &scc_info_Header_MessageV2_2eproto.base,
       &scc_info_SendMessageResponse_MessageV2_2eproto.base,
       &scc_info_QueryMessageResponse_MessageV2_2eproto.base,
-      &scc_info_QueryMessageListResponse_MessageV2_2eproto.base,}};
+      &scc_info_QueryMessageListResponse_MessageV2_2eproto.base,
+      &scc_info_KeyOperationResponse_MessageV2_2eproto.base,}};
 
 static void InitDefaultsscc_info_SendMessageRequest_MessageV2_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -242,7 +326,7 @@ static void InitDefaultsscc_info_SendMessageResponse_MessageV2_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SendMessageResponse_MessageV2_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_SendMessageResponse_MessageV2_2eproto}, {}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_MessageV2_2eproto[11];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_MessageV2_2eproto[15];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_MessageV2_2eproto[4];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_MessageV2_2eproto = nullptr;
 
@@ -254,6 +338,34 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_MessageV2_2eproto::offsets[] P
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageListRequest, sender_id_),
   PROTOBUF_FIELD_OFFSET(::secmng::v2::QueryMessageListRequest, limit_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::KeyAgreementRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::KeyAgreementRequest, public_key_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::KeyAgreementRequest, sign_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::KeyCheckRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::KeyCheckRequest, key_id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::KeyLogoutRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::KeyLogoutRequest, key_id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::KeyOperationResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::KeyOperationResponse, code_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::KeyOperationResponse, message_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::KeyOperationResponse, key_id_),
+  PROTOBUF_FIELD_OFFSET(::secmng::v2::KeyOperationResponse, data_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::secmng::v2::Header, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -340,6 +452,9 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_MessageV2_2eproto::offsets[] P
   offsetof(::secmng::v2::RequestPacketDefaultTypeInternal, send_msg_req_),
   offsetof(::secmng::v2::RequestPacketDefaultTypeInternal, query_msg_req_),
   offsetof(::secmng::v2::RequestPacketDefaultTypeInternal, query_msg_list_req_),
+  offsetof(::secmng::v2::RequestPacketDefaultTypeInternal, key_agree_req_),
+  offsetof(::secmng::v2::RequestPacketDefaultTypeInternal, key_check_req_),
+  offsetof(::secmng::v2::RequestPacketDefaultTypeInternal, key_logout_req_),
   PROTOBUF_FIELD_OFFSET(::secmng::v2::RequestPacket, body_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::secmng::v2::ResponsePacket, _internal_metadata_),
@@ -350,24 +465,33 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_MessageV2_2eproto::offsets[] P
   offsetof(::secmng::v2::ResponsePacketDefaultTypeInternal, send_msg_resp_),
   offsetof(::secmng::v2::ResponsePacketDefaultTypeInternal, query_msg_resp_),
   offsetof(::secmng::v2::ResponsePacketDefaultTypeInternal, query_msg_list_resp_),
+  offsetof(::secmng::v2::ResponsePacketDefaultTypeInternal, key_op_resp_),
   PROTOBUF_FIELD_OFFSET(::secmng::v2::ResponsePacket, body_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::secmng::v2::QueryMessageListRequest)},
-  { 7, -1, sizeof(::secmng::v2::Header)},
-  { 17, -1, sizeof(::secmng::v2::EncryptedMessage)},
-  { 28, -1, sizeof(::secmng::v2::SendMessageRequest)},
-  { 34, -1, sizeof(::secmng::v2::SendMessageResponse)},
-  { 44, -1, sizeof(::secmng::v2::QueryMessageRequest)},
-  { 50, -1, sizeof(::secmng::v2::QueryMessageResponse)},
-  { 64, -1, sizeof(::secmng::v2::MessageSummary)},
-  { 76, -1, sizeof(::secmng::v2::QueryMessageListResponse)},
-  { 84, -1, sizeof(::secmng::v2::RequestPacket)},
-  { 94, -1, sizeof(::secmng::v2::ResponsePacket)},
+  { 7, -1, sizeof(::secmng::v2::KeyAgreementRequest)},
+  { 14, -1, sizeof(::secmng::v2::KeyCheckRequest)},
+  { 20, -1, sizeof(::secmng::v2::KeyLogoutRequest)},
+  { 26, -1, sizeof(::secmng::v2::KeyOperationResponse)},
+  { 35, -1, sizeof(::secmng::v2::Header)},
+  { 45, -1, sizeof(::secmng::v2::EncryptedMessage)},
+  { 56, -1, sizeof(::secmng::v2::SendMessageRequest)},
+  { 62, -1, sizeof(::secmng::v2::SendMessageResponse)},
+  { 72, -1, sizeof(::secmng::v2::QueryMessageRequest)},
+  { 78, -1, sizeof(::secmng::v2::QueryMessageResponse)},
+  { 92, -1, sizeof(::secmng::v2::MessageSummary)},
+  { 104, -1, sizeof(::secmng::v2::QueryMessageListResponse)},
+  { 112, -1, sizeof(::secmng::v2::RequestPacket)},
+  { 125, -1, sizeof(::secmng::v2::ResponsePacket)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_QueryMessageListRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_KeyAgreementRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_KeyCheckRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_KeyLogoutRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_KeyOperationResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_Header_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_EncryptedMessage_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::secmng::v2::_SendMessageRequest_default_instance_),
@@ -383,65 +507,86 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 const char descriptor_table_protodef_MessageV2_2eproto[] =
   "\n\017MessageV2.proto\022\tsecmng.v2\";\n\027QueryMes"
   "sageListRequest\022\021\n\tsender_id\030\001 \001(\t\022\r\n\005li"
-  "mit\030\002 \001(\005\"\200\001\n\006Header\022\022\n\nmessage_id\030\001 \001(\t"
-  "\022\'\n\007command\030\002 \001(\0162\026.secmng.v2.CommandTyp"
-  "e\022\021\n\tsender_id\030\003 \001(\t\022\023\n\013receiver_id\030\004 \001("
-  "\t\022\021\n\ttimestamp\030\005 \001(\003\"\217\001\n\020EncryptedMessag"
-  "e\022\016\n\006key_id\030\001 \001(\005\022(\n\010msg_type\030\002 \001(\0162\026.se"
-  "cmng.v2.MessageType\022\022\n\nciphertext\030\003 \001(\t\022"
-  "\r\n\005nonce\030\004 \001(\t\022\013\n\003tag\030\005 \001(\t\022\021\n\talgorithm"
-  "\030\006 \001(\t\"B\n\022SendMessageRequest\022,\n\007message\030"
-  "\001 \001(\0132\033.secmng.v2.EncryptedMessage\"\257\001\n\023S"
-  "endMessageResponse\022#\n\004code\030\001 \001(\0162\025.secmn"
-  "g.v2.ResultCode\022\017\n\007message\030\002 \001(\t\022\031\n\021serv"
-  "er_message_id\030\003 \001(\t\022\023\n\013server_time\030\004 \001(\003"
-  "\0222\n\017delivery_status\030\005 \001(\0162\031.secmng.v2.De"
-  "liveryStatus\"0\n\023QueryMessageRequest\022\031\n\021s"
-  "erver_message_id\030\001 \001(\t\"\324\001\n\024QueryMessageR"
-  "esponse\022#\n\004code\030\001 \001(\0162\025.secmng.v2.Result"
-  "Code\022\017\n\007message\030\002 \001(\t\022\031\n\021server_message_"
-  "id\030\003 \001(\t\022\021\n\tsender_id\030\004 \001(\t\022\023\n\013receiver_"
-  "id\030\005 \001(\t\022\016\n\006key_id\030\006 \001(\005\022\020\n\010msg_type\030\007 \001"
-  "(\t\022\021\n\tsend_time\030\010 \001(\003\022\016\n\006status\030\t \001(\005\"\230\001"
-  "\n\016MessageSummary\022\031\n\021server_message_id\030\001 "
-  "\001(\t\022\021\n\tsender_id\030\002 \001(\t\022\023\n\013receiver_id\030\003 "
-  "\001(\t\022\016\n\006key_id\030\004 \001(\005\022\020\n\010msg_type\030\005 \001(\t\022\021\n"
-  "\tsend_time\030\006 \001(\003\022\016\n\006status\030\007 \001(\005\"}\n\030Quer"
-  "yMessageListResponse\022#\n\004code\030\001 \001(\0162\025.sec"
-  "mng.v2.ResultCode\022\017\n\007message\030\002 \001(\t\022+\n\010me"
-  "ssages\030\003 \003(\0132\031.secmng.v2.MessageSummary\""
-  "\354\001\n\rRequestPacket\022!\n\006header\030\001 \001(\0132\021.secm"
-  "ng.v2.Header\0225\n\014send_msg_req\030\002 \001(\0132\035.sec"
-  "mng.v2.SendMessageRequestH\000\0227\n\rquery_msg"
-  "_req\030\003 \001(\0132\036.secmng.v2.QueryMessageReque"
-  "stH\000\022@\n\022query_msg_list_req\030\004 \001(\0132\".secmn"
-  "g.v2.QueryMessageListRequestH\000B\006\n\004body\"\363"
-  "\001\n\016ResponsePacket\022!\n\006header\030\001 \001(\0132\021.secm"
-  "ng.v2.Header\0227\n\rsend_msg_resp\030\002 \001(\0132\036.se"
-  "cmng.v2.SendMessageResponseH\000\0229\n\016query_m"
-  "sg_resp\030\003 \001(\0132\037.secmng.v2.QueryMessageRe"
-  "sponseH\000\022B\n\023query_msg_list_resp\030\004 \001(\0132#."
-  "secmng.v2.QueryMessageListResponseH\000B\006\n\004"
-  "body*\263\001\n\013CommandType\022\017\n\013CMD_UNKNOWN\020\000\022\024\n"
-  "\020CMD_SEND_MSG_REQ\020\001\022\025\n\021CMD_SEND_MSG_RESP"
-  "\020\002\022\025\n\021CMD_QUERY_MSG_REQ\020\003\022\026\n\022CMD_QUERY_M"
-  "SG_RESP\020\004\022\032\n\026CMD_QUERY_MSG_LIST_REQ\020\005\022\033\n"
-  "\027CMD_QUERY_MSG_LIST_RESP\020\006*\312\001\n\nResultCod"
+  "mit\030\002 \001(\005\"7\n\023KeyAgreementRequest\022\022\n\npubl"
+  "ic_key\030\001 \001(\t\022\014\n\004sign\030\002 \001(\t\"!\n\017KeyCheckRe"
+  "quest\022\016\n\006key_id\030\001 \001(\005\"\"\n\020KeyLogoutReques"
+  "t\022\016\n\006key_id\030\001 \001(\005\"j\n\024KeyOperationRespons"
+  "e\022#\n\004code\030\001 \001(\0162\025.secmng.v2.ResultCode\022\017"
+  "\n\007message\030\002 \001(\t\022\016\n\006key_id\030\003 \001(\005\022\014\n\004data\030"
+  "\004 \001(\t\"\200\001\n\006Header\022\022\n\nmessage_id\030\001 \001(\t\022\'\n\007"
+  "command\030\002 \001(\0162\026.secmng.v2.CommandType\022\021\n"
+  "\tsender_id\030\003 \001(\t\022\023\n\013receiver_id\030\004 \001(\t\022\021\n"
+  "\ttimestamp\030\005 \001(\003\"\217\001\n\020EncryptedMessage\022\016\n"
+  "\006key_id\030\001 \001(\005\022(\n\010msg_type\030\002 \001(\0162\026.secmng"
+  ".v2.MessageType\022\022\n\nciphertext\030\003 \001(\t\022\r\n\005n"
+  "once\030\004 \001(\t\022\013\n\003tag\030\005 \001(\t\022\021\n\talgorithm\030\006 \001"
+  "(\t\"B\n\022SendMessageRequest\022,\n\007message\030\001 \001("
+  "\0132\033.secmng.v2.EncryptedMessage\"\257\001\n\023SendM"
+  "essageResponse\022#\n\004code\030\001 \001(\0162\025.secmng.v2"
+  ".ResultCode\022\017\n\007message\030\002 \001(\t\022\031\n\021server_m"
+  "essage_id\030\003 \001(\t\022\023\n\013server_time\030\004 \001(\003\0222\n\017"
+  "delivery_status\030\005 \001(\0162\031.secmng.v2.Delive"
+  "ryStatus\"0\n\023QueryMessageRequest\022\031\n\021serve"
+  "r_message_id\030\001 \001(\t\"\324\001\n\024QueryMessageRespo"
+  "nse\022#\n\004code\030\001 \001(\0162\025.secmng.v2.ResultCode"
+  "\022\017\n\007message\030\002 \001(\t\022\031\n\021server_message_id\030\003"
+  " \001(\t\022\021\n\tsender_id\030\004 \001(\t\022\023\n\013receiver_id\030\005"
+  " \001(\t\022\016\n\006key_id\030\006 \001(\005\022\020\n\010msg_type\030\007 \001(\t\022\021"
+  "\n\tsend_time\030\010 \001(\003\022\016\n\006status\030\t \001(\005\"\230\001\n\016Me"
+  "ssageSummary\022\031\n\021server_message_id\030\001 \001(\t\022"
+  "\021\n\tsender_id\030\002 \001(\t\022\023\n\013receiver_id\030\003 \001(\t\022"
+  "\016\n\006key_id\030\004 \001(\005\022\020\n\010msg_type\030\005 \001(\t\022\021\n\tsen"
+  "d_time\030\006 \001(\003\022\016\n\006status\030\007 \001(\005\"}\n\030QueryMes"
+  "sageListResponse\022#\n\004code\030\001 \001(\0162\025.secmng."
+  "v2.ResultCode\022\017\n\007message\030\002 \001(\t\022+\n\010messag"
+  "es\030\003 \003(\0132\031.secmng.v2.MessageSummary\"\221\003\n\r"
+  "RequestPacket\022!\n\006header\030\001 \001(\0132\021.secmng.v"
+  "2.Header\0225\n\014send_msg_req\030\002 \001(\0132\035.secmng."
+  "v2.SendMessageRequestH\000\0227\n\rquery_msg_req"
+  "\030\003 \001(\0132\036.secmng.v2.QueryMessageRequestH\000"
+  "\022@\n\022query_msg_list_req\030\004 \001(\0132\".secmng.v2"
+  ".QueryMessageListRequestH\000\0227\n\rkey_agree_"
+  "req\030\005 \001(\0132\036.secmng.v2.KeyAgreementReques"
+  "tH\000\0223\n\rkey_check_req\030\006 \001(\0132\032.secmng.v2.K"
+  "eyCheckRequestH\000\0225\n\016key_logout_req\030\007 \001(\013"
+  "2\033.secmng.v2.KeyLogoutRequestH\000B\006\n\004body\""
+  "\253\002\n\016ResponsePacket\022!\n\006header\030\001 \001(\0132\021.sec"
+  "mng.v2.Header\0227\n\rsend_msg_resp\030\002 \001(\0132\036.s"
+  "ecmng.v2.SendMessageResponseH\000\0229\n\016query_"
+  "msg_resp\030\003 \001(\0132\037.secmng.v2.QueryMessageR"
+  "esponseH\000\022B\n\023query_msg_list_resp\030\004 \001(\0132#"
+  ".secmng.v2.QueryMessageListResponseH\000\0226\n"
+  "\013key_op_resp\030\005 \001(\0132\037.secmng.v2.KeyOperat"
+  "ionResponseH\000B\006\n\004body*\302\002\n\013CommandType\022\017\n"
+  "\013CMD_UNKNOWN\020\000\022\024\n\020CMD_SEND_MSG_REQ\020\001\022\025\n\021"
+  "CMD_SEND_MSG_RESP\020\002\022\025\n\021CMD_QUERY_MSG_REQ"
+  "\020\003\022\026\n\022CMD_QUERY_MSG_RESP\020\004\022\032\n\026CMD_QUERY_"
+  "MSG_LIST_REQ\020\005\022\033\n\027CMD_QUERY_MSG_LIST_RES"
+  "P\020\006\022\025\n\021CMD_KEY_AGREE_REQ\020\007\022\026\n\022CMD_KEY_AG"
+  "REE_RESP\020\010\022\025\n\021CMD_KEY_CHECK_REQ\020\t\022\026\n\022CMD"
+  "_KEY_CHECK_RESP\020\n\022\026\n\022CMD_KEY_LOGOUT_REQ\020"
+  "\013\022\027\n\023CMD_KEY_LOGOUT_RESP\020\014*\242\002\n\nResultCod"
   "e\022\022\n\016RESULT_UNKNOWN\020\000\022\022\n\016RESULT_SUCCESS\020"
   "\001\022\021\n\rRESULT_FAILED\020\002\022\030\n\024RESULT_KEY_NOT_F"
   "OUND\020\003\022\026\n\022RESULT_KEY_INVALID\020\004\022\031\n\025RESULT"
   "_DECRYPT_FAILED\020\005\022\032\n\026RESULT_INVALID_REQU"
-  "EST\020\006\022\030\n\024RESULT_MSG_NOT_FOUND\020\007*6\n\013Messa"
-  "geType\022\024\n\020MSG_TYPE_UNKNOWN\020\000\022\021\n\rMSG_TYPE"
-  "_TEXT\020\001*T\n\016DeliveryStatus\022\024\n\020DELIVERY_UN"
-  "KNOWN\020\000\022\025\n\021DELIVERY_ACCEPTED\020\001\022\025\n\021DELIVE"
-  "RY_REJECTED\020\002b\006proto3"
+  "EST\020\006\022\030\n\024RESULT_MSG_NOT_FOUND\020\007\022\033\n\027RESUL"
+  "T_KEY_AGREE_FAILED\020\010\022\033\n\027RESULT_KEY_CHECK"
+  "_FAILED\020\t\022\034\n\030RESULT_KEY_LOGOUT_FAILED\020\n*"
+  "6\n\013MessageType\022\024\n\020MSG_TYPE_UNKNOWN\020\000\022\021\n\r"
+  "MSG_TYPE_TEXT\020\001*T\n\016DeliveryStatus\022\024\n\020DEL"
+  "IVERY_UNKNOWN\020\000\022\025\n\021DELIVERY_ACCEPTED\020\001\022\025"
+  "\n\021DELIVERY_REJECTED\020\002b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_MessageV2_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_MessageV2_2eproto_sccs[11] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_MessageV2_2eproto_sccs[15] = {
   &scc_info_EncryptedMessage_MessageV2_2eproto.base,
   &scc_info_Header_MessageV2_2eproto.base,
+  &scc_info_KeyAgreementRequest_MessageV2_2eproto.base,
+  &scc_info_KeyCheckRequest_MessageV2_2eproto.base,
+  &scc_info_KeyLogoutRequest_MessageV2_2eproto.base,
+  &scc_info_KeyOperationResponse_MessageV2_2eproto.base,
   &scc_info_MessageSummary_MessageV2_2eproto.base,
   &scc_info_QueryMessageListRequest_MessageV2_2eproto.base,
   &scc_info_QueryMessageListResponse_MessageV2_2eproto.base,
@@ -455,10 +600,10 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Mes
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_MessageV2_2eproto_once;
 static bool descriptor_table_MessageV2_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_MessageV2_2eproto = {
-  &descriptor_table_MessageV2_2eproto_initialized, descriptor_table_protodef_MessageV2_2eproto, "MessageV2.proto", 2181,
-  &descriptor_table_MessageV2_2eproto_once, descriptor_table_MessageV2_2eproto_sccs, descriptor_table_MessageV2_2eproto_deps, 11, 0,
+  &descriptor_table_MessageV2_2eproto_initialized, descriptor_table_protodef_MessageV2_2eproto, "MessageV2.proto", 2869,
+  &descriptor_table_MessageV2_2eproto_once, descriptor_table_MessageV2_2eproto_sccs, descriptor_table_MessageV2_2eproto_deps, 15, 0,
   schemas, file_default_instances, TableStruct_MessageV2_2eproto::offsets,
-  file_level_metadata_MessageV2_2eproto, 11, file_level_enum_descriptors_MessageV2_2eproto, file_level_service_descriptors_MessageV2_2eproto,
+  file_level_metadata_MessageV2_2eproto, 15, file_level_enum_descriptors_MessageV2_2eproto, file_level_service_descriptors_MessageV2_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -478,6 +623,12 @@ bool CommandType_IsValid(int value) {
     case 4:
     case 5:
     case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
       return true;
     default:
       return false;
@@ -498,6 +649,9 @@ bool ResultCode_IsValid(int value) {
     case 5:
     case 6:
     case 7:
+    case 8:
+    case 9:
+    case 10:
       return true;
     default:
       return false;
@@ -852,6 +1006,1298 @@ void QueryMessageListRequest::InternalSwap(QueryMessageListRequest* other) {
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata QueryMessageListRequest::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void KeyAgreementRequest::InitAsDefaultInstance() {
+}
+class KeyAgreementRequest::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int KeyAgreementRequest::kPublicKeyFieldNumber;
+const int KeyAgreementRequest::kSignFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+KeyAgreementRequest::KeyAgreementRequest()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:secmng.v2.KeyAgreementRequest)
+}
+KeyAgreementRequest::KeyAgreementRequest(const KeyAgreementRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  public_key_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.public_key().size() > 0) {
+    public_key_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.public_key_);
+  }
+  sign_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.sign().size() > 0) {
+    sign_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.sign_);
+  }
+  // @@protoc_insertion_point(copy_constructor:secmng.v2.KeyAgreementRequest)
+}
+
+void KeyAgreementRequest::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_KeyAgreementRequest_MessageV2_2eproto.base);
+  public_key_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  sign_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+KeyAgreementRequest::~KeyAgreementRequest() {
+  // @@protoc_insertion_point(destructor:secmng.v2.KeyAgreementRequest)
+  SharedDtor();
+}
+
+void KeyAgreementRequest::SharedDtor() {
+  public_key_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  sign_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void KeyAgreementRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const KeyAgreementRequest& KeyAgreementRequest::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_KeyAgreementRequest_MessageV2_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void KeyAgreementRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:secmng.v2.KeyAgreementRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  public_key_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  sign_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* KeyAgreementRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // string public_key = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_public_key(), ptr, ctx, "secmng.v2.KeyAgreementRequest.public_key");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string sign = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_sign(), ptr, ctx, "secmng.v2.KeyAgreementRequest.sign");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool KeyAgreementRequest::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:secmng.v2.KeyAgreementRequest)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string public_key = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (10 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_public_key()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->public_key().data(), static_cast<int>(this->public_key().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.KeyAgreementRequest.public_key"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string sign = 2;
+      case 2: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_sign()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->sign().data(), static_cast<int>(this->sign().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.KeyAgreementRequest.sign"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:secmng.v2.KeyAgreementRequest)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:secmng.v2.KeyAgreementRequest)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void KeyAgreementRequest::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:secmng.v2.KeyAgreementRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string public_key = 1;
+  if (this->public_key().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->public_key().data(), static_cast<int>(this->public_key().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.KeyAgreementRequest.public_key");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->public_key(), output);
+  }
+
+  // string sign = 2;
+  if (this->sign().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->sign().data(), static_cast<int>(this->sign().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.KeyAgreementRequest.sign");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->sign(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:secmng.v2.KeyAgreementRequest)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* KeyAgreementRequest::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:secmng.v2.KeyAgreementRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string public_key = 1;
+  if (this->public_key().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->public_key().data(), static_cast<int>(this->public_key().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.KeyAgreementRequest.public_key");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        1, this->public_key(), target);
+  }
+
+  // string sign = 2;
+  if (this->sign().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->sign().data(), static_cast<int>(this->sign().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.KeyAgreementRequest.sign");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        2, this->sign(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:secmng.v2.KeyAgreementRequest)
+  return target;
+}
+
+size_t KeyAgreementRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:secmng.v2.KeyAgreementRequest)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string public_key = 1;
+  if (this->public_key().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->public_key());
+  }
+
+  // string sign = 2;
+  if (this->sign().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->sign());
+  }
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void KeyAgreementRequest::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:secmng.v2.KeyAgreementRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  const KeyAgreementRequest* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<KeyAgreementRequest>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:secmng.v2.KeyAgreementRequest)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:secmng.v2.KeyAgreementRequest)
+    MergeFrom(*source);
+  }
+}
+
+void KeyAgreementRequest::MergeFrom(const KeyAgreementRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:secmng.v2.KeyAgreementRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.public_key().size() > 0) {
+
+    public_key_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.public_key_);
+  }
+  if (from.sign().size() > 0) {
+
+    sign_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.sign_);
+  }
+}
+
+void KeyAgreementRequest::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:secmng.v2.KeyAgreementRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void KeyAgreementRequest::CopyFrom(const KeyAgreementRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:secmng.v2.KeyAgreementRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool KeyAgreementRequest::IsInitialized() const {
+  return true;
+}
+
+void KeyAgreementRequest::Swap(KeyAgreementRequest* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void KeyAgreementRequest::InternalSwap(KeyAgreementRequest* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  public_key_.Swap(&other->public_key_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  sign_.Swap(&other->sign_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata KeyAgreementRequest::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void KeyCheckRequest::InitAsDefaultInstance() {
+}
+class KeyCheckRequest::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int KeyCheckRequest::kKeyIdFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+KeyCheckRequest::KeyCheckRequest()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:secmng.v2.KeyCheckRequest)
+}
+KeyCheckRequest::KeyCheckRequest(const KeyCheckRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  key_id_ = from.key_id_;
+  // @@protoc_insertion_point(copy_constructor:secmng.v2.KeyCheckRequest)
+}
+
+void KeyCheckRequest::SharedCtor() {
+  key_id_ = 0;
+}
+
+KeyCheckRequest::~KeyCheckRequest() {
+  // @@protoc_insertion_point(destructor:secmng.v2.KeyCheckRequest)
+  SharedDtor();
+}
+
+void KeyCheckRequest::SharedDtor() {
+}
+
+void KeyCheckRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const KeyCheckRequest& KeyCheckRequest::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_KeyCheckRequest_MessageV2_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void KeyCheckRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:secmng.v2.KeyCheckRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  key_id_ = 0;
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* KeyCheckRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // int32 key_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          key_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool KeyCheckRequest::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:secmng.v2.KeyCheckRequest)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int32 key_id = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                 input, &key_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:secmng.v2.KeyCheckRequest)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:secmng.v2.KeyCheckRequest)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void KeyCheckRequest::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:secmng.v2.KeyCheckRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 key_id = 1;
+  if (this->key_id() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(1, this->key_id(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:secmng.v2.KeyCheckRequest)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* KeyCheckRequest::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:secmng.v2.KeyCheckRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 key_id = 1;
+  if (this->key_id() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->key_id(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:secmng.v2.KeyCheckRequest)
+  return target;
+}
+
+size_t KeyCheckRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:secmng.v2.KeyCheckRequest)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 key_id = 1;
+  if (this->key_id() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->key_id());
+  }
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void KeyCheckRequest::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:secmng.v2.KeyCheckRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  const KeyCheckRequest* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<KeyCheckRequest>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:secmng.v2.KeyCheckRequest)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:secmng.v2.KeyCheckRequest)
+    MergeFrom(*source);
+  }
+}
+
+void KeyCheckRequest::MergeFrom(const KeyCheckRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:secmng.v2.KeyCheckRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.key_id() != 0) {
+    set_key_id(from.key_id());
+  }
+}
+
+void KeyCheckRequest::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:secmng.v2.KeyCheckRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void KeyCheckRequest::CopyFrom(const KeyCheckRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:secmng.v2.KeyCheckRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool KeyCheckRequest::IsInitialized() const {
+  return true;
+}
+
+void KeyCheckRequest::Swap(KeyCheckRequest* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void KeyCheckRequest::InternalSwap(KeyCheckRequest* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(key_id_, other->key_id_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata KeyCheckRequest::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void KeyLogoutRequest::InitAsDefaultInstance() {
+}
+class KeyLogoutRequest::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int KeyLogoutRequest::kKeyIdFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+KeyLogoutRequest::KeyLogoutRequest()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:secmng.v2.KeyLogoutRequest)
+}
+KeyLogoutRequest::KeyLogoutRequest(const KeyLogoutRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  key_id_ = from.key_id_;
+  // @@protoc_insertion_point(copy_constructor:secmng.v2.KeyLogoutRequest)
+}
+
+void KeyLogoutRequest::SharedCtor() {
+  key_id_ = 0;
+}
+
+KeyLogoutRequest::~KeyLogoutRequest() {
+  // @@protoc_insertion_point(destructor:secmng.v2.KeyLogoutRequest)
+  SharedDtor();
+}
+
+void KeyLogoutRequest::SharedDtor() {
+}
+
+void KeyLogoutRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const KeyLogoutRequest& KeyLogoutRequest::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_KeyLogoutRequest_MessageV2_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void KeyLogoutRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:secmng.v2.KeyLogoutRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  key_id_ = 0;
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* KeyLogoutRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // int32 key_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          key_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool KeyLogoutRequest::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:secmng.v2.KeyLogoutRequest)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int32 key_id = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                 input, &key_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:secmng.v2.KeyLogoutRequest)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:secmng.v2.KeyLogoutRequest)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void KeyLogoutRequest::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:secmng.v2.KeyLogoutRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 key_id = 1;
+  if (this->key_id() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(1, this->key_id(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:secmng.v2.KeyLogoutRequest)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* KeyLogoutRequest::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:secmng.v2.KeyLogoutRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 key_id = 1;
+  if (this->key_id() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->key_id(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:secmng.v2.KeyLogoutRequest)
+  return target;
+}
+
+size_t KeyLogoutRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:secmng.v2.KeyLogoutRequest)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 key_id = 1;
+  if (this->key_id() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->key_id());
+  }
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void KeyLogoutRequest::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:secmng.v2.KeyLogoutRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  const KeyLogoutRequest* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<KeyLogoutRequest>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:secmng.v2.KeyLogoutRequest)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:secmng.v2.KeyLogoutRequest)
+    MergeFrom(*source);
+  }
+}
+
+void KeyLogoutRequest::MergeFrom(const KeyLogoutRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:secmng.v2.KeyLogoutRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.key_id() != 0) {
+    set_key_id(from.key_id());
+  }
+}
+
+void KeyLogoutRequest::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:secmng.v2.KeyLogoutRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void KeyLogoutRequest::CopyFrom(const KeyLogoutRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:secmng.v2.KeyLogoutRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool KeyLogoutRequest::IsInitialized() const {
+  return true;
+}
+
+void KeyLogoutRequest::Swap(KeyLogoutRequest* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void KeyLogoutRequest::InternalSwap(KeyLogoutRequest* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(key_id_, other->key_id_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata KeyLogoutRequest::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void KeyOperationResponse::InitAsDefaultInstance() {
+}
+class KeyOperationResponse::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int KeyOperationResponse::kCodeFieldNumber;
+const int KeyOperationResponse::kMessageFieldNumber;
+const int KeyOperationResponse::kKeyIdFieldNumber;
+const int KeyOperationResponse::kDataFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+KeyOperationResponse::KeyOperationResponse()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:secmng.v2.KeyOperationResponse)
+}
+KeyOperationResponse::KeyOperationResponse(const KeyOperationResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.message().size() > 0) {
+    message_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.message_);
+  }
+  data_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.data().size() > 0) {
+    data_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+  ::memcpy(&code_, &from.code_,
+    static_cast<size_t>(reinterpret_cast<char*>(&key_id_) -
+    reinterpret_cast<char*>(&code_)) + sizeof(key_id_));
+  // @@protoc_insertion_point(copy_constructor:secmng.v2.KeyOperationResponse)
+}
+
+void KeyOperationResponse::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_KeyOperationResponse_MessageV2_2eproto.base);
+  message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  data_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::memset(&code_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&key_id_) -
+      reinterpret_cast<char*>(&code_)) + sizeof(key_id_));
+}
+
+KeyOperationResponse::~KeyOperationResponse() {
+  // @@protoc_insertion_point(destructor:secmng.v2.KeyOperationResponse)
+  SharedDtor();
+}
+
+void KeyOperationResponse::SharedDtor() {
+  message_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  data_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void KeyOperationResponse::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const KeyOperationResponse& KeyOperationResponse::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_KeyOperationResponse_MessageV2_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void KeyOperationResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:secmng.v2.KeyOperationResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  message_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  data_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::memset(&code_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&key_id_) -
+      reinterpret_cast<char*>(&code_)) + sizeof(key_id_));
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* KeyOperationResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // .secmng.v2.ResultCode code = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+          set_code(static_cast<::secmng::v2::ResultCode>(val));
+        } else goto handle_unusual;
+        continue;
+      // string message = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_message(), ptr, ctx, "secmng.v2.KeyOperationResponse.message");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 key_id = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          key_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string data = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_data(), ptr, ctx, "secmng.v2.KeyOperationResponse.data");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool KeyOperationResponse::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:secmng.v2.KeyOperationResponse)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // .secmng.v2.ResultCode code = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
+          int value = 0;
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   int, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_code(static_cast< ::secmng::v2::ResultCode >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string message = 2;
+      case 2: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_message()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->message().data(), static_cast<int>(this->message().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.KeyOperationResponse.message"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 key_id = 3;
+      case 3: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (24 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                 input, &key_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string data = 4;
+      case 4: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (34 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_data()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->data().data(), static_cast<int>(this->data().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "secmng.v2.KeyOperationResponse.data"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:secmng.v2.KeyOperationResponse)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:secmng.v2.KeyOperationResponse)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void KeyOperationResponse::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:secmng.v2.KeyOperationResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .secmng.v2.ResultCode code = 1;
+  if (this->code() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnum(
+      1, this->code(), output);
+  }
+
+  // string message = 2;
+  if (this->message().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->message().data(), static_cast<int>(this->message().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.KeyOperationResponse.message");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->message(), output);
+  }
+
+  // int32 key_id = 3;
+  if (this->key_id() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(3, this->key_id(), output);
+  }
+
+  // string data = 4;
+  if (this->data().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->data().data(), static_cast<int>(this->data().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.KeyOperationResponse.data");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      4, this->data(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:secmng.v2.KeyOperationResponse)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* KeyOperationResponse::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:secmng.v2.KeyOperationResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .secmng.v2.ResultCode code = 1;
+  if (this->code() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      1, this->code(), target);
+  }
+
+  // string message = 2;
+  if (this->message().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->message().data(), static_cast<int>(this->message().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.KeyOperationResponse.message");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        2, this->message(), target);
+  }
+
+  // int32 key_id = 3;
+  if (this->key_id() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->key_id(), target);
+  }
+
+  // string data = 4;
+  if (this->data().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->data().data(), static_cast<int>(this->data().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "secmng.v2.KeyOperationResponse.data");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        4, this->data(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:secmng.v2.KeyOperationResponse)
+  return target;
+}
+
+size_t KeyOperationResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:secmng.v2.KeyOperationResponse)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string message = 2;
+  if (this->message().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->message());
+  }
+
+  // string data = 4;
+  if (this->data().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->data());
+  }
+
+  // .secmng.v2.ResultCode code = 1;
+  if (this->code() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->code());
+  }
+
+  // int32 key_id = 3;
+  if (this->key_id() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->key_id());
+  }
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void KeyOperationResponse::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:secmng.v2.KeyOperationResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  const KeyOperationResponse* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<KeyOperationResponse>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:secmng.v2.KeyOperationResponse)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:secmng.v2.KeyOperationResponse)
+    MergeFrom(*source);
+  }
+}
+
+void KeyOperationResponse::MergeFrom(const KeyOperationResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:secmng.v2.KeyOperationResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.message().size() > 0) {
+
+    message_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.message_);
+  }
+  if (from.data().size() > 0) {
+
+    data_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+  if (from.code() != 0) {
+    set_code(from.code());
+  }
+  if (from.key_id() != 0) {
+    set_key_id(from.key_id());
+  }
+}
+
+void KeyOperationResponse::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:secmng.v2.KeyOperationResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void KeyOperationResponse::CopyFrom(const KeyOperationResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:secmng.v2.KeyOperationResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool KeyOperationResponse::IsInitialized() const {
+  return true;
+}
+
+void KeyOperationResponse::Swap(KeyOperationResponse* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void KeyOperationResponse::InternalSwap(KeyOperationResponse* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  message_.Swap(&other->message_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  data_.Swap(&other->data_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(code_, other->code_);
+  swap(key_id_, other->key_id_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata KeyOperationResponse::GetMetadata() const {
   return GetMetadataStatic();
 }
 
@@ -4664,6 +6110,12 @@ void RequestPacket::InitAsDefaultInstance() {
       ::secmng::v2::QueryMessageRequest::internal_default_instance());
   ::secmng::v2::_RequestPacket_default_instance_.query_msg_list_req_ = const_cast< ::secmng::v2::QueryMessageListRequest*>(
       ::secmng::v2::QueryMessageListRequest::internal_default_instance());
+  ::secmng::v2::_RequestPacket_default_instance_.key_agree_req_ = const_cast< ::secmng::v2::KeyAgreementRequest*>(
+      ::secmng::v2::KeyAgreementRequest::internal_default_instance());
+  ::secmng::v2::_RequestPacket_default_instance_.key_check_req_ = const_cast< ::secmng::v2::KeyCheckRequest*>(
+      ::secmng::v2::KeyCheckRequest::internal_default_instance());
+  ::secmng::v2::_RequestPacket_default_instance_.key_logout_req_ = const_cast< ::secmng::v2::KeyLogoutRequest*>(
+      ::secmng::v2::KeyLogoutRequest::internal_default_instance());
 }
 class RequestPacket::HasBitSetters {
  public:
@@ -4671,6 +6123,9 @@ class RequestPacket::HasBitSetters {
   static const ::secmng::v2::SendMessageRequest& send_msg_req(const RequestPacket* msg);
   static const ::secmng::v2::QueryMessageRequest& query_msg_req(const RequestPacket* msg);
   static const ::secmng::v2::QueryMessageListRequest& query_msg_list_req(const RequestPacket* msg);
+  static const ::secmng::v2::KeyAgreementRequest& key_agree_req(const RequestPacket* msg);
+  static const ::secmng::v2::KeyCheckRequest& key_check_req(const RequestPacket* msg);
+  static const ::secmng::v2::KeyLogoutRequest& key_logout_req(const RequestPacket* msg);
 };
 
 const ::secmng::v2::Header&
@@ -4688,6 +6143,18 @@ RequestPacket::HasBitSetters::query_msg_req(const RequestPacket* msg) {
 const ::secmng::v2::QueryMessageListRequest&
 RequestPacket::HasBitSetters::query_msg_list_req(const RequestPacket* msg) {
   return *msg->body_.query_msg_list_req_;
+}
+const ::secmng::v2::KeyAgreementRequest&
+RequestPacket::HasBitSetters::key_agree_req(const RequestPacket* msg) {
+  return *msg->body_.key_agree_req_;
+}
+const ::secmng::v2::KeyCheckRequest&
+RequestPacket::HasBitSetters::key_check_req(const RequestPacket* msg) {
+  return *msg->body_.key_check_req_;
+}
+const ::secmng::v2::KeyLogoutRequest&
+RequestPacket::HasBitSetters::key_logout_req(const RequestPacket* msg) {
+  return *msg->body_.key_logout_req_;
 }
 void RequestPacket::set_allocated_send_msg_req(::secmng::v2::SendMessageRequest* send_msg_req) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
@@ -4731,11 +6198,56 @@ void RequestPacket::set_allocated_query_msg_list_req(::secmng::v2::QueryMessageL
   }
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.RequestPacket.query_msg_list_req)
 }
+void RequestPacket::set_allocated_key_agree_req(::secmng::v2::KeyAgreementRequest* key_agree_req) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  clear_body();
+  if (key_agree_req) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      key_agree_req = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, key_agree_req, submessage_arena);
+    }
+    set_has_key_agree_req();
+    body_.key_agree_req_ = key_agree_req;
+  }
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.RequestPacket.key_agree_req)
+}
+void RequestPacket::set_allocated_key_check_req(::secmng::v2::KeyCheckRequest* key_check_req) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  clear_body();
+  if (key_check_req) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      key_check_req = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, key_check_req, submessage_arena);
+    }
+    set_has_key_check_req();
+    body_.key_check_req_ = key_check_req;
+  }
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.RequestPacket.key_check_req)
+}
+void RequestPacket::set_allocated_key_logout_req(::secmng::v2::KeyLogoutRequest* key_logout_req) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  clear_body();
+  if (key_logout_req) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      key_logout_req = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, key_logout_req, submessage_arena);
+    }
+    set_has_key_logout_req();
+    body_.key_logout_req_ = key_logout_req;
+  }
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.RequestPacket.key_logout_req)
+}
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int RequestPacket::kHeaderFieldNumber;
 const int RequestPacket::kSendMsgReqFieldNumber;
 const int RequestPacket::kQueryMsgReqFieldNumber;
 const int RequestPacket::kQueryMsgListReqFieldNumber;
+const int RequestPacket::kKeyAgreeReqFieldNumber;
+const int RequestPacket::kKeyCheckReqFieldNumber;
+const int RequestPacket::kKeyLogoutReqFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 RequestPacket::RequestPacket()
@@ -4764,6 +6276,18 @@ RequestPacket::RequestPacket(const RequestPacket& from)
     }
     case kQueryMsgListReq: {
       mutable_query_msg_list_req()->::secmng::v2::QueryMessageListRequest::MergeFrom(from.query_msg_list_req());
+      break;
+    }
+    case kKeyAgreeReq: {
+      mutable_key_agree_req()->::secmng::v2::KeyAgreementRequest::MergeFrom(from.key_agree_req());
+      break;
+    }
+    case kKeyCheckReq: {
+      mutable_key_check_req()->::secmng::v2::KeyCheckRequest::MergeFrom(from.key_check_req());
+      break;
+    }
+    case kKeyLogoutReq: {
+      mutable_key_logout_req()->::secmng::v2::KeyLogoutRequest::MergeFrom(from.key_logout_req());
       break;
     }
     case BODY_NOT_SET: {
@@ -4813,6 +6337,18 @@ void RequestPacket::clear_body() {
     }
     case kQueryMsgListReq: {
       delete body_.query_msg_list_req_;
+      break;
+    }
+    case kKeyAgreeReq: {
+      delete body_.key_agree_req_;
+      break;
+    }
+    case kKeyCheckReq: {
+      delete body_.key_check_req_;
+      break;
+    }
+    case kKeyLogoutReq: {
+      delete body_.key_logout_req_;
       break;
     }
     case BODY_NOT_SET: {
@@ -4870,6 +6406,27 @@ const char* RequestPacket::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
           ptr = ctx->ParseMessage(mutable_query_msg_list_req(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .secmng.v2.KeyAgreementRequest key_agree_req = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+          ptr = ctx->ParseMessage(mutable_key_agree_req(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .secmng.v2.KeyCheckRequest key_check_req = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
+          ptr = ctx->ParseMessage(mutable_key_check_req(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .secmng.v2.KeyLogoutRequest key_logout_req = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 58)) {
+          ptr = ctx->ParseMessage(mutable_key_logout_req(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -4947,6 +6504,39 @@ bool RequestPacket::MergePartialFromCodedStream(
         break;
       }
 
+      // .secmng.v2.KeyAgreementRequest key_agree_req = 5;
+      case 5: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (42 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
+               input, mutable_key_agree_req()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .secmng.v2.KeyCheckRequest key_check_req = 6;
+      case 6: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (50 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
+               input, mutable_key_check_req()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .secmng.v2.KeyLogoutRequest key_logout_req = 7;
+      case 7: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (58 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
+               input, mutable_key_logout_req()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -4998,6 +6588,24 @@ void RequestPacket::SerializeWithCachedSizes(
       4, HasBitSetters::query_msg_list_req(this), output);
   }
 
+  // .secmng.v2.KeyAgreementRequest key_agree_req = 5;
+  if (has_key_agree_req()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
+      5, HasBitSetters::key_agree_req(this), output);
+  }
+
+  // .secmng.v2.KeyCheckRequest key_check_req = 6;
+  if (has_key_check_req()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
+      6, HasBitSetters::key_check_req(this), output);
+  }
+
+  // .secmng.v2.KeyLogoutRequest key_logout_req = 7;
+  if (has_key_logout_req()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
+      7, HasBitSetters::key_logout_req(this), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -5037,6 +6645,27 @@ void RequestPacket::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessageToArray(
         4, HasBitSetters::query_msg_list_req(this), target);
+  }
+
+  // .secmng.v2.KeyAgreementRequest key_agree_req = 5;
+  if (has_key_agree_req()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        5, HasBitSetters::key_agree_req(this), target);
+  }
+
+  // .secmng.v2.KeyCheckRequest key_check_req = 6;
+  if (has_key_check_req()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        6, HasBitSetters::key_check_req(this), target);
+  }
+
+  // .secmng.v2.KeyLogoutRequest key_logout_req = 7;
+  if (has_key_logout_req()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        7, HasBitSetters::key_logout_req(this), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -5089,6 +6718,27 @@ size_t RequestPacket::ByteSizeLong() const {
           *body_.query_msg_list_req_);
       break;
     }
+    // .secmng.v2.KeyAgreementRequest key_agree_req = 5;
+    case kKeyAgreeReq: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *body_.key_agree_req_);
+      break;
+    }
+    // .secmng.v2.KeyCheckRequest key_check_req = 6;
+    case kKeyCheckReq: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *body_.key_check_req_);
+      break;
+    }
+    // .secmng.v2.KeyLogoutRequest key_logout_req = 7;
+    case kKeyLogoutReq: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *body_.key_logout_req_);
+      break;
+    }
     case BODY_NOT_SET: {
       break;
     }
@@ -5134,6 +6784,18 @@ void RequestPacket::MergeFrom(const RequestPacket& from) {
     }
     case kQueryMsgListReq: {
       mutable_query_msg_list_req()->::secmng::v2::QueryMessageListRequest::MergeFrom(from.query_msg_list_req());
+      break;
+    }
+    case kKeyAgreeReq: {
+      mutable_key_agree_req()->::secmng::v2::KeyAgreementRequest::MergeFrom(from.key_agree_req());
+      break;
+    }
+    case kKeyCheckReq: {
+      mutable_key_check_req()->::secmng::v2::KeyCheckRequest::MergeFrom(from.key_check_req());
+      break;
+    }
+    case kKeyLogoutReq: {
+      mutable_key_logout_req()->::secmng::v2::KeyLogoutRequest::MergeFrom(from.key_logout_req());
       break;
     }
     case BODY_NOT_SET: {
@@ -5188,6 +6850,8 @@ void ResponsePacket::InitAsDefaultInstance() {
       ::secmng::v2::QueryMessageResponse::internal_default_instance());
   ::secmng::v2::_ResponsePacket_default_instance_.query_msg_list_resp_ = const_cast< ::secmng::v2::QueryMessageListResponse*>(
       ::secmng::v2::QueryMessageListResponse::internal_default_instance());
+  ::secmng::v2::_ResponsePacket_default_instance_.key_op_resp_ = const_cast< ::secmng::v2::KeyOperationResponse*>(
+      ::secmng::v2::KeyOperationResponse::internal_default_instance());
 }
 class ResponsePacket::HasBitSetters {
  public:
@@ -5195,6 +6859,7 @@ class ResponsePacket::HasBitSetters {
   static const ::secmng::v2::SendMessageResponse& send_msg_resp(const ResponsePacket* msg);
   static const ::secmng::v2::QueryMessageResponse& query_msg_resp(const ResponsePacket* msg);
   static const ::secmng::v2::QueryMessageListResponse& query_msg_list_resp(const ResponsePacket* msg);
+  static const ::secmng::v2::KeyOperationResponse& key_op_resp(const ResponsePacket* msg);
 };
 
 const ::secmng::v2::Header&
@@ -5212,6 +6877,10 @@ ResponsePacket::HasBitSetters::query_msg_resp(const ResponsePacket* msg) {
 const ::secmng::v2::QueryMessageListResponse&
 ResponsePacket::HasBitSetters::query_msg_list_resp(const ResponsePacket* msg) {
   return *msg->body_.query_msg_list_resp_;
+}
+const ::secmng::v2::KeyOperationResponse&
+ResponsePacket::HasBitSetters::key_op_resp(const ResponsePacket* msg) {
+  return *msg->body_.key_op_resp_;
 }
 void ResponsePacket::set_allocated_send_msg_resp(::secmng::v2::SendMessageResponse* send_msg_resp) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
@@ -5255,11 +6924,26 @@ void ResponsePacket::set_allocated_query_msg_list_resp(::secmng::v2::QueryMessag
   }
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.ResponsePacket.query_msg_list_resp)
 }
+void ResponsePacket::set_allocated_key_op_resp(::secmng::v2::KeyOperationResponse* key_op_resp) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  clear_body();
+  if (key_op_resp) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      key_op_resp = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, key_op_resp, submessage_arena);
+    }
+    set_has_key_op_resp();
+    body_.key_op_resp_ = key_op_resp;
+  }
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.ResponsePacket.key_op_resp)
+}
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ResponsePacket::kHeaderFieldNumber;
 const int ResponsePacket::kSendMsgRespFieldNumber;
 const int ResponsePacket::kQueryMsgRespFieldNumber;
 const int ResponsePacket::kQueryMsgListRespFieldNumber;
+const int ResponsePacket::kKeyOpRespFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ResponsePacket::ResponsePacket()
@@ -5288,6 +6972,10 @@ ResponsePacket::ResponsePacket(const ResponsePacket& from)
     }
     case kQueryMsgListResp: {
       mutable_query_msg_list_resp()->::secmng::v2::QueryMessageListResponse::MergeFrom(from.query_msg_list_resp());
+      break;
+    }
+    case kKeyOpResp: {
+      mutable_key_op_resp()->::secmng::v2::KeyOperationResponse::MergeFrom(from.key_op_resp());
       break;
     }
     case BODY_NOT_SET: {
@@ -5337,6 +7025,10 @@ void ResponsePacket::clear_body() {
     }
     case kQueryMsgListResp: {
       delete body_.query_msg_list_resp_;
+      break;
+    }
+    case kKeyOpResp: {
+      delete body_.key_op_resp_;
       break;
     }
     case BODY_NOT_SET: {
@@ -5394,6 +7086,13 @@ const char* ResponsePacket::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
           ptr = ctx->ParseMessage(mutable_query_msg_list_resp(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .secmng.v2.KeyOperationResponse key_op_resp = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+          ptr = ctx->ParseMessage(mutable_key_op_resp(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -5471,6 +7170,17 @@ bool ResponsePacket::MergePartialFromCodedStream(
         break;
       }
 
+      // .secmng.v2.KeyOperationResponse key_op_resp = 5;
+      case 5: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (42 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
+               input, mutable_key_op_resp()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -5522,6 +7232,12 @@ void ResponsePacket::SerializeWithCachedSizes(
       4, HasBitSetters::query_msg_list_resp(this), output);
   }
 
+  // .secmng.v2.KeyOperationResponse key_op_resp = 5;
+  if (has_key_op_resp()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
+      5, HasBitSetters::key_op_resp(this), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -5561,6 +7277,13 @@ void ResponsePacket::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessageToArray(
         4, HasBitSetters::query_msg_list_resp(this), target);
+  }
+
+  // .secmng.v2.KeyOperationResponse key_op_resp = 5;
+  if (has_key_op_resp()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        5, HasBitSetters::key_op_resp(this), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -5613,6 +7336,13 @@ size_t ResponsePacket::ByteSizeLong() const {
           *body_.query_msg_list_resp_);
       break;
     }
+    // .secmng.v2.KeyOperationResponse key_op_resp = 5;
+    case kKeyOpResp: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *body_.key_op_resp_);
+      break;
+    }
     case BODY_NOT_SET: {
       break;
     }
@@ -5658,6 +7388,10 @@ void ResponsePacket::MergeFrom(const ResponsePacket& from) {
     }
     case kQueryMsgListResp: {
       mutable_query_msg_list_resp()->::secmng::v2::QueryMessageListResponse::MergeFrom(from.query_msg_list_resp());
+      break;
+    }
+    case kKeyOpResp: {
+      mutable_key_op_resp()->::secmng::v2::KeyOperationResponse::MergeFrom(from.key_op_resp());
       break;
     }
     case BODY_NOT_SET: {
@@ -5707,6 +7441,18 @@ void ResponsePacket::InternalSwap(ResponsePacket* other) {
 PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::secmng::v2::QueryMessageListRequest* Arena::CreateMaybeMessage< ::secmng::v2::QueryMessageListRequest >(Arena* arena) {
   return Arena::CreateInternal< ::secmng::v2::QueryMessageListRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::secmng::v2::KeyAgreementRequest* Arena::CreateMaybeMessage< ::secmng::v2::KeyAgreementRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::secmng::v2::KeyAgreementRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::secmng::v2::KeyCheckRequest* Arena::CreateMaybeMessage< ::secmng::v2::KeyCheckRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::secmng::v2::KeyCheckRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::secmng::v2::KeyLogoutRequest* Arena::CreateMaybeMessage< ::secmng::v2::KeyLogoutRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::secmng::v2::KeyLogoutRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::secmng::v2::KeyOperationResponse* Arena::CreateMaybeMessage< ::secmng::v2::KeyOperationResponse >(Arena* arena) {
+  return Arena::CreateInternal< ::secmng::v2::KeyOperationResponse >(arena);
 }
 template<> PROTOBUF_NOINLINE ::secmng::v2::Header* Arena::CreateMaybeMessage< ::secmng::v2::Header >(Arena* arena) {
   return Arena::CreateInternal< ::secmng::v2::Header >(arena);

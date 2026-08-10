@@ -16,6 +16,8 @@ struct AuditLogRecord
 };
 
 // AuditService 负责把审计信息写入 audit_log。
+// 审计日志用于回答“谁在什么时候对什么目标做了什么，结果如何”。
+// 失败请求也应该记录，这对排查非法请求、权限拒绝和解密失败很重要。
 class AuditService
 {
 public:
@@ -26,7 +28,7 @@ public:
     bool logAction(const AuditLogRecord& record);
 
     // 一个方便调用的辅助接口：
-// 直接传关键字段，让调用方不用每次手动组装完整结构体。
+    // 直接传关键字段，让调用方不用每次手动组装完整结构体。
     bool logAction(const std::string& logId,
         const std::string& nodeId,
         const std::string& action,

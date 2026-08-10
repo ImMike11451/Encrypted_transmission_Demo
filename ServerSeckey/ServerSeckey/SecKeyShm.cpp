@@ -31,35 +31,30 @@ void SecKeyShm::shmInit()
 int SecKeyShm::shmWrite(NodeSHMInfo * pNodeInfo)
 {
 	int ret = -1;
-	// 关联共享内存
+	// 每次操作前临时映射共享内存，操作结束后解除映射，避免长期持有裸指针。
 	NodeSHMInfo* pAddr = static_cast<NodeSHMInfo*>(mapShm());
 	if (pAddr == NULL)
 	{
 		return ret;
 	}
 
-	// 判断传入的网点密钥是否已经存在
+	// 先查找同一 clientID + serverID 的节点，命中则覆盖旧密钥。
 	NodeSHMInfo	*pNode = NULL;
 	for (int i = 0; i < m_maxNode; i++)
 	{
-		// pNode依次指向每个节点的首地址
 		pNode = pAddr + i;
-		//Logger::info("clientID 比较: " + std::string(pNode->clientID) + ", " + std::string(pNodeInfo->clientID));
-		//Logger::info("serverID 比较: " + std::string(pNode->serverID) + ", " + std::string(pNodeInfo->serverID));
 		if (strcmp(pNode->clientID, pNodeInfo->clientID) == 0 &&
 			strcmp(pNode->serverID, pNodeInfo->serverID) == 0)
 		{
-			// 如果找到了该网点秘钥已经存在, 使用新秘钥覆盖旧的值
 			memcpy(pNode, pNodeInfo, sizeof(NodeSHMInfo));
 			unmapShm();
-			Logger::info("写数据成功: 原数据被覆盖!");
 			return 0;
 		}
 	}
 
-	// 若没有找到对应的信息, 找一个空节点将秘钥信息写入
+	// 如果没有旧节点，就找一个空槽位写入新密钥。
 	int i = 0;
-	NodeSHMInfo tmpNodeInfo; //空结点
+	NodeSHMInfo tmpNodeInfo{};
 	for (i = 0; i < m_maxNode; i++)
 	{
 		pNode = pAddr + i;
@@ -67,7 +62,6 @@ int SecKeyShm::shmWrite(NodeSHMInfo * pNodeInfo)
 		{
 			ret = 0;
 			memcpy(pNode, pNodeInfo, sizeof(NodeSHMInfo));
-			Logger::info("写数据成功: 在新的节点上添加数据!");
 			break;
 		}
 	}
@@ -83,7 +77,6 @@ int SecKeyShm::shmWrite(NodeSHMInfo * pNodeInfo)
 NodeSHMInfo SecKeyShm::shmRead(string clientID, string serverID)
 {
 	int ret = 0;
-	// 关联共享内存
 	NodeSHMInfo *pAddr = NULL;
 	pAddr = static_cast<NodeSHMInfo*>(mapShm());
 	if (pAddr == NULL)
@@ -91,25 +84,18 @@ NodeSHMInfo SecKeyShm::shmRead(string clientID, string serverID)
 		Logger::error("共享内存关联失败...");
 		return NodeSHMInfo();
 	}
-	Logger::info("共享内存关联成功...");
 
-	//遍历网点信息
 	int i = 0;
 	NodeSHMInfo info;
 	NodeSHMInfo	*pNode = NULL;
-	// 通过clientID和serverID查找节点
-	Logger::info("maxNode: " + std::to_string(m_maxNode));
+	// 通过 clientID + serverID 精确定位一条会话密钥。
 	for (i = 0; i < m_maxNode; i++)
 	{
 		pNode = pAddr + i;
-		//Logger::info("clientID 比较: " + std::string(pNode->clientID) + ", " + clientID);
-		//Logger::info("serverID 比较: " + std::string(pNode->serverID) + ", " + serverID);
 		if (strcmp(pNode->clientID, clientID.data()) == 0 &&
 			strcmp(pNode->serverID, serverID.data()) == 0)
 		{
-			// 找到的节点信息, 拷贝到传出参数
 			info = *pNode;
-			Logger::info("秘钥ID: " + std::to_string(info.seckeyID));
 			break;
 		}
 	}
@@ -129,6 +115,7 @@ int SecKeyShm::shmUpdateStatus(string clientID, string serverID, int status)
 	}
 
 	NodeSHMInfo* pNode = NULL;
+	// 注销密钥时只更新状态，不清空 key 本体，便于保留缓存结构和历史排查信息。
 	for(int i = 0; i < m_maxNode; i++)
 	{
 		pNode = pAddr + i;
@@ -136,7 +123,6 @@ int SecKeyShm::shmUpdateStatus(string clientID, string serverID, int status)
 			strcmp(pNode->serverID, serverID.data()) == 0)
 		{
 			pNode->status = status;
-			Logger::info("更新状态成功! 当前status = " + std::to_string(pNode->status));
 			unmapShm();
 			return 0;
 		}

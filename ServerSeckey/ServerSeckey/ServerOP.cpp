@@ -1,8 +1,4 @@
 #include "ServerOP.h"
-#include "RespondCodec.h"
-#include "RequestCodec.h"
-#include "RespondFactory.h"
-#include "RequestFactory.h"
 #include "RsaCrypto.h"
 #include "Hash.h"
 #include "Base64Util.h"
@@ -22,6 +18,47 @@
 
 
 using namespace Json;
+
+namespace
+{
+// 密钥业务响应头沿用请求 message_id，便于客户端和审计日志关联请求/响应。
+V2HeaderInfo buildKeyResponseHeader(
+	const secmng::v2::RequestPacket& packet,
+	const std::string& serverId,
+	int command)
+{
+	V2HeaderInfo header;
+	header.command = command;
+	header.senderId = serverId;
+	header.timestamp = static_cast<long long>(time(nullptr));
+
+	if (packet.has_header())
+	{
+		header.messageId = packet.header().message_id();
+		header.receiverId = packet.header().sender_id();
+	}
+
+	return header;
+}
+
+V2KeyOperationResponseInfo makeKeyResponse(
+	const secmng::v2::RequestPacket& packet,
+	const std::string& serverId,
+	int command,
+	int code,
+	const std::string& message,
+	int keyId = 0,
+	const std::string& data = "")
+{
+	V2KeyOperationResponseInfo info;
+	info.header = buildKeyResponseHeader(packet, serverId, command);
+	info.code = code;
+	info.message = message;
+	info.keyId = keyId;
+	info.data = data;
+	return info;
+}
+}
 
 ServerOP::ServerOP(std::string json) :mySQL(nullptr), m_server(nullptr),m_shm(nullptr)
 {
@@ -124,7 +161,6 @@ void ServerOP::startServer()
 						continue;
 					}
 
-					Logger::info("新的客户端连接: " + std::to_string(cfd));
 				}
 			}
 			else
@@ -151,12 +187,22 @@ void ServerOP::startServer()
 	}
 }
 
-std::string ServerOP::seckeyAgree(RequestMsg* reqMsg)
+V2KeyOperationResponseInfo ServerOP::seckeyAgree(const secmng::v2::RequestPacket& packet)
 {
-	std::string pubFile = reqMsg->clientid() + "_pub.pem";
-	//将客户端的公钥写入文件
+	if (!packet.has_header() || !packet.has_key_agree_req())
+	{
+		return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_AGREE_RESP,
+			secmng::v2::RESULT_INVALID_REQUEST, "invalid key agreement request");
+	}
+
+	const secmng::v2::Header& header = packet.header();
+	const secmng::v2::KeyAgreementRequest& req = packet.key_agree_req();
+
+	std::string pubFile = header.sender_id() + "_pub.pem";
+	// 当前 demo 把客户端公钥落盘后交给 RsaCrypto 读取。
+	// 后续可以改成内存 BIO，避免协议处理依赖临时文件。
 	std::ofstream ofs(pubFile);
-	ofs << reqMsg->data();
+	ofs << req.public_key();
 	ofs.flush();
 	ofs.close();
 
@@ -165,154 +211,113 @@ std::string ServerOP::seckeyAgree(RequestMsg* reqMsg)
 
 	//创建哈希对象
 	Hash sha(T_SHA256);
-	sha.addData(reqMsg->data());
+	sha.addData(req.public_key());
 
-	RespondInfo info;
-	bool flage =  rsa.rsaVerify(sha.result(), reqMsg->sign());
+	bool flage =  rsa.rsaVerify(sha.result(), req.sign());
 	if (flage == false)
 	{
 		Logger::error("签名校验失败....");
-		info.status = false;
+		return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_AGREE_RESP,
+			secmng::v2::RESULT_KEY_AGREE_FAILED, "verify sign failed");
 	}
-	else
+
+	// 生成 A-Server 会话密钥。Len16 对应 AES-128。
+	std::string aesKey = getRandKey(Len16);
+
+	// 只有持有客户端私钥的一方才能解开这段会话密钥。
+	std::string secKey = rsa.rsaPublicEncrypt(aesKey);
+
+	//将生成的随机字符串写入数据库
+	NodeSHMInfo node;
+	strcpy(node.clientID, header.sender_id().data());
+	strcpy(node.serverID, header.receiver_id().data());
+	// 数据库和共享内存当前以字符串保存 key，所以统一 Base64 编码。
+	std::string base64Key = Base64Util::encode((const unsigned char*)aesKey.data(), aesKey.size());
+	strcpy(node.seckey, base64Key.data());
+	node.status = 1;
+
+	//初始化node对象
+	bool bl = mySQL->writeSecKeyWithTrans(&node);
+
+	if (!bl)
 	{
-		//生成随机字符串
-		//对称加密的秘钥，aes，密钥长度为16,24,32字节
-		std::string aesKey = getRandKey(Len16);
-
-		//通过公钥加密
-		std::string secKey = rsa.rsaPublicEncrypt(aesKey);
-		//初始化回复的数据
-		info.clientID = reqMsg->clientid();
-		info.data = secKey;
-		//info.seckeyID = 12;
-		//info.seckeyID = mySQL->getKeyId();
-		info.serverID = m_serverID;
-		info.status = true;
-
-		//将生成的随机字符串写入数据库
-		NodeSHMInfo node;
-		strcpy(node.clientID, reqMsg->clientid().data());
-		strcpy(node.serverID, reqMsg->serverid().data());
-		//base64编码后存储
-		std::string base64Key = Base64Util::encode((const unsigned char*)aesKey.data(), aesKey.size());
-		strcpy(node.seckey, base64Key.data());
-		//node.seckeyID = mySQL->getKeyId();
-		node.status = 1;
-
-		//初始化node对象
-		bool bl = mySQL->writeSecKeyWithTrans(&node);
-
-		if (!bl)
-		{
-			info.status = false;
-			info.data = "write db failed";
-		}
-		else
-		{
-			info.seckeyID = node.seckeyID;
-			m_shm->shmWrite(&node);
-		}
+		return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_AGREE_RESP,
+			secmng::v2::RESULT_KEY_AGREE_FAILED, "write db failed");
 	}
 
-	//序列化
-	std::unique_ptr<CodecFactory> fac = std::make_unique<RespondFactory>(&info);
-	std::unique_ptr<Codec> c(fac->createCodec());
-	std::string ecnMsg = c->encodeMsg();
-	//发送
-	return ecnMsg;
+	m_shm->shmWrite(&node);
+
+	return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_AGREE_RESP,
+		secmng::v2::RESULT_SUCCESS, "key agreement success", node.seckeyID, secKey);
 
 }
 
 //秘钥校验
-std::string ServerOP::secKeyCheck(RequestMsg* msg)
+V2KeyOperationResponseInfo ServerOP::secKeyCheck(const secmng::v2::RequestPacket& packet)
 {
-    RespondInfo info;
+	if (!packet.has_header() || !packet.has_key_check_req())
+	{
+		return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_CHECK_RESP,
+			secmng::v2::RESULT_INVALID_REQUEST, "invalid key check request");
+	}
 
-	info.clientID = msg->clientid();
-	info.serverID = msg->serverid();
-	info.seckeyID = atoi(msg->data().data());
-	info.status = false;
-	info.data = "key invalid";
+	const secmng::v2::Header& header = packet.header();
+	const int reqKeyID = packet.key_check_req().key_id();
 
-	int reqKeyID = atoi(msg->data().data());
 	//先检查共享内存中是否存在有效的秘钥
-	NodeSHMInfo node = m_shm->shmRead(info.clientID, info.serverID);
-	if(strcmp(node.clientID, msg->clientid().data()) == 0 &&
-		strcmp(node.serverID, msg->serverid().data()) == 0 &&
+	NodeSHMInfo node = m_shm->shmRead(header.sender_id(), header.receiver_id());
+	if(strcmp(node.clientID, header.sender_id().data()) == 0 &&
+		strcmp(node.serverID, header.receiver_id().data()) == 0 &&
 		node.seckeyID == reqKeyID &&
 		node.status == 1)
 	{
-		info.status = true;
-		info.data = "key valid in shm";
+		return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_CHECK_RESP,
+			secmng::v2::RESULT_SUCCESS, "key valid in shm", reqKeyID);
 	}
-	else
+
+	//共享内存中没有，就查找数据库
+	bool ret = mySQL->checkSecKey(header.sender_id(), header.receiver_id(), reqKeyID);
+	if (ret)
 	{
-		//共享内存中没有，就查找数据库
-		bool ret = mySQL->checkSecKey(info.clientID, info.serverID, reqKeyID);
-		if (ret)
-		{
-			info.status = true;
-			info.data = "key valid in db";
-		}
-		else
-		{
-			info.status = false;
-			info.data = "key invalid";
-		}
+		return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_CHECK_RESP,
+			secmng::v2::RESULT_SUCCESS, "key valid in db", reqKeyID);
 	}
 
-	std::unique_ptr<CodecFactory> fac = std::make_unique<RespondFactory>(&info);
-	std::unique_ptr<Codec> c(fac->createCodec());
-    string n = c->encodeMsg();
-
-	Logger::info("秘钥校验成功");
-
-    return n;
+	return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_CHECK_RESP,
+		secmng::v2::RESULT_KEY_INVALID, "key invalid", reqKeyID);
 }
 
-std::string ServerOP::SeckeyLogout(RequestMsg* msg)
+V2KeyOperationResponseInfo ServerOP::SeckeyLogout(const secmng::v2::RequestPacket& packet)
 {
-	RespondInfo info;
-	info.clientID = msg->clientid();
-	info.serverID = msg->serverid();
-	info.seckeyID = atoi(msg->data().data());
-	info.status = false;
-	info.data = "logout failed";
+	if (!packet.has_header() || !packet.has_key_logout_req())
+	{
+		return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_LOGOUT_RESP,
+			secmng::v2::RESULT_INVALID_REQUEST, "invalid key logout request");
+	}
 
-	int reqKeyID = atoi(msg->data().data());
+	const secmng::v2::Header& header = packet.header();
+	int reqKeyID = packet.key_logout_req().key_id();
 
 	//先更新数据库
-	bool dbRet = mySQL->logoutSecKey(msg->clientid(), msg->serverid(), reqKeyID);
+	bool dbRet = mySQL->logoutSecKey(header.sender_id(), header.receiver_id(), reqKeyID);
 	if (!dbRet)
 	{
-		info.status = false;
-		info.data = "logout failed in db";
+		return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_LOGOUT_RESP,
+			secmng::v2::RESULT_KEY_LOGOUT_FAILED, "logout failed in db", reqKeyID);
 	}
-	else
+
+	// 2. 再同步更新共享内存状态
+	int shmRet = m_shm->shmUpdateStatus(header.sender_id(), header.receiver_id(), 0);
+
+	if(shmRet == 0)
 	{
-		// 2. 再同步更新共享内存状态
-		int shmRet = m_shm->shmUpdateStatus(msg->clientid(), msg->serverid(), 0);
-		if(shmRet == 0)
-		{
-			info.status = true;
-			info.data = "logout success";
-		}
-		else
-		{
-			// 数据库成功，共享内存失败，也可以认为整体成功，提示
-			info.status = true;
-			info.data = "db logout success, shm update failed";
-		}
+		return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_LOGOUT_RESP,
+			secmng::v2::RESULT_SUCCESS, "logout success", reqKeyID);
 	}
 
-	std::unique_ptr<CodecFactory> fac = std::make_unique<RespondFactory>(&info);
-	std::unique_ptr<Codec> c(fac->createCodec());
-	std::string ecnMsg = c->encodeMsg();
-
-	Logger::info("秘钥注销成功");
-
-	return ecnMsg;
+	// 数据库成功，共享内存失败，也可以认为整体成功，提示
+	return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_LOGOUT_RESP,
+		secmng::v2::RESULT_SUCCESS, "db logout success, shm update failed", reqKeyID);
 }
 
 //包含a-z，A-Z，0-9，特殊字符
@@ -326,6 +331,8 @@ std::string ServerOP::getRandKey(keyLen len)
 
 void ServerOP::handleClientFd(int clientfd)
 {
+	// 当前服务端使用短连接：一个连接只收一个请求、回一个响应，然后关闭。
+	// 这样实现简单，适合演示协议和业务链路；后续做实时推送时再升级成长连接。
     TcpSocket tcp(clientfd);
 
     std::string recvData;
@@ -338,41 +345,13 @@ void ServerOP::handleClientFd(int clientfd)
         return;
     }
 
-	std::string rspData;
-
-	if (recvData.size() >= 4 && recvData.substr(0, 4) == "V2PK")
+	std::string rspData = processV2Request(recvData);
+	if(rspData.empty())
 	{
-		std::string v2Body = recvData.substr(4);
-		rspData = processV2Request(v2Body);
-
-		if(rspData.empty())
-		{
-			Logger::error("处理 v2 请求失败, fd = " + std::to_string(clientfd));
-			m_server->delFd(clientfd);
-			tcp.disconnect();
-			return;
-		}
-	}
-	else
-	{
-		// 解码请求
-		std::unique_ptr<CodecFactory> fac = std::make_unique<RequestFactory>(recvData);
-		std::unique_ptr<Codec> c(fac->createCodec());
-
-		// 注意：这里返回的是Codec内部成员地址，不能delete
-		RequestMsg* recvReq = static_cast<RequestMsg*>(c->decodeMsg());
-		if (recvReq == nullptr)
-		{
-			Logger::error("请求解码失败, fd = " + std::to_string(clientfd));
-			m_server->delFd(clientfd);
-			tcp.disconnect();
-			return;
-		}
-
-		Logger::info("收到客户端请求: " + recvReq->clientid());
-
-		// 处理业务
-		rspData = processRequest(recvReq);
+		Logger::error("处理 v2 请求失败, fd = " + std::to_string(clientfd));
+		m_server->delFd(clientfd);
+		tcp.disconnect();
+		return;
 	}
 
     // 发送响应
@@ -387,35 +366,6 @@ void ServerOP::handleClientFd(int clientfd)
     tcp.disconnect();
 
 	std::cout << "------------------------------------------------------" << std::endl;
-}
-
-std::string ServerOP::processRequest(RequestMsg* msg)
-{
-	switch (msg->cmdtype())
-	{
-	case t_keyAgreement:
-		return seckeyAgree(msg);
-	case t_keyVerification:
-		return secKeyCheck(msg);
-	case  t_keyLogout:
-		return SeckeyLogout(msg);
-	default:
-	{
-		Logger::error("未知的请求类型: " + std::to_string(msg->cmdtype()));
-
-		RespondInfo info;
-		
-		info.status = false;
-		info.data = "unknown cmd type";
-		info.clientID = msg->clientid();
-		info.serverID = m_serverID;
-		info.seckeyID = 0;
-
-		std::unique_ptr<CodecFactory> fac = std::make_unique<RespondFactory>(&info);
-		std::unique_ptr<Codec> c(fac->createCodec());
-		return c->encodeMsg();
-	}
-	}
 }
 
 bool ServerOP::markFdProcessing(int fd)
@@ -440,88 +390,107 @@ void ServerOP::unmarkFdProcessing(int fd)
 	m_processingFds.erase(fd);
 }
 
+// 处理客户端发来的 v2 请求，并返回编码后的响应
 std::string ServerOP::processV2Request(const std::string& recvData)
 {
-	// 第 1 步：尝试按 v2 协议解码
-	V2RequestCodec codec(recvData);
-	secmng::v2::RequestPacket* packet = static_cast<secmng::v2::RequestPacket*>(codec.decodeMsg());
+    // 解码客户端请求
+    V2RequestCodec codec(recvData);
+    secmng::v2::RequestPacket* packet = static_cast<secmng::v2::RequestPacket*>(codec.decodeMsg());
 
-	if (packet == nullptr)
-	{
-		Logger::error("v2 请求解码失败。");
-		return "";
-	}
+    if (packet == nullptr)
+    {
+        Logger::error("v2 请求解码失败。");
+        return "";
+    }
 
-	// 记录 body_case，便于后续排查请求体类型问题
-	Logger::info("v2 packet body_case = " + std::to_string(packet->body_case()));
+    // 消息业务处理对象
+    MessageService msgService(m_serverID, mySQL.get(), m_shm.get());
 
-	// 创建消息服务对象
-	MessageService msgService(m_serverID, mySQL.get(), m_shm.get());
+    // 根据请求体类型分发业务
+    switch (packet->body_case())
+    {
+    case secmng::v2::RequestPacket::kSendMsgReq:
+    {
+        // 发送加密消息
+        V2SendMessageResponseInfo respInfo = msgService.handleSendMessage(*packet);
 
-	// 第 2 步：根据 oneof body 分发业务
-	switch (packet->body_case())
-	{
-		case secmng::v2::RequestPacket::kSendMsgReq:
-		{
-			Logger::info("处理 v2 发送消息请求。");
-			// 调用服务层处理发送消息业务
-			V2SendMessageResponseInfo respInfo = msgService.handleSendMessage(*packet);
+        V2RespondCodec rspCodec(&respInfo);
+        return rspCodec.encodeMsg();
+    }
 
-			// 使用 v2 响应 codec 进行编码
-			V2RespondCodec rspCodec(&respInfo);
-			return rspCodec.encodeMsg();
-		}
-		case secmng::v2::RequestPacket::kQueryMsgReq:
-		{
-			Logger::info("处理 v2 查询消息请求。");
+    case secmng::v2::RequestPacket::kQueryMsgReq:
+    {
+        // 查询单条消息
+        V2QueryMessageResponseInfo respInfo = msgService.handleQueryMessage(*packet);
 
-			V2QueryMessageResponseInfo respInfo = msgService.handleQueryMessage(*packet);
+        V2RespondCodec rspCodec(&respInfo);
+        return rspCodec.encodeMsg();
+    }
 
-			V2RespondCodec rspCodec(&respInfo);
-			return rspCodec.encodeMsg();
-		}
-		case secmng::v2::RequestPacket::kQueryMsgListReq:
-		{
-			Logger::info("处理 v2 查询消息列表请求。");
+    case secmng::v2::RequestPacket::kQueryMsgListReq:
+    {
+        // 查询消息列表
+        V2QueryMessageListResponseInfo respInfo = msgService.handleQueryMessageList(*packet);
 
-			V2QueryMessageListResponseInfo respInfo =
-				msgService.handleQueryMessageList(*packet);
+        V2RespondCodec rspCodec(&respInfo);
+        return rspCodec.encodeMsg();
+    }
 
-			V2RespondCodec rspCodec(&respInfo);
-			return rspCodec.encodeMsg();
-		}
-	default:
-		{
-			Logger::error("不支持的 v2 请求类型。");
-			// 即便 body 不支持，也尽量返回一个合法的 v2 响应，
-			// 避免客户端收到空串后无法判断发生了什么。
-			V2SendMessageResponseInfo respInfo;
-			respInfo.header = {};
+    case secmng::v2::RequestPacket::kKeyAgreeReq:
+    {
+        // 密钥协商
+        V2KeyOperationResponseInfo respInfo = seckeyAgree(*packet);
 
-			if (packet->has_header())
-			{
-				respInfo.header.messageId = packet->header().message_id();
-				respInfo.header.receiverId = packet->header().sender_id();
-			}
-			else
-			{
-				respInfo.header.messageId = "";
-				respInfo.header.receiverId = "";
-			}
+        V2RespondCodec rspCodec(&respInfo);
+        return rspCodec.encodeMsg();
+    }
 
-			respInfo.header.command = secmng::v2::CMD_SEND_MSG_RESP;
-			respInfo.header.senderId = m_serverID;
-			respInfo.header.timestamp = static_cast<long long>(time(nullptr));
+    case secmng::v2::RequestPacket::kKeyCheckReq:
+    {
+        // 密钥校验
+        V2KeyOperationResponseInfo respInfo = secKeyCheck(*packet);
 
-			respInfo.code = secmng::v2::RESULT_INVALID_REQUEST;
-			respInfo.message = "unsupported v2 request type";
-			respInfo.serverMessageId = "";
-			respInfo.serverTime = static_cast<long long>(time(nullptr));
-			respInfo.deliveryStatus = secmng::v2::DELIVERY_REJECTED;
+        V2RespondCodec rspCodec(&respInfo);
+        return rspCodec.encodeMsg();
+    }
 
-			V2RespondCodec rspCodec(&respInfo);
-			return rspCodec.encodeMsg();
-		}
-	}
+    case secmng::v2::RequestPacket::kKeyLogoutReq:
+    {
+        // 密钥注销
+        V2KeyOperationResponseInfo respInfo = SeckeyLogout(*packet);
+
+        V2RespondCodec rspCodec(&respInfo);
+        return rspCodec.encodeMsg();
+    }
+
+    default:
+    {
+        // 返回不支持请求类型的错误响应
+        Logger::error("不支持的 v2 请求类型。");
+
+        V2SendMessageResponseInfo respInfo;
+        respInfo.header = {};
+
+        if (packet->has_header())
+        {
+            // 保留请求 ID，并把响应发回原发送方
+            respInfo.header.messageId = packet->header().message_id();
+            respInfo.header.receiverId = packet->header().sender_id();
+        }
+
+        respInfo.header.command = secmng::v2::CMD_SEND_MSG_RESP;
+        respInfo.header.senderId = m_serverID;
+        respInfo.header.timestamp = static_cast<long long>(time(nullptr));
+
+        respInfo.code = secmng::v2::RESULT_INVALID_REQUEST;
+        respInfo.message = "unsupported v2 request type";
+        respInfo.serverMessageId = "";
+        respInfo.serverTime = static_cast<long long>(time(nullptr));
+        respInfo.deliveryStatus = secmng::v2::DELIVERY_REJECTED;
+
+        V2RespondCodec rspCodec(&respInfo);
+        return rspCodec.encodeMsg();
+    }
+    }
 }
 

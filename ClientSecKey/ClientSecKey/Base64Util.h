@@ -1,20 +1,16 @@
 #pragma once
-// =======================================================
-// 文件名: Base64Util.h
-// 作用:   提供Base64编码和解码功能
-// 说明:
-//   1. 用于替代 ClientOP / ServerOP 中重复的base64函数
-// =======================================================
 #include <string>
 #include <vector>
 
+// 职责：提供 Base64 编码和解码。
+// 边界：Base64 只是二进制到文本的编码，不提供任何保密能力。
 class Base64Util
 {
 public:
-    // Base64编码
+    // 把任意二进制数据编码成可放入 protobuf string / MySQL 文本字段的字符串。
     static std::string encode(const unsigned char* input, int length);
 
-    // Base64解码
+    // 把 Base64 字符串还原成原始二进制数据。
     static std::string decode(const std::string& input);
 };
 

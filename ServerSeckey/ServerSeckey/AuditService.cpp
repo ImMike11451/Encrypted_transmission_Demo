@@ -10,7 +10,8 @@ AuditService::~AuditService()
 {
 }
 
-// 写入一条完整的审计记录
+// 写入一条完整的审计记录。
+// 这里故意只依赖 mysqlOP 的公开接口，避免业务层直接接触 MYSQL*。
 bool AuditService::logAction(const AuditLogRecord& record)
 {
     if (m_db == nullptr)
@@ -19,8 +20,6 @@ bool AuditService::logAction(const AuditLogRecord& record)
         return false;
     }
 
-    // 和 MessageRepository 一样，这里建议继续走 mysqlOP 提供的专用接口，
-    // 而不是让业务模块直接操作底层 MYSQL*。
     return m_db->insertAuditLog(
         record.logId,
         record.nodeId,

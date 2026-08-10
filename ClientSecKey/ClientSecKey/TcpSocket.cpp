@@ -97,35 +97,8 @@ int TcpSocket::connectToHost(std::string ip, unsigned short port, int timeout)
 
 	return ret;
 }
-/*
-* sendMsg - 发送数据（带4字节长度头）
-* @sendData: 要发送的数据内容
-* @timeout:  写超时时间（秒）
-*
-* 发送数据时采用“长度 + 数据”的协议格式：
-*
-* 数据结构：
-* +------------+--------------+
-* | 4字节长度   | 数据内容      |
-* +------------+--------------+
-*
-* 其中：
-* - 前4字节为数据长度（网络字节序）
-* - 后续为真实数据内容
-*
-* 发送流程：
-* 1. 计算数据长度
-* 2. 将长度转换为网络字节序
-* 3. 构造发送缓冲区（长度头 + 数据）
-* 4. 检测写超时
-* 5. 调用 writen() 发送完整数据
-*
-* 返回值：
-* 0            -> 发送成功
-* ParamError   -> 参数错误
-* TimeoutError -> 发送超时
-* SyscallError -> 系统调用错误
-*/
+// 发送一帧数据：4 字节网络序长度 + payload。
+// TCP 本身没有消息边界，长度头用于接收方准确拆出一条 protobuf 消息。
 int TcpSocket::sendMsg(const std::string& sendData, int timeout)
 {
 	// 参数检查
@@ -191,7 +164,7 @@ int TcpSocket::recvMsg(std::string& recvData, int timeout)
 	int ret = readWithTimeout(timeout);
 	if (ret != 0)  return ret;
 
-	// 先读取4字节长度头
+	// 先读取 4 字节长度头，再按长度读取 payload，避免 TCP 粘包/半包影响上层协议。
 	std::string lenBuf;
 	ret = readn(lenBuf, 4);
 	if (ret != 0) return ret;
@@ -211,12 +184,8 @@ TcpSocket::~TcpSocket()
 	disconnect();
 }
 
-/*
-* connectTimeout - connect
-* @addr: 要连接的对方地址
-* @wait_seconds: 等待超时秒数，如果为0表示正常模式
-* 成功（未超时）返回0，失败返回-1，超时返回-1并且errno = ETIMEDOUT
-*/
+// 使用非阻塞 connect + select 实现连接超时。
+// 连接成功后恢复阻塞模式，让后续 readn/writen 的循环逻辑更直接。
 int TcpSocket::connectTimeout(struct sockaddr_in* addr, unsigned int wait_time)
 {
 	int ret = 0;
@@ -310,19 +279,7 @@ int TcpSocket::connectTimeout(struct sockaddr_in* addr, unsigned int wait_time)
 	setBlock(m_sockfd);
 	return 0;
 }
-/*
-* readn - 从套接字循环读取指定长度的数据
-* @recvData: 接收数据的字符串引用
-* @len:      需要读取的字节数
-*
-* TCP 的 recv() 一次读取的数据长度是不确定的，
-* 可能小于请求的长度，因此需要循环调用 recv()
-* 直到读取到指定长度的数据。
-* 返回值：
-* 0                     -> 读取成功
-* PeerCloseError        -> 对端关闭连接
-* -1                    -> recv 调用失败
-*/
+// 循环读取指定长度。recv 一次返回多少字节不可控，必须累积到目标长度。
 int TcpSocket::readn(std::string& recvData, int len)
 {
 	int left = len; //剩余要读取的数据长度
@@ -354,17 +311,7 @@ int TcpSocket::readn(std::string& recvData, int len)
 
 	return 0;
 }
-/*
-* writeWithTimeout - 写超时检测函数，不执行实际写操作
-* @wait_time: 等待超时时间（秒），如果为0表示不检测超时
-*
-* 使用 select 监测套接字是否可写，在指定时间内等待写事件发生。
-*
-* 返回值：
-* 0             -> 套接字可写，未超时
-* -1            -> 检测失败（select 调用错误）
-* TimeoutError  -> 等待超时
-*/
+// 写超时检测，只判断 socket 是否可写，不真正发送数据。
 int TcpSocket::writeWithTimeout(unsigned int wait_time)
 {
 	int ret = 0;
@@ -386,18 +333,7 @@ int TcpSocket::writeWithTimeout(unsigned int wait_time)
 	else
 		return -1;
 }
-/*
-* writen - 向套接字循环发送指定长度的数据
-* @sendData: 要发送的数据
-* @len:      需要发送的字节数
-*
-* TCP 的 send() 一次发送的数据长度不确定，
-* 因此需要循环调用 send()，直到发送完指定长度的数据。
-*
-* 返回值：
-* 0   -> 所有数据发送成功
-* -1  -> 发送失败（send 系统调用错误或连接异常）
-*/
+// 循环写入指定长度。send 一次可能只写出部分数据，所以要持续推进指针。
 int TcpSocket::writen(const std::string& sendData, int len)
 {
 	int left = len; //剩余要发送的数据长度
@@ -463,19 +399,7 @@ int TcpSocket::setBlock(int fd)
 	return fcntl(fd, F_SETFL, flags & ~O_NONBLOCK);
 #endif
 }
-/*
-* readWithTimeout - 读事件超时检测函数（不执行读操作）
-* @wait_time: 等待超时的秒数，如果为0表示不检测超时
-*
-* 该函数通过 select() 监视套接字的读事件，
-* 判断套接字在指定时间内是否变为可读状态。
-* 这里只是检测是否可以读取数据，并不真正执行 read/recv 操作。
-*
-* 返回值：
-* 0              -> 套接字可读（未超时）
-* TimeoutError   -> 等待超时，没有检测到读事件
-* -1             -> select 调用失败
-*/
+// 读超时检测，只判断 socket 是否可读，不真正读取数据。
 int TcpSocket::readWithTimeout(unsigned int wait_time)
 {
 	int ret = 0;

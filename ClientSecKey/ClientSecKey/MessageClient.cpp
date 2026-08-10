@@ -2,6 +2,22 @@
 #include "Base64Util.h"
 #include "Logger.h"
 #include "AesGcmCrypto.h"
+#include <atomic>
+#include <chrono>
+
+namespace
+{
+// 客户端侧所有消息业务共用这个 ID 规则。
+// 进程内序号用于补足微秒时间戳在极端高频调用下仍可能重复的问题。
+std::string generateClientRequestId(const std::string& clientId)
+{
+	static std::atomic<unsigned long long> sequence{ 0 };
+	const auto now = std::chrono::system_clock::now().time_since_epoch();
+	const auto micros = std::chrono::duration_cast<std::chrono::microseconds>(now).count();
+
+	return clientId + "_" + std::to_string(micros) + "_" + std::to_string(++sequence);
+}
+}
 
 
 MessageClient::MessageClient(const ClientInfo& info, SecKeyShm* shm)
@@ -22,7 +38,8 @@ SendMessageResult  MessageClient::sendTextMessage(const SendTextMessageInfo& msg
 	sendResult.serverMessageId.clear();
 	sendResult.errorMsg.clear();
 
-	// 第 1 步：读取本地有效密钥
+	// 第 1 步：读取本地有效密钥。
+	// 当前客户端只保存自己与服务端之间的会话密钥，不能用它直接解密别的客户端消息。
 	NodeSHMInfo KeyNode;
 	if (!getActiveKey(KeyNode))
 	{
@@ -31,10 +48,8 @@ SendMessageResult  MessageClient::sendTextMessage(const SendTextMessageInfo& msg
 		return sendResult;
 	}
 
-	// 第 2 步：使用密钥加密明文
-	// 注意：当前共享内存里保存的是 base64 编码后的 key，
-	// 所以这里先直接把它作为字符串传给加密函数。
-	// 后面加密函数内部会按需要做 base64 解码。
+	// 第 2 步：使用 A-Server 会话密钥加密明文。
+	// AES-GCM 会同时产出密文、nonce 和 tag，三者缺一不可。
 	EncryptTextResult encResult = encryptText(KeyNode.seckey, msgInfo.plaintext);
 	if (!encResult.success)
 	{
@@ -43,7 +58,8 @@ SendMessageResult  MessageClient::sendTextMessage(const SendTextMessageInfo& msg
 		return sendResult;
 	}
 
-	// 第 3 步：组装 v2 请求对象
+	// 第 3 步：组装 v2 请求对象。
+	// 接收方 ID 放在 header.receiverId 中，密钥 ID 和密文参数放在 message 里。
 	V2SendMessageRequestInfo reqInfo;
 	//构造请求头
 	reqInfo.header = buildHeader(msgInfo.receiverId);
@@ -69,10 +85,6 @@ SendMessageResult  MessageClient::sendTextMessage(const SendTextMessageInfo& msg
 		Logger::error(sendResult.errorMsg);
 		return sendResult;
 	}
-	encStr = "V2PK" + encStr; // 协议要求消息体前加上 "V2PK" 标识
-
-	//std::string sendBuf = "V2PK" + encStr;
-
 	ret = tcp.sendMsg(encStr, 10);
 	if (ret != 0)
 	{
@@ -117,9 +129,7 @@ SendMessageResult  MessageClient::sendTextMessage(const SendTextMessageInfo& msg
 		sendResult.success = true;
 		sendResult.serverMessageId = resp.server_message_id();
 
-		Logger::info("消息发送成功！");
 		Logger::info("server message id: " + resp.server_message_id());
-		Logger::info("delivery_status: " + deliveryStatusToString(resp.delivery_status()));
 		return sendResult;
 	}
 	else
@@ -128,7 +138,6 @@ SendMessageResult  MessageClient::sendTextMessage(const SendTextMessageInfo& msg
 		sendResult.errorMsg = resp.message();
 
 		Logger::error("消息发送失败: " + resp.message());
-		Logger::error("delivery_status: " + deliveryStatusToString(resp.delivery_status()));
 		return sendResult;
 	}
 }
@@ -142,7 +151,8 @@ bool MessageClient::queryMessageById(const std::string& serverMessageId)
 		return false;
 	}
 
-	// 第 2 步：组装查询请求对象
+	// 第 2 步：组装查询请求对象。
+	// 服务端会根据 header.senderId 判断当前客户端是否属于该消息的发送方或接收方。
 	V2QueryMessageRequestInfo reqInfo;
 
 	reqInfo.header.messageId = generateMessageId();
@@ -156,8 +166,6 @@ bool MessageClient::queryMessageById(const std::string& serverMessageId)
 	// 第 3 步：编码查询请求
 	V2RequestCodec reqCodec(&reqInfo);
 	std::string encStr = reqCodec.encodeMsg();
-
-	encStr = "V2PK" + encStr;
 
 	// 第 4 步：建立连接并发送请求
 	TcpSocket tcp;
@@ -213,8 +221,7 @@ bool MessageClient::queryMessageById(const std::string& serverMessageId)
 	}
 
 	// 第 8 步：输出查询结果
-	// 当前阶段先把消息元数据打印出来，
-	// 不直接返回明文，也不直接展示密文内容。
+	// 当前查询只展示元数据，不展示明文和密文内容。
 	Logger::info("查询消息成功。");
 	Logger::info("server_message_id: " + resp.server_message_id());
 	Logger::info("sender_id: " + resp.sender_id());
@@ -249,7 +256,8 @@ bool MessageClient::queryRecentMessagesBySender(const std::string& senderId, int
 		return false;
 	}
 
-	// 第 2 步：组装列表查询请求
+	// 第 2 步：组装列表查询请求。
+	// 当前安全策略只允许查询自己的发送记录，服务端会再次校验 senderId。
 	V2QueryMessageListRequestInfo reqInfo;
 	reqInfo.header.messageId = generateMessageId();
 	reqInfo.header.command = secmng::v2::CMD_QUERY_MSG_LIST_REQ;
@@ -263,8 +271,6 @@ bool MessageClient::queryRecentMessagesBySender(const std::string& senderId, int
 	// 第 3 步：编码请求
 	V2RequestCodec reqCodec(&reqInfo);
 	std::string encStr = reqCodec.encodeMsg();
-
-	encStr = "V2PK" + encStr;
 
 	// 第 4 步：连接服务端
 	TcpSocket tcp;
@@ -320,7 +326,6 @@ bool MessageClient::queryRecentMessagesBySender(const std::string& senderId, int
 	}
 
 	// 第 9 步：打印消息列表
-	Logger::info("查询消息列表成功。");
 	Logger::info("message count: " + std::to_string(resp.messages_size()));
 
 	for (int i = 0; i < resp.messages_size(); ++i)
@@ -378,7 +383,8 @@ EncryptTextResult MessageClient::encryptText(const std::string& base64Key, const
 		return result;
 	}
 
-	// 第 2 步：使用 AesGcmCrypto 执行 AES-GCM 加密
+	// 第 2 步：使用 AesGcmCrypto 执行 AES-GCM 加密。
+	// GCM 的 tag 用来验证密文是否被篡改，nonce 用来保证同一 key 下每次加密结果不同。
 	AesGcmCrypto aes(rawKey);
 	GcmEncryptResult gcmResult = aes.encrypt(plaintext);
 	if (!gcmResult.success)
@@ -434,9 +440,7 @@ V2HeaderInfo MessageClient::buildHeader(const std::string& receiverId)
 // 后面如果你想更规范，可以换成 UUID。
 std::string MessageClient::generateMessageId()
 {
-	std::stringstream ss;
-	ss << m_info.clientId << "_" << static_cast<long long>(time(nullptr));
-	return ss.str();
+	return generateClientRequestId(m_info.clientId);
 }
 
 std::string MessageClient::deliveryStatusToString(int status)

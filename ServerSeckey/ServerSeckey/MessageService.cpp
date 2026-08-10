@@ -8,6 +8,22 @@
 #include <ctime>
 #include <sstream>
 #include <iomanip>
+#include <atomic>
+#include <chrono>
+
+namespace
+{
+// 服务端消息 ID 和审计 ID 都走同一套生成规则。
+// 这里先用“作用域前缀 + 微秒时间戳 + 进程内递增序号”，避免引入额外 UUID 依赖。
+std::string generateScopedId(const std::string& prefix)
+{
+	static std::atomic<unsigned long long> sequence{ 0 };
+	const auto now = std::chrono::system_clock::now().time_since_epoch();
+	const auto micros = std::chrono::duration_cast<std::chrono::microseconds>(now).count();
+
+	return prefix + "_" + std::to_string(micros) + "_" + std::to_string(++sequence);
+}
+}
 
 MessageService::MessageService(const std::string& serverId, mysqlOP* db, SecKeyShm* shm)
 	:m_serverId(serverId), m_db(db), m_shm(shm)
@@ -18,8 +34,9 @@ MessageService::~MessageService()
 {
 }
 
-// 这是服务端处理“发送加密消息”请求的主入口。
-// 你可以把它理解成服务端新业务链的核心函数。
+// 这是服务端处理“发送加密消息”的主入口。
+// 当前链路是可信服务端转发模型：服务端先用 A-Server key 解密，
+// 再用 B-Server key 重新加密后存储，便于 B 后续拉取。
 V2SendMessageResponseInfo MessageService::handleSendMessage(const secmng::v2::RequestPacket& packet)
 {
 
@@ -105,7 +122,8 @@ V2SendMessageResponseInfo MessageService::handleSendMessage(const secmng::v2::Re
 		return respInfo;
 	}
 
-	// 第 4 步：使用取到的 key 解密消息
+	// 第 4 步：使用取到的 key 解密消息。
+	// 解密得到的明文只在内存中短暂存在，用于给接收方重加密，不写入日志。
 	DecryptMessageResult decResult = decryptMessage(senderKeyResult.base64Key, encMsg.ciphertext(), encMsg.nonce(), encMsg.tag(),encMsg.algorithm());
 	if (!decResult.success)
 	{
@@ -171,6 +189,7 @@ V2SendMessageResponseInfo MessageService::handleSendMessage(const secmng::v2::Re
 	}
 
 	// 第 6 步：用 B-Server key 重新加密明文。
+	// message_log 中保存 receiverCiphertext，接收方后续只能用自己的 B-Server key 解密。
 	EncryptMessageResult receiverEncResult = encryptMessage(
 		receiverNode.seckey,
 		decResult.plaintext
@@ -261,11 +280,6 @@ V2SendMessageResponseInfo MessageService::handleSendMessage(const secmng::v2::Re
 		m_db->getCurTime()
 	);
 
-	// 当前调试阶段可以打印明文，便于确认流程。
-	// 后续正式展示时，建议不要在服务端日志里打印明文。
-	Logger::info("消息解密成功，明文内容: " + decResult.plaintext);
-	Logger::info("消息已使用接收方密钥重新加密，receiver_id: " + header.receiver_id());
-
 	// 第 11 步：组装成功响应。
 	respInfo.code = secmng::v2::RESULT_SUCCESS;
 	respInfo.message = "消息发送成功";
@@ -343,6 +357,27 @@ V2QueryMessageResponseInfo MessageService::handleQueryMessage(const secmng::v2::
 		return respInfo;
 	}
 
+	// 权限控制放在服务层：Repository 只负责查数据，Service 才知道“谁在请求”。
+	if (header.sender_id() != queryResult.senderId &&
+		header.sender_id() != queryResult.receiverId)
+	{
+		respInfo.code = secmng::v2::RESULT_INVALID_REQUEST;
+		respInfo.message = "permission denied";
+		respInfo.serverMessageId = req.server_message_id();
+
+		auditSvc.logAction(
+			generateAuditLogId(),
+			header.sender_id(),
+			"MSG_QUERY",
+			req.server_message_id(),
+			0,
+			"permission denied",
+			m_db->getCurTime()
+		);
+
+		return respInfo;
+	}
+
 	// 第 4 步：组装成功响应
 	respInfo.code = secmng::v2::RESULT_SUCCESS;
 	respInfo.message = "query message success";
@@ -404,6 +439,26 @@ V2QueryMessageListResponseInfo MessageService::handleQueryMessageList(const secm
 
 	const secmng::v2::Header& header = packet.header();
 	const secmng::v2::QueryMessageListRequest& req = packet.query_msg_list_req();
+
+	// 列表查询先采用最严格的演示策略：只能查自己的发送记录。
+	// 如果后续支持“收件箱”，建议单独增加 receiver_id 维度的查询接口。
+	if (req.sender_id() != header.sender_id())
+	{
+		respInfo.code = secmng::v2::RESULT_INVALID_REQUEST;
+		respInfo.message = "permission denied";
+
+		auditSvc.logAction(
+			generateAuditLogId(),
+			header.sender_id(),
+			"MSG_LIST_QUERY",
+			req.sender_id(),
+			0,
+			"permission denied",
+			m_db->getCurTime()
+		);
+
+		return respInfo;
+	}
 
 	// 第 3 步：调用 Repository 查询最近 N 条消息
 	std::vector<MessageSummaryInfo> dbMessages;
@@ -616,7 +671,8 @@ bool MessageService::validateRequest(const secmng::v2::RequestPacket& packet, st
 }
 
 // 查找当前活跃 key。
-// 第一阶段优先复用你现有的共享内存 + 数据库校验逻辑。
+// 当前消息解密必须拿到真实 key，因此共享内存命中是必要条件。
+// 数据库现有接口只能确认 key 状态，不能把 key 本体安全地回填给业务层。
 ActiveKeyResult MessageService::getActiveKey(const std::string& senderId, const std::string& receiverId, int keyId)
 {
 	ActiveKeyResult result;
@@ -671,11 +727,8 @@ ActiveKeyResult MessageService::getActiveKey(const std::string& senderId, const 
 
 }
 
-// 使用当前项目已有的 AesCrypto 解密消息。
-// 当前 AesCrypto 特点：
-// 1. 只接收 key，不接收外部 IV
-// 2. IV 由 key 内部派生
-// 所以这里暂时不使用 nonce 参数来参与解密
+// 使用 AES-GCM 解密消息。
+// nonce 和 tag 必须来自发送方请求；tag 校验失败时说明密文、nonce、tag 或 key 任一项不匹配。
 DecryptMessageResult MessageService::decryptMessage(const std::string& base64Key,
 	const std::string& base64Ciphertext,
 	const std::string& base64Nonce,
@@ -829,16 +882,12 @@ V2HeaderInfo MessageService::buildResponseHeader(const secmng::v2::RequestPacket
 // 后续如果你想做得更规范，可以换成 UUID。
 std::string MessageService::generateServerMessageId()
 {
-	std::stringstream ss;
-	ss << m_serverId << "_" << static_cast<long long>(time(nullptr));
-	return ss.str();
+	return generateScopedId(m_serverId + "_msg");
 }
 
 std::string MessageService::generateAuditLogId()
 {
-	std::stringstream ss;
-	ss << m_serverId << "_audit_" << static_cast<long long>(time(nullptr));
-	return ss.str();
+	return generateScopedId(m_serverId + "_audit");
 }
 
 long long MessageService::parseDateTimeToTimestamp(const std::string& dateTimeStr)

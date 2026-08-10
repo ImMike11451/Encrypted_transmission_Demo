@@ -31,7 +31,7 @@ EpollServer::~EpollServer()
 
 bool EpollServer::init(unsigned short port, int maxEvents)
 {
-	//创建监听socket
+	// 创建监听 socket。EpollServer 只负责网络事件，不负责业务协议。
 	m_lfd = socket(AF_INET, SOCK_STREAM, 0);
 	if(m_lfd < 0)
 	{
@@ -40,7 +40,7 @@ bool EpollServer::init(unsigned short port, int maxEvents)
 	}
 
 	int on = 1;
-	//设置SO_REUSEADDR选项，允许地址重用
+	// 允许地址复用，避免服务重启时端口短时间不可用。
 	setsockopt(m_lfd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on));
 
 	if(!setNonBlocking(m_lfd))
@@ -67,7 +67,7 @@ bool EpollServer::init(unsigned short port, int maxEvents)
 		return false;
 	}
 
-	//创建epoll实例
+	// 创建 epoll 实例，并用 EPOLL_CLOEXEC 避免子进程继承该 fd。
 	m_epfd = epoll_create1(EPOLL_CLOEXEC);
 	if(m_epfd < 0)
 	{
@@ -90,6 +90,7 @@ int EpollServer::getListenFd() const
 
 bool EpollServer::addFd(int fd, uint32_t events)
 {
+	// 调用方决定监听哪些事件，例如监听 fd 用 EPOLLIN，客户端 fd 可加 EPOLLET。
 	epoll_event ev;
 	memset(&ev, 0, sizeof(ev));
 	ev.events = events;
@@ -115,7 +116,7 @@ bool EpollServer::delFd(int fd)
 
 bool EpollServer::setNonBlocking(int fd)
 {
-	//获取当前文件描述符的状态标志
+	// 获取当前文件描述符标志，再追加 O_NONBLOCK。
 	int flags = fcntl(fd, F_GETFL, 0);
 	if (flags < 0)
 	{

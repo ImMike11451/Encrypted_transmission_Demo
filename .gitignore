@@ -9,3 +9,13 @@ Release/
 *.lib
 *.dll
 *.log
+
+# 本机运行配置：公开仓库只保留对应的 *.example.json 模板。
+/ClientSecKey/ClientSecKey/client.json
+/ClientSecKey/ClientSecKey/clientA.json
+/ClientSecKey/ClientSecKey/clientB.json
+/ServerSeckey/ServerSeckey/server.json
+
+# 密钥协商运行时生成的私钥、公钥和服务端缓存公钥。
+*.pem
+/ServerSeckey/ServerSeckey/*_pub.pem

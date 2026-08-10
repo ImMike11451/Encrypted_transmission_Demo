@@ -56,21 +56,40 @@ struct V2QueryMessageListRequestInfo
     int limit;                 // 最多返回多少条
 };
 
-// V2RequestCodec 的职责只有一个：
-// 把“C++ 业务结构” <-> “protobuf 请求对象/字符串”做转换。
-// 它不关心消息从哪来，也不关心消息往哪发。
+// 密钥协商请求
+struct V2KeyAgreementRequestInfo
+{
+    V2HeaderInfo header;
+    std::string publicKey;
+    std::string sign;
+};
+
+// 密钥校验请求
+struct V2KeyCheckRequestInfo
+{
+    V2HeaderInfo header;
+    int keyId;
+};
+
+// 密钥注销请求
+struct V2KeyLogoutRequestInfo
+{
+    V2HeaderInfo header;
+    int keyId;
+};
+
+// 职责：完成 C++ 请求结构体与 protobuf RequestPacket 之间的转换。
+// 边界：不做业务校验、不做网络收发、不做加解密。
 class V2RequestCodec : public Codec
 {
 public:
-    // 空构造：用于先创建对象，后续再初始化
+    // 空构造：用于先创建对象，后续再初始化。
     V2RequestCodec();
 
-    // 这个构造函数用于“解码”场景：
-    // 调用者拿到网络字节流后，用它初始化 codec
+    // 解码场景：调用者拿到网络字节流后，用它初始化 codec。
     V2RequestCodec(const std::string& encStr);
 
-    // 这个构造函数用于“编码”场景：
-    // 调用者先准备业务结构，再交给 codec 生成 protobuf 字节流
+    // 编码场景：调用者先准备业务结构，再交给 codec 生成 protobuf 字节流。
     V2RequestCodec(V2SendMessageRequestInfo* info);
 
     // 查询消息请求编码
@@ -79,29 +98,41 @@ public:
     // 查询最近 N 条消息请求
     V2RequestCodec(V2QueryMessageListRequestInfo* info);
 
-    // 解码初始化：把收到的字节流保存起来，后面 decodeMsg() 再解析
+    V2RequestCodec(V2KeyAgreementRequestInfo* info);
+
+    V2RequestCodec(V2KeyCheckRequestInfo* info);
+
+    V2RequestCodec(V2KeyLogoutRequestInfo* info);
+
+    // 解码初始化：把收到的字节流保存起来，后面 decodeMsg() 再解析。
     void initMessage(const std::string& encStr);
 
-    // 编码初始化：把业务结构填充进 protobuf 对象
+    // 编码初始化：把业务结构填充进 protobuf 对象。
     void initMessage(V2SendMessageRequestInfo* info);
 
     void initMessage(V2QueryMessageRequestInfo* info);
 
     void initMessage(V2QueryMessageListRequestInfo* info);
 
-    // 把 protobuf 请求对象序列化成字符串，供网络发送
+    void initMessage(V2KeyAgreementRequestInfo* info);
+
+    void initMessage(V2KeyCheckRequestInfo* info);
+
+    void initMessage(V2KeyLogoutRequestInfo* info);
+
+    // 把 protobuf 请求对象序列化成字符串，供网络发送。
     std::string encodeMsg() override;
 
-    // 把字符串反序列化回 protobuf 对象
-    // 返回值仍然沿用旧工程的设计，使用 void* 以兼容当前 Codec 抽象
+    // 把字符串反序列化回 protobuf 对象。
+    // 返回值沿用旧工程的 void* 设计，以兼容当前 Codec 抽象。
     void* decodeMsg() override;
 
     ~V2RequestCodec();
 
 private:
-    // protobuf 请求对象，真正负责序列化/反序列化
+    // protobuf 请求对象，真正负责序列化/反序列化。
     secmng::v2::RequestPacket m_msg;
 
-    // 保存待解码的原始字符串
+    // 保存待解码的原始字符串。
     std::string m_encStr;
 };

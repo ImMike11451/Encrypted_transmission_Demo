@@ -1,20 +1,48 @@
 #include "ClientOP.h"
-#include "RequestFactory.h"
 #include "RsaCrypto.h"
 #include "TcpSocket.h"
-#include "RespondCodec.h"
-#include "RespondFactory.h"
-#include "Message.pb.h"
 #include "MessageClient.h"
 #include "Hash.h"
 #include "Base64Util.h"
 #include "Config.h"
 #include "Logger.h"
+#include "V2RequestCodec.h"
+#include "V2RespondCodec.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <limits>
 #include <cstring>
+#include <ctime>
+#include <atomic>
+#include <chrono>
+
+namespace
+{
+// 客户端请求 ID 用于把请求、响应和日志串起来。
+// 这里不用秒级时间戳，是为了避免菜单连续操作时多个请求拿到同一个 ID。
+std::string generateClientRequestId(const std::string& clientId)
+{
+	static std::atomic<unsigned long long> sequence{ 0 };
+	const auto now = std::chrono::system_clock::now().time_since_epoch();
+	const auto micros = std::chrono::duration_cast<std::chrono::microseconds>(now).count();
+
+	return clientId + "_" + std::to_string(micros) + "_" + std::to_string(++sequence);
+}
+
+// 密钥业务共用同一种请求头。把组装逻辑集中在这里，
+// 后面切 Qt UI 或其他前端时，也不用在每个入口重新拼 header。
+V2HeaderInfo buildKeyHeader(const ClientInfo& info, int command)
+{
+	V2HeaderInfo header;
+	header.messageId = generateClientRequestId(info.clientId);
+	header.command = command;
+	header.senderId = info.clientId;
+	header.receiverId = info.serverId;
+	header.timestamp = static_cast<long long>(time(nullptr));
+	return header;
+}
+}
 
 
 ClientOP::ClientOP(std::string fileName)
@@ -46,7 +74,8 @@ ClientOP::~ClientOP() = default;
 
 bool ClientOP::keyAgreement()
 {
-	//生成秘钥对，将公钥读取
+	// 生成一组演示用 RSA 密钥对。当前 demo 每次协商都会重新生成，
+	// 后续如果做真实身份体系，应该把长期身份密钥和临时协商密钥分开管理。
 	RsaCrypto rsa{};
 	rsa.generateKeyPair("pub.pem", "pri.pem",2048);
 
@@ -61,25 +90,17 @@ bool ClientOP::keyAgreement()
 	stringstream str;
 	str << ifs.rdbuf();
 
-	//初始化序列化数据
-	//序列化对象，工厂类创建对象，调用对象的序列化方法，得到序列化数据
-	RequestInfo reqInfo;
-	reqInfo.clientID = m_info.clientId;
-	reqInfo.serverID = m_info.serverId;
-	reqInfo.cmd = t_keyAgreement;   //秘钥协商
-	reqInfo.data = str.str();  //非对称加密的公钥
-
 	//创建哈希对象
 	Hash sha1(T_SHA256);
 	sha1.addData(str.str());
+
+	V2KeyAgreementRequestInfo reqInfo;
+	reqInfo.header = buildKeyHeader(m_info, secmng::v2::CMD_KEY_AGREE_REQ);
+	reqInfo.publicKey = str.str();
 	reqInfo.sign = rsa.rsaSign(sha1.result());//公钥的哈希运算后的签名
 
-	Logger::info("签名完成....");
-
-	std::unique_ptr<CodecFactory> fac = std::make_unique<RequestFactory>(&reqInfo);
-	std::unique_ptr<Codec> c(fac->createCodec());
-	//得到序列化数据
-	string encstr = c->encodeMsg();
+	V2RequestCodec reqCodec(&reqInfo);
+	string encstr = reqCodec.encodeMsg();
 
 	//套接字通信，连接服务器，发送数据，接收数据
 	TcpSocket tcp;
@@ -106,27 +127,31 @@ bool ClientOP::keyAgreement()
 		return false;
 	}
 
-	//解码，反序列化，验签
-	//数据还原到RespondMsg
-	std::unique_ptr<CodecFactory> rspFactory = std::make_unique<RespondFactory>(recvData);
-	std::unique_ptr<Codec> rspCodec(rspFactory->createCodec());
-	RespondMsg* resData = (RespondMsg*)rspCodec->decodeMsg();
+	V2RespondCodec rspCodec(recvData);
+	secmng::v2::ResponsePacket* resData = static_cast<secmng::v2::ResponsePacket*>(rspCodec.decodeMsg());
+	if (resData == nullptr || !resData->has_key_op_resp())
+	{
+		Logger::error("密钥协商响应格式错误！");
+		return false;
+	}
+
+	const secmng::v2::KeyOperationResponse& keyResp = resData->key_op_resp();
 	//判断状态
-	if (!resData->status())
+	if (keyResp.code() != secmng::v2::RESULT_SUCCESS)
 	{
 		Logger::error("秘钥协商失败！");
-		Logger::error("server msg: " + resData->data());
+		Logger::error("server msg: " + keyResp.message());
 		return false;
 	}
 
 	Logger::info("秘钥协商成功！");
 
 	//将得到的密文解密
-	std::string key = rsa.rsaPrivateDecrypt(resData->data());
+	std::string key = rsa.rsaPrivateDecrypt(keyResp.data());
 
-	//base64编码后存储
+	// 共享内存结构使用字符串保存 key，所以这里统一转成 Base64。
+	// 注意：Base64 只是编码，不是加密，因此不能输出到日志。
 	std::string base64Key = Base64Util::encode((const unsigned char*)key.data(), key.size());
-	Logger::info("协商得到的对称加密的密钥:" + base64Key);
 
 	////秘钥写入共享内存中
 	//NodeSHMInfo info;
@@ -147,12 +172,13 @@ bool ClientOP::keyAgreement()
 	strncpy(info.serverID, m_info.serverId.c_str(), sizeof(info.serverID) - 1);
 	strncpy(info.seckey, base64Key.c_str(), sizeof(info.seckey) - 1);
 
-	info.seckeyID = resData->seckeyid();
+	info.seckeyID = keyResp.key_id();
 	info.status = 1;
 
 	m_shm->shmWrite(&info);
 
-	// 写完立刻回读，确认是否真的写进去了
+	// 写完立刻回读，确认是否真的写进去了。
+	// 共享内存路径、ftok、节点数量配置错误时，写入失败通常不会像普通文件那样直观。
 	NodeSHMInfo checkInfo = m_shm->shmRead(m_info.clientId, m_info.serverId);
 
 	if (strlen(checkInfo.clientID) == 0 || strlen(checkInfo.serverID) == 0)
@@ -163,8 +189,6 @@ bool ClientOP::keyAgreement()
 	}
 
 	Logger::info("密钥已成功写入本地共享内存。");
-	Logger::info("clientID: " + std::string(checkInfo.clientID));
-	Logger::info("serverID: " + std::string(checkInfo.serverID));
 	Logger::info("seckeyID: " + std::to_string(checkInfo.seckeyID));
 
 	return true;
@@ -186,18 +210,12 @@ void ClientOP::keyVerification()
 		return;
 	}
 
-	//Logger::info("SecKeyID: " + std::to_string(readInfo.seckeyID));
+	V2KeyCheckRequestInfo reqInfo;
+	reqInfo.header = buildKeyHeader(m_info, secmng::v2::CMD_KEY_CHECK_REQ);
+	reqInfo.keyId = readInfo.seckeyID;
 
-	RequestInfo reqInfo;
-	reqInfo.clientID = m_info.clientId;
-	reqInfo.serverID = m_info.serverId;
-	reqInfo.cmd = t_keyVerification;   //秘钥校验
-	reqInfo.data = std::to_string(readInfo.seckeyID);  //秘钥ID
-	reqInfo.sign = "";
-
-	std::unique_ptr<CodecFactory> factory = std::make_unique<RequestFactory>(&reqInfo);
-	std::unique_ptr<Codec> c(factory->createCodec());
-	std::string resStr = c->encodeMsg();
+	V2RequestCodec reqCodec(&reqInfo);
+	std::string resStr = reqCodec.encodeMsg();
 	
 	//套接字通信，连接服务器，发送数据，接收数据
 	TcpSocket tcp;
@@ -224,20 +242,25 @@ void ClientOP::keyVerification()
 		return;
 	}
 
-	//解析响应
-	std::unique_ptr<CodecFactory> rspFactory = std::make_unique<RespondFactory>(recvData);
-	std::unique_ptr<Codec> rspCodec(rspFactory->createCodec());
-	RespondMsg* resData = (RespondMsg*)rspCodec->decodeMsg();
+	V2RespondCodec rspCodec(recvData);
+	secmng::v2::ResponsePacket* resData = static_cast<secmng::v2::ResponsePacket*>(rspCodec.decodeMsg());
+	if (resData == nullptr || !resData->has_key_op_resp())
+	{
+		Logger::error("密钥校验响应格式错误。");
+		return;
+	}
 
-	if (resData->status())
+	const secmng::v2::KeyOperationResponse& keyResp = resData->key_op_resp();
+
+	if (keyResp.code() == secmng::v2::RESULT_SUCCESS)
 	{
 		Logger::info("密钥校验成功，当前密钥有效。");
-		Logger::info("server msg: " + resData->data());
+		Logger::info("server msg: " + keyResp.message());
 	}
 	else
 	{
 		Logger::error("密钥校验失败，当前密钥无效。");
-		Logger::error("server msg: " + resData->data());
+		Logger::error("server msg: " + keyResp.message());
 
 		// 服务端说无效，则本地也同步置为失效
 		m_shm->shmUpdateStatus(m_info.clientId, m_info.serverId, 0);
@@ -256,16 +279,12 @@ void ClientOP::keyLogout()
 	}
 
 	//请求初始化
-	RequestInfo reqInfo;
-	reqInfo.clientID = m_info.clientId;
-	reqInfo.serverID = m_info.serverId;
-	reqInfo.cmd = t_keyLogout;
-	reqInfo.data = std::to_string(node.seckeyID);
-	reqInfo.sign = "";
+	V2KeyLogoutRequestInfo reqInfo;
+	reqInfo.header = buildKeyHeader(m_info, secmng::v2::CMD_KEY_LOGOUT_REQ);
+	reqInfo.keyId = node.seckeyID;
 
-	std::unique_ptr<CodecFactory> factory = std::make_unique<RequestFactory>(&reqInfo);
-	std::unique_ptr<Codec> c(factory->createCodec());
-	std::string encstr = c->encodeMsg();
+	V2RequestCodec reqCodec(&reqInfo);
+	std::string encstr = reqCodec.encodeMsg();
 
 	//通信
 	TcpSocket tcp;
@@ -291,14 +310,20 @@ void ClientOP::keyLogout()
 		return;
 	}
 
-	std::unique_ptr<CodecFactory> rspFactory = std::make_unique<RespondFactory>(recvData);
-	std::unique_ptr<Codec> rspCodec(rspFactory->createCodec());
-	RespondMsg* resData = (RespondMsg*)rspCodec->decodeMsg();
+	V2RespondCodec rspCodec(recvData);
+	secmng::v2::ResponsePacket* resData = static_cast<secmng::v2::ResponsePacket*>(rspCodec.decodeMsg());
+	if (resData == nullptr || !resData->has_key_op_resp())
+	{
+		Logger::error("密钥注销响应格式错误。");
+		return;
+	}
 
-	if (resData->status())
+	const secmng::v2::KeyOperationResponse& keyResp = resData->key_op_resp();
+
+	if (keyResp.code() == secmng::v2::RESULT_SUCCESS)
 	{
 		Logger::info("密钥注销成功！");
-		Logger::info("server msg: " + resData->data());
+		Logger::info("server msg: " + keyResp.message());
 
 		// 本地共享内存同步置失效
 		m_shm->shmUpdateStatus(m_info.clientId, m_info.serverId, 0);
@@ -306,7 +331,7 @@ void ClientOP::keyLogout()
 	else
 	{
 		Logger::error("密钥注销失败！");
-		Logger::error("server msg: " + resData->data());
+		Logger::error("server msg: " + keyResp.message());
 	}
 
 }
@@ -314,7 +339,8 @@ void ClientOP::keyLogout()
 void ClientOP::sendEncryptedMessage()
 {
 
-	// 第 1 步：让用户输入接收方和明文
+	// 菜单层只负责收集输入和展示结果，真正的加密、编码、网络发送交给 MessageClient。
+	// 这样后续替换成 Qt UI 时，可以复用同一套客户端业务能力。
 	SendTextMessageInfo msgInfo;
 
 	std::cout << "请输入接收方节点 ID: ";
@@ -331,7 +357,6 @@ void ClientOP::sendEncryptedMessage()
 		return;
 	}
 
-	// 第 2 步：创建 MessageClient 并发送
 	MessageClient msgClient(m_info,m_shm.get());
 	SendMessageResult result = msgClient.sendTextMessage(msgInfo);
 
@@ -341,10 +366,9 @@ void ClientOP::sendEncryptedMessage()
 		return;
 	}
 
-	// 第 3 步：缓存最近一次 server_message_id
+	// 缓存最近一次 server_message_id，方便演示时直接查询刚发送的消息。
 	m_lastServerMessageId = result.serverMessageId;
 
-	Logger::info("发送加密消息完成。");
 	Logger::info("已缓存最近一次 server_message_id: " + m_lastServerMessageId);
 }
 
@@ -379,7 +403,7 @@ void ClientOP::queryMessage()
 	}
 
 
-	// 第 2 步：创建 MessageClient 并发起查询
+	// 查询本身仍走统一 v2 协议，由服务端判断当前客户端是否有权限查看该消息。
 	MessageClient msgClient(m_info, m_shm.get());
 
 	bool ret = msgClient.queryMessageById(serverMessageId);
@@ -388,7 +412,6 @@ void ClientOP::queryMessage()
 		Logger::error("查询消息失败。");
 		return;
 	}
-	Logger::info("查询消息完成。");
 }
 
 void ClientOP::queryRecentMessages()
@@ -429,6 +452,4 @@ void ClientOP::queryRecentMessages()
 		Logger::error("查询消息列表失败。");
 		return;
 	}
-
-	Logger::info("查询消息列表完成。");
 }

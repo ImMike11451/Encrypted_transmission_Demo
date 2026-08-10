@@ -36,7 +36,6 @@ RsaCrypto::~RsaCrypto()
 	RSA_free(m_privateKey);
 }
 
-// 生成 RSA 密钥对（公钥 + 私钥）
 void RsaCrypto::generateKeyPair(std::string pubfile, std::string prifile, int bits)
 {
 	RSA* rsa = RSA_new();
@@ -49,7 +48,7 @@ void RsaCrypto::generateKeyPair(std::string pubfile, std::string prifile, int bi
 		return;
 	}
 
-	//将生成的公钥对写入文件
+	// 当前 demo 把密钥写入 PEM 文件，便于复用现有文件读取逻辑。
 	BIO* pubbio = BIO_new_file(pubfile.data(), "w");
 
 	if(PEM_write_bio_RSAPublicKey(pubbio, rsa) != 1)
@@ -92,14 +91,11 @@ bool RsaCrypto::loadKey(std::string pubfile, std::string prifile)
 	return ret1 && ret2;
 }
 
-// 公钥加密
 std::string RsaCrypto::rsaPublicEncrypt(std::string data)
 {
-	//计算密钥长度
+	// RSA 可加密的数据长度有限，本项目只用它加密短会话密钥。
 	int keyLen = RSA_size(m_publicKey);
-	Logger::info("pubKey len: " + std::to_string(keyLen));
 	std::string toData(keyLen, '\0');
-	//使用公钥加密数据，RSA_public_encrypt函数返回加密后的数据长度
 	int retlen = RSA_public_encrypt(data.size(), (const unsigned char*)data.data(), (unsigned char*)toData.data(), m_publicKey, RSA_PKCS1_PADDING);
 	if ( retlen < 0)
 	{
@@ -111,16 +107,11 @@ std::string RsaCrypto::rsaPublicEncrypt(std::string data)
 	return retStr;
 }
 
-// 私钥解密
 std::string RsaCrypto::rsaPrivateDecrypt(std::string data)
 {
-	//std::cout << "协商得到的对称加密的密钥: " << data << std::endl;
 	std::string text = fromBase64(data);
-	//计算密钥长度
 	int keyLen = RSA_size(m_privateKey);
-	Logger::info("privKey len: " + std::to_string(keyLen));
 	std::string toData(keyLen, '\0');
-	//使用私钥解密数据，RSA_private_decrypt函数返回解密后的数据长度
 	int retlen = RSA_private_decrypt(text.size(), (const unsigned char*)text.data(), (unsigned char*)toData.data(), m_privateKey, RSA_PKCS1_PADDING);
 	if (retlen < 0)
 	{
@@ -130,14 +121,12 @@ std::string RsaCrypto::rsaPrivateDecrypt(std::string data)
 	return std::string(toData.data(), retlen);
 }
 
-// 私钥签名
 std::string RsaCrypto::rsaSign(std::string data, SignLevel level)
 {
 	size_t len = data.size();
-	// 分配签名缓冲区（最大为RSA_size）
+	// RSA_sign 接收摘要数据。本项目先在业务层计算 SHA-256，再在这里签名。
 	std::string signBuf(RSA_size(m_privateKey), '\0');
 	unsigned int signBufLen = 0;
-	// 生成签名
 	int flag = RSA_sign(level, (const unsigned char*)data.data(), len, (unsigned char*)signBuf.data(), &signBufLen, m_privateKey);
 	if(flag != 1)
 	{
@@ -145,7 +134,6 @@ std::string RsaCrypto::rsaSign(std::string data, SignLevel level)
 		return "";
 	}
 	std::string retStr = toBase64(signBuf.data(), signBufLen);
-	//Logger::info("data: " + retStr + " sign len: " + std::to_string(signBufLen));
 	return retStr;
 }
 
@@ -201,12 +189,10 @@ std::string RsaCrypto::fromBase64(std::string str)
 	return buffer;
 }
 
-// 初始化私钥（从文件读取）
 bool RsaCrypto::initPrivateKey(std::string prifile)
 {
-	//通过BIO读取私钥文件
+	// OpenSSL BIO 负责读取 PEM 文件并解析出 RSA 私钥结构。
 	BIO* bio = BIO_new_file(prifile.data(), "r");
-	// 将bio中的pem数据读出
 	if (PEM_read_bio_RSAPrivateKey(bio, &m_privateKey, NULL, NULL) == NULL)
 	{
 		ERR_print_errors_fp(stdout);
@@ -217,12 +203,10 @@ bool RsaCrypto::initPrivateKey(std::string prifile)
 	return true;
 }
 
-// 初始化公钥
 bool RsaCrypto::initPublicKey(std::string pubfile)
 {
-	//通过BIO读取公钥文件
+	// OpenSSL BIO 负责读取 PEM 文件并解析出 RSA 公钥结构。
 	BIO* bio = BIO_new_file(pubfile.data(), "r");
-	// 将bio中的pem数据读出
 	if (PEM_read_bio_RSAPublicKey(bio, &m_publicKey, NULL, NULL) == NULL)
 	{
 		ERR_print_errors_fp(stdout);

@@ -1,45 +1,82 @@
 #include "mysqlOP.h"
-#include "mysqlOP.h"
-#include "mysqlOP.h"
+
 #include "Logger.h"
 
-mysqlOP::mysqlOP()
-{
+#include <ctime>
+#include <sstream>
 
+mysqlOP::mysqlOP()
+	: m_conn(nullptr)
+{
 }
 
 mysqlOP::~mysqlOP()
 {
+	if (m_conn != nullptr)
+	{
+		mysql_close(m_conn);
+		m_conn = nullptr;
+	}
 }
 
-bool mysqlOP::connectDb(std::string host,std::string user, std::string password, std::string dbName)
+bool mysqlOP::connectDb(const std::string& host,
+	const std::string& user,
+	const std::string& password,
+	const std::string& dbName)
 {
-	m_conn = mysql_init(NULL);
-
-	if(!mysql_real_connect(m_conn, host.c_str(), user.c_str(), password.c_str(), dbName.c_str(), 3306, NULL, 0))
+	m_conn = mysql_init(nullptr);
+	if (m_conn == nullptr)
 	{
-		Logger::error("连接数据库失败: " + std::string(mysql_error(m_conn)));
+		Logger::error("初始化数据库连接失败");
 		return false;
 	}
-	Logger::info("连接数据库成功!");
+
+	if (mysql_real_connect(m_conn, host.c_str(), user.c_str(), password.c_str(), dbName.c_str(), 3306, nullptr, 0) == nullptr)
+	{
+		Logger::error("连接数据库失败: " + std::string(mysql_error(m_conn)));
+		mysql_close(m_conn);
+		m_conn = nullptr;
+		return false;
+	}
+
 	return true;
+}
+
+std::string mysqlOP::escapeSqlString(const std::string& value) const
+{
+	if (m_conn == nullptr)
+	{
+		return "";
+	}
+
+	std::string escaped(value.size() * 2 + 1, '\0');
+	const unsigned long escapedLength = mysql_real_escape_string(
+		m_conn,
+		&escaped[0],
+		value.data(),
+		static_cast<unsigned long>(value.size()));
+	escaped.resize(escapedLength);
+	return escaped;
 }
 
 bool mysqlOP::writeSecKey(NodeSHMInfo* pNode)
 {
-	char sql[1024]{ 0 };
-	sprintf(sql, "insert into seckeyinfo(clientid,serverid,keyid,createtime,state,seckey)"
-		"values('%s','%s',%d,'%s',%d,'%s')",
-		pNode->clientID,
-		pNode->serverID,
-		pNode->seckeyID,
-		getCurTime().c_str(),
-		1,
-		pNode->seckey);
-
-	if(mysql_query(m_conn,sql))
+	if (pNode == nullptr)
 	{
-		Logger::info("插入 SQL: " + std::string(sql));
+		Logger::error("写入密钥失败: 密钥节点为空");
+		return false;
+	}
+
+	std::ostringstream sql;
+	sql << "insert into seckeyinfo(clientid,serverid,keyid,createtime,state,seckey) values('"
+		<< escapeSqlString(pNode->clientID) << "','"
+		<< escapeSqlString(pNode->serverID) << "',"
+		<< pNode->seckeyID << ",'"
+		<< escapeSqlString(getCurTime()) << "',1,'"
+		<< escapeSqlString(pNode->seckey) << "')";
+
+	if (mysql_query(m_conn, sql.str().c_str()))
+	{
 		Logger::error("执行查询失败: " + std::string(mysql_error(m_conn)));
 		return false;
 	}
@@ -106,10 +143,16 @@ bool mysqlOP::updateKeyId(int keyID)
 
 bool mysqlOP::writeSecKeyWithTrans(NodeSHMInfo* pNode)
 {
-	// 1️⃣ 开启事务
+	if (pNode == nullptr)
+	{
+		Logger::error("写入密钥失败: 密钥节点为空");
+		return false;
+	}
+
+	// 开启事务后用 select ... for update 锁住 keysn。
+	// 这样多个客户端同时协商密钥时，不会拿到相同的 key_id。
 	mysql_query(m_conn, "start transaction");
 
-	// 2️⃣ 加锁读取 keyID
 	std::string sql = "select ikeysn from keysn for update";
 	if (mysql_query(m_conn, sql.c_str()))
 	{
@@ -131,30 +174,23 @@ bool mysqlOP::writeSecKeyWithTrans(NodeSHMInfo* pNode)
 	int keyID = atoi(row[0]);
 	mysql_free_result(res);
 
-	// 3️⃣ 设置到节点
 	pNode->seckeyID = keyID;
 
-	// 4️⃣ 插入 seckeyinfo
-	char sqlInsert[1024]{ 0 };
-	sprintf(sqlInsert,
-		"insert into seckeyinfo(clientid,serverid,keyid,createtime,state,seckey) "
-		"values('%s','%s',%d,'%s',%d,'%s')",
-		pNode->clientID,
-		pNode->serverID,
-		pNode->seckeyID,
-		getCurTime().c_str(),
-		1,
-		pNode->seckey);
+	std::ostringstream sqlInsert;
+	sqlInsert << "insert into seckeyinfo(clientid,serverid,keyid,createtime,state,seckey) values('"
+		<< escapeSqlString(pNode->clientID) << "','"
+		<< escapeSqlString(pNode->serverID) << "',"
+		<< pNode->seckeyID << ",'"
+		<< escapeSqlString(getCurTime()) << "',1,'"
+		<< escapeSqlString(pNode->seckey) << "')";
 
-	if (mysql_query(m_conn, sqlInsert))
+	if (mysql_query(m_conn, sqlInsert.str().c_str()))
 	{
-		Logger::info("插入 SQL: " + std::string(sqlInsert));
 		Logger::error("执行查询失败: " + std::string(mysql_error(m_conn)));
 		mysql_query(m_conn, "rollback");
 		return false;
 	}
 
-	// 5️⃣ keyID 自增
 	std::string updateSql = "update keysn set ikeysn = ikeysn + 1";
 	if (mysql_query(m_conn, updateSql.c_str()))
 	{
@@ -163,21 +199,21 @@ bool mysqlOP::writeSecKeyWithTrans(NodeSHMInfo* pNode)
 		return false;
 	}
 
-	// 6️⃣ 提交事务
 	mysql_query(m_conn, "commit");
 
 	return true;
 }
 
-bool mysqlOP::checkSecKey(std::string clientID, std::string serverID, int keyID)
+bool mysqlOP::checkSecKey(const std::string& clientID, const std::string& serverID, int keyID)
 {
-	char sql[1024]{ 0 };
-	sprintf(sql, "select keyid, state from seckeyinfo "
-		"where clientid = '%s' and serverid = '%s' and keyid = % d",
-		clientID.data(), serverID.data(), keyID);
-	if(mysql_query(m_conn, sql))
+	// 只校验 key 是否存在且有效，不把 seckey 本体返回给上层。
+	// 消息解密仍依赖共享内存中的活跃 key。
+	std::ostringstream sql;
+	sql << "select keyid, state from seckeyinfo where clientid = '"
+		<< escapeSqlString(clientID) << "' and serverid = '"
+		<< escapeSqlString(serverID) << "' and keyid = " << keyID;
+	if (mysql_query(m_conn, sql.str().c_str()))
 	{
-		Logger::info("checkSecKey sql : " + std::string(sql));
 		Logger::error("执行查询失败: " + std::string(mysql_error(m_conn)));
 		return false;
 	}
@@ -192,7 +228,6 @@ bool mysqlOP::checkSecKey(std::string clientID, std::string serverID, int keyID)
 	MYSQL_ROW row = mysql_fetch_row(res);
 	if(row == NULL)
 	{
-		Logger::info("No matching key found.");
 		mysql_free_result(res);
 		return false;
 	}
@@ -207,21 +242,21 @@ bool mysqlOP::checkSecKey(std::string clientID, std::string serverID, int keyID)
 	}
 	else
 	{
-		Logger::info("Key ID or state does not match.");
 		return false;
 	}
 
 }
 
-bool mysqlOP::logoutSecKey(std::string clientID, std::string serverID, int keyID)
+bool mysqlOP::logoutSecKey(const std::string& clientID, const std::string& serverID, int keyID)
 {
-	char sql[1024]{ 0 };
-	sprintf(sql, "update seckeyinfo set state = 0 "
-		"where clientid = '%s' and serverid = '%s' and keyid = %d and state = 1",
-		clientID.data(), serverID.data(), keyID);
-	if (mysql_query(m_conn,sql))
+	// 注销并不删除历史密钥记录，而是把 state 置为 0。
+	// 这样可以保留审计和排查所需的历史状态。
+	std::ostringstream sql;
+	sql << "update seckeyinfo set state = 0 where clientid = '"
+		<< escapeSqlString(clientID) << "' and serverid = '"
+		<< escapeSqlString(serverID) << "' and keyid = " << keyID << " and state = 1";
+	if (mysql_query(m_conn, sql.str().c_str()))
 	{
-		Logger::info("logoutSecKey sql : " + std::string(sql));
 		Logger::error("执行更新失败: " + std::string(mysql_error(m_conn)));
 		return false;
 	}
@@ -229,7 +264,6 @@ bool mysqlOP::logoutSecKey(std::string clientID, std::string serverID, int keyID
 	my_ulonglong rows = mysql_affected_rows(m_conn);
 	if (rows == 0)
 	{
-		Logger::info("没有匹配到可注销的密钥记录...");
 		return false;
 	}
 
@@ -261,44 +295,28 @@ bool mysqlOP::insertMessageLog(const std::string& msgId,
 	const std::string& sendTime,
 	int status)
 {
-	char sql[8192]{ 0 };
-	// 这里仍然沿用你当前项目“sprintf 拼 SQL”的风格，
-	// 后面建议升级成参数化 SQL，避免注入风险。
-	sprintf(sql,
-		"insert into message_log("
-		"msg_id,sender_id,receiver_id,"
-		"sender_key_id,receiver_key_id,"
-		"msg_type,"
-		"sender_ciphertext,sender_nonce,sender_tag,"
-		"receiver_ciphertext,receiver_nonce,receiver_tag,"
-		"algorithm,send_time,status"
-		") values("
-		"'%s','%s','%s',"
-		"%d,%d,"
-		"'%s',"
-		"'%s','%s','%s',"
-		"'%s','%s','%s',"
-		"'%s','%s',%d"
-		")",
-		msgId.c_str(),
-		senderId.c_str(),
-		receiverId.c_str(),
-		senderKeyId,
-		receiverKeyId,
-		msgType.c_str(),
-		senderCiphertext.c_str(),
-		senderNonce.c_str(),
-		senderTag.c_str(),
-		receiverCiphertext.c_str(),
-		receiverNonce.c_str(),
-		receiverTag.c_str(),
-		algorithm.c_str(),
-		sendTime.c_str(),
-		status
-	);
-	if(mysql_query(m_conn, sql))
+	// message_log 同时保存发送方原始密文和接收方重加密密文。
+	// 这样既能保留入站记录，也能支持接收方后续按自己的会话密钥解密。
+	std::ostringstream sql;
+	sql << "insert into message_log("
+		"msg_id,sender_id,receiver_id,sender_key_id,receiver_key_id,msg_type,"
+		"sender_ciphertext,sender_nonce,sender_tag,receiver_ciphertext,receiver_nonce,receiver_tag,"
+		"algorithm,send_time,status) values('"
+		<< escapeSqlString(msgId) << "','"
+		<< escapeSqlString(senderId) << "','"
+		<< escapeSqlString(receiverId) << "',"
+		<< senderKeyId << ',' << receiverKeyId << ",'"
+		<< escapeSqlString(msgType) << "','"
+		<< escapeSqlString(senderCiphertext) << "','"
+		<< escapeSqlString(senderNonce) << "','"
+		<< escapeSqlString(senderTag) << "','"
+		<< escapeSqlString(receiverCiphertext) << "','"
+		<< escapeSqlString(receiverNonce) << "','"
+		<< escapeSqlString(receiverTag) << "','"
+		<< escapeSqlString(algorithm) << "','"
+		<< escapeSqlString(sendTime) << "'," << status << ')';
+	if (mysql_query(m_conn, sql.str().c_str()))
 	{
-		Logger::info("insertMessageLog sql: " + std::string(sql));
 		Logger::error("insertMessageLog failed: " + std::string(mysql_error(m_conn)));
 		return false;
 	}
@@ -313,39 +331,25 @@ bool mysqlOP::insertAuditLog(const std::string& logId,
 	const std::string& detail,
 	const std::string& createTime)
 {
-	char sql[2048]{ 0 };
-
+	// audit_log 记录业务行为结果，不应该包含密钥、明文或完整 SQL。
+	std::ostringstream sql;
+	sql << "insert into audit_log(log_id,node_id,action,target_id,result,detail,create_time) values('"
+		<< escapeSqlString(logId) << "',";
 	if (nodeId.empty())
 	{
-		sprintf(sql,
-			"insert into audit_log(log_id,node_id,action,target_id,result,detail,create_time) "
-			"values('%s',NULL,'%s','%s',%d,'%s','%s')",
-			logId.c_str(),
-			action.c_str(),
-			targetId.c_str(),
-			result,
-			detail.c_str(),
-			createTime.c_str()
-		);
+		sql << "NULL";
 	}
 	else
 	{
-		sprintf(sql,
-			"insert into audit_log(log_id,node_id,action,target_id,result,detail,create_time) "
-			"values('%s','%s','%s','%s',%d,'%s','%s')",
-			logId.c_str(),
-			nodeId.c_str(),
-			action.c_str(),
-			targetId.c_str(),
-			result,
-			detail.c_str(),
-			createTime.c_str()
-		);
+		sql << '\'' << escapeSqlString(nodeId) << '\'';
 	}
+	sql << ",'" << escapeSqlString(action) << "','"
+		<< escapeSqlString(targetId) << "'," << result << ",'"
+		<< escapeSqlString(detail) << "','"
+		<< escapeSqlString(createTime) << "')";
 
-	if (mysql_query(m_conn, sql))
+	if (mysql_query(m_conn, sql.str().c_str()))
 	{
-		Logger::info("insertAuditLog sql: " + std::string(sql));
 		Logger::error("insertAuditLog failed: " + std::string(mysql_error(m_conn)));
 		return false;
 	}
@@ -355,18 +359,15 @@ bool mysqlOP::insertAuditLog(const std::string& logId,
 
 bool mysqlOP::queryMessageLogById(const std::string& msgId, std::string& senderId, std::string& receiverId, int& keyId, std::string& msgType, std::string& ciphertext, std::string& nonce, std::string& tag, std::string& sendTime, int& status)
 {
-	char sql[2048]{ 0 };
-
 	// 按 msg_id 查询单条消息记录。
-	sprintf(sql,
-		"select sender_id, receiver_id, sender_key_id, msg_type, "
+	// 权限校验不在这里做，由 MessageService 根据请求方身份统一判断。
+	std::ostringstream sql;
+	sql << "select sender_id, receiver_id, sender_key_id, msg_type, "
 		"sender_ciphertext, sender_nonce, sender_tag, send_time, status "
-		"from message_log where msg_id = '%s'",
-		msgId.c_str());
+		"from message_log where msg_id = '" << escapeSqlString(msgId) << "'";
 
-	if(mysql_query(m_conn, sql))
+	if (mysql_query(m_conn, sql.str().c_str()))
 	{
-		Logger::info("queryMessageLogById sql: " + std::string(sql));
 		Logger::error("queryMessageLogById failed: " + std::string(mysql_error(m_conn)));
 		return false;
 	}
@@ -385,7 +386,6 @@ bool mysqlOP::queryMessageLogById(const std::string& msgId, std::string& senderI
 	{
 		// 没查到数据不算 SQL 执行失败，但本函数先统一返回 false，
 		// 由上层 Repository 再决定 errorMsg 如何描述。
-		Logger::info("No message found with msg_id: " + msgId);
 		mysql_free_result(res);
 		return false;
 	}
@@ -417,21 +417,16 @@ bool mysqlOP::queryRecentMessagesBySender(const std::string& senderId, int limit
 		return false;
 	}
 
-	char sql[2048]{ 0 };
-
 	// 这里按 send_time 倒序查最近 N 条消息。
 	// 当前阶段只查消息摘要相关字段，不查 ciphertext / nonce / tag，
 	// 因为列表页主要用于展示元数据。
-	sprintf(sql,
-		"select msg_id, sender_id, receiver_id, sender_key_id, msg_type, send_time, status "
-		"from message_log where sender_id = '%s' "
-		"order by send_time desc limit %d",
-		senderId.c_str(),
-		limit);
+	std::ostringstream sql;
+	sql << "select msg_id, sender_id, receiver_id, sender_key_id, msg_type, send_time, status "
+		"from message_log where sender_id = '" << escapeSqlString(senderId)
+		<< "' order by send_time desc limit " << limit;
 
-	if (mysql_query(m_conn, sql))
+	if (mysql_query(m_conn, sql.str().c_str()))
 	{
-		Logger::info("queryRecentMessagesBySender sql: " + std::string(sql));
 		Logger::error("queryRecentMessagesBySender failed: " + std::string(mysql_error(m_conn)));
 		return false;
 	}

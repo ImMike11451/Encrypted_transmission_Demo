@@ -13,6 +13,7 @@ MessageRepository::~MessageRepository()
 }
 
 // 插入一条消息记录到 message_log。
+// 这里不直接拼 SQL，而是继续走 mysqlOP，保持当前项目的数据访问入口集中。
 bool MessageRepository::insertMessage(const MessageLogRecord& record)
 {
 
@@ -101,7 +102,8 @@ bool MessageRepository::queryRecentMessagesBySender(const std::string& senderId,
         return false;
     }
 
-    // 先从 mysqlOP 拿到底层原始行数据
+    // 先从 mysqlOP 拿到底层原始行数据，再转换成服务层更容易使用的结构体。
+    // 这里不做权限过滤，因为 Repository 不知道当前请求者是谁。
     std::vector<std::vector<std::string>> rows;
     bool ret = m_db->queryRecentMessagesBySender(senderId, limit, rows);
     if (!ret)

@@ -82,7 +82,7 @@ private:
 	V2HeaderInfo buildHeader(const std::string& receiverId);
 
     // 生成消息唯一 ID。
-    // 第一阶段我们可以先用“时间戳 + 发送方ID”这种简单方案。
+    // 使用微秒时间戳 + 进程内递增序号，降低高频请求时的碰撞概率。
 	std::string generateMessageId();
 
     static std::string deliveryStatusToString(int status);

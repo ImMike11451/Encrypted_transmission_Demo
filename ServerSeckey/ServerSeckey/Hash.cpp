@@ -92,13 +92,12 @@ std::string Hash::result()
 
 std::string Hash::md5Result()
 {
-	//md5哈希值长度为16字节，每个字节用两位十六进制表示，所以结果字符串长度为32+ '/0'
+	// 摘要最终统一转成十六进制字符串，便于签名、日志和调试展示。
 	unsigned char digest[MD5_DIGEST_LENGTH];
 	char res[MD5_DIGEST_LENGTH * 2 + 1];
 	MD5_Final(digest, &md5);
 	for (int i = 0; i < MD5_DIGEST_LENGTH; i++)
 	{
-		//将每个字节转换为两位十六进制字符串，并存储在res中
 		sprintf(res + i * 2, "%02x", digest[i]);
 	}
 	return std::string(res,MD5_DIGEST_LENGTH * 2);

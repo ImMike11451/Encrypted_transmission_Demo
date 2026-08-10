@@ -14,26 +14,28 @@ enum SignLevel
 	Level_6 = NID_sha512
 };
 
+// 职责：封装 RSA 密钥生成、公钥加密、私钥解密、签名和验签。
+// 边界：RSA 只用于密钥协商和身份证明，不用于加密正文消息；正文消息使用 AES-GCM。
 class RsaCrypto
 {
 public:
-	// 构造函数：初始化公钥和私钥结构体
+	// 初始化空 RSA 公钥和私钥结构。
 	RsaCrypto();
-	// 构造函数（带参数）：根据文件初始化密钥
+	// 根据文件初始化公钥或私钥。
 	RsaCrypto(std::string filename, bool isPrivate = true);
 	~RsaCrypto();
 
-	// 生成 RSA 密钥对（公钥 + 私钥）
+	// 生成 RSA 密钥对，并写入 PEM 文件。
 	void generateKeyPair(std::string pubfile, std::string prifile, int bits = 2048);
 
 	bool loadKey(std::string pubfile, std::string prifile);
-	// 公钥加密
+	// 公钥加密：服务端用客户端公钥加密会话密钥。
 	std::string rsaPublicEncrypt(std::string data);
-	// 私钥解密
+	// 私钥解密：客户端用自己的私钥解开会话密钥。
 	std::string rsaPrivateDecrypt(std::string data);
-	// 私钥签名
+	// 私钥签名：客户端对摘要签名，证明自己持有私钥。
 	std::string rsaSign(std::string data, SignLevel level = Level_4);
-	// 公钥验签
+	// 公钥验签：服务端验证签名是否来自对应私钥。
 	bool rsaVerify(std::string data, std::string signData, SignLevel level = Level_4);
 
 

@@ -48,7 +48,7 @@ struct TableStruct_MessageV2_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[11]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[15]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -63,6 +63,18 @@ extern EncryptedMessageDefaultTypeInternal _EncryptedMessage_default_instance_;
 class Header;
 class HeaderDefaultTypeInternal;
 extern HeaderDefaultTypeInternal _Header_default_instance_;
+class KeyAgreementRequest;
+class KeyAgreementRequestDefaultTypeInternal;
+extern KeyAgreementRequestDefaultTypeInternal _KeyAgreementRequest_default_instance_;
+class KeyCheckRequest;
+class KeyCheckRequestDefaultTypeInternal;
+extern KeyCheckRequestDefaultTypeInternal _KeyCheckRequest_default_instance_;
+class KeyLogoutRequest;
+class KeyLogoutRequestDefaultTypeInternal;
+extern KeyLogoutRequestDefaultTypeInternal _KeyLogoutRequest_default_instance_;
+class KeyOperationResponse;
+class KeyOperationResponseDefaultTypeInternal;
+extern KeyOperationResponseDefaultTypeInternal _KeyOperationResponse_default_instance_;
 class MessageSummary;
 class MessageSummaryDefaultTypeInternal;
 extern MessageSummaryDefaultTypeInternal _MessageSummary_default_instance_;
@@ -95,6 +107,10 @@ extern SendMessageResponseDefaultTypeInternal _SendMessageResponse_default_insta
 PROTOBUF_NAMESPACE_OPEN
 template<> ::secmng::v2::EncryptedMessage* Arena::CreateMaybeMessage<::secmng::v2::EncryptedMessage>(Arena*);
 template<> ::secmng::v2::Header* Arena::CreateMaybeMessage<::secmng::v2::Header>(Arena*);
+template<> ::secmng::v2::KeyAgreementRequest* Arena::CreateMaybeMessage<::secmng::v2::KeyAgreementRequest>(Arena*);
+template<> ::secmng::v2::KeyCheckRequest* Arena::CreateMaybeMessage<::secmng::v2::KeyCheckRequest>(Arena*);
+template<> ::secmng::v2::KeyLogoutRequest* Arena::CreateMaybeMessage<::secmng::v2::KeyLogoutRequest>(Arena*);
+template<> ::secmng::v2::KeyOperationResponse* Arena::CreateMaybeMessage<::secmng::v2::KeyOperationResponse>(Arena*);
 template<> ::secmng::v2::MessageSummary* Arena::CreateMaybeMessage<::secmng::v2::MessageSummary>(Arena*);
 template<> ::secmng::v2::QueryMessageListRequest* Arena::CreateMaybeMessage<::secmng::v2::QueryMessageListRequest>(Arena*);
 template<> ::secmng::v2::QueryMessageListResponse* Arena::CreateMaybeMessage<::secmng::v2::QueryMessageListResponse>(Arena*);
@@ -116,12 +132,18 @@ enum CommandType : int {
   CMD_QUERY_MSG_RESP = 4,
   CMD_QUERY_MSG_LIST_REQ = 5,
   CMD_QUERY_MSG_LIST_RESP = 6,
+  CMD_KEY_AGREE_REQ = 7,
+  CMD_KEY_AGREE_RESP = 8,
+  CMD_KEY_CHECK_REQ = 9,
+  CMD_KEY_CHECK_RESP = 10,
+  CMD_KEY_LOGOUT_REQ = 11,
+  CMD_KEY_LOGOUT_RESP = 12,
   CommandType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   CommandType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
 bool CommandType_IsValid(int value);
 constexpr CommandType CommandType_MIN = CMD_UNKNOWN;
-constexpr CommandType CommandType_MAX = CMD_QUERY_MSG_LIST_RESP;
+constexpr CommandType CommandType_MAX = CMD_KEY_LOGOUT_RESP;
 constexpr int CommandType_ARRAYSIZE = CommandType_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* CommandType_descriptor();
@@ -147,12 +169,15 @@ enum ResultCode : int {
   RESULT_DECRYPT_FAILED = 5,
   RESULT_INVALID_REQUEST = 6,
   RESULT_MSG_NOT_FOUND = 7,
+  RESULT_KEY_AGREE_FAILED = 8,
+  RESULT_KEY_CHECK_FAILED = 9,
+  RESULT_KEY_LOGOUT_FAILED = 10,
   ResultCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   ResultCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
 bool ResultCode_IsValid(int value);
 constexpr ResultCode ResultCode_MIN = RESULT_UNKNOWN;
-constexpr ResultCode ResultCode_MAX = RESULT_MSG_NOT_FOUND;
+constexpr ResultCode ResultCode_MAX = RESULT_KEY_LOGOUT_FAILED;
 constexpr int ResultCode_ARRAYSIZE = ResultCode_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ResultCode_descriptor();
@@ -361,6 +386,562 @@ class QueryMessageListRequest :
 };
 // -------------------------------------------------------------------
 
+class KeyAgreementRequest :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:secmng.v2.KeyAgreementRequest) */ {
+ public:
+  KeyAgreementRequest();
+  virtual ~KeyAgreementRequest();
+
+  KeyAgreementRequest(const KeyAgreementRequest& from);
+  KeyAgreementRequest(KeyAgreementRequest&& from) noexcept
+    : KeyAgreementRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline KeyAgreementRequest& operator=(const KeyAgreementRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline KeyAgreementRequest& operator=(KeyAgreementRequest&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const KeyAgreementRequest& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const KeyAgreementRequest* internal_default_instance() {
+    return reinterpret_cast<const KeyAgreementRequest*>(
+               &_KeyAgreementRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  void Swap(KeyAgreementRequest* other);
+  friend void swap(KeyAgreementRequest& a, KeyAgreementRequest& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline KeyAgreementRequest* New() const final {
+    return CreateMaybeMessage<KeyAgreementRequest>(nullptr);
+  }
+
+  KeyAgreementRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<KeyAgreementRequest>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const KeyAgreementRequest& from);
+  void MergeFrom(const KeyAgreementRequest& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(KeyAgreementRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "secmng.v2.KeyAgreementRequest";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_MessageV2_2eproto);
+    return ::descriptor_table_MessageV2_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string public_key = 1;
+  void clear_public_key();
+  static const int kPublicKeyFieldNumber = 1;
+  const std::string& public_key() const;
+  void set_public_key(const std::string& value);
+  void set_public_key(std::string&& value);
+  void set_public_key(const char* value);
+  void set_public_key(const char* value, size_t size);
+  std::string* mutable_public_key();
+  std::string* release_public_key();
+  void set_allocated_public_key(std::string* public_key);
+
+  // string sign = 2;
+  void clear_sign();
+  static const int kSignFieldNumber = 2;
+  const std::string& sign() const;
+  void set_sign(const std::string& value);
+  void set_sign(std::string&& value);
+  void set_sign(const char* value);
+  void set_sign(const char* value, size_t size);
+  std::string* mutable_sign();
+  std::string* release_sign();
+  void set_allocated_sign(std::string* sign);
+
+  // @@protoc_insertion_point(class_scope:secmng.v2.KeyAgreementRequest)
+ private:
+  class HasBitSetters;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr public_key_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr sign_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_MessageV2_2eproto;
+};
+// -------------------------------------------------------------------
+
+class KeyCheckRequest :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:secmng.v2.KeyCheckRequest) */ {
+ public:
+  KeyCheckRequest();
+  virtual ~KeyCheckRequest();
+
+  KeyCheckRequest(const KeyCheckRequest& from);
+  KeyCheckRequest(KeyCheckRequest&& from) noexcept
+    : KeyCheckRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline KeyCheckRequest& operator=(const KeyCheckRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline KeyCheckRequest& operator=(KeyCheckRequest&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const KeyCheckRequest& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const KeyCheckRequest* internal_default_instance() {
+    return reinterpret_cast<const KeyCheckRequest*>(
+               &_KeyCheckRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  void Swap(KeyCheckRequest* other);
+  friend void swap(KeyCheckRequest& a, KeyCheckRequest& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline KeyCheckRequest* New() const final {
+    return CreateMaybeMessage<KeyCheckRequest>(nullptr);
+  }
+
+  KeyCheckRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<KeyCheckRequest>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const KeyCheckRequest& from);
+  void MergeFrom(const KeyCheckRequest& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(KeyCheckRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "secmng.v2.KeyCheckRequest";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_MessageV2_2eproto);
+    return ::descriptor_table_MessageV2_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 key_id = 1;
+  void clear_key_id();
+  static const int kKeyIdFieldNumber = 1;
+  ::PROTOBUF_NAMESPACE_ID::int32 key_id() const;
+  void set_key_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:secmng.v2.KeyCheckRequest)
+ private:
+  class HasBitSetters;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::int32 key_id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_MessageV2_2eproto;
+};
+// -------------------------------------------------------------------
+
+class KeyLogoutRequest :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:secmng.v2.KeyLogoutRequest) */ {
+ public:
+  KeyLogoutRequest();
+  virtual ~KeyLogoutRequest();
+
+  KeyLogoutRequest(const KeyLogoutRequest& from);
+  KeyLogoutRequest(KeyLogoutRequest&& from) noexcept
+    : KeyLogoutRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline KeyLogoutRequest& operator=(const KeyLogoutRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline KeyLogoutRequest& operator=(KeyLogoutRequest&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const KeyLogoutRequest& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const KeyLogoutRequest* internal_default_instance() {
+    return reinterpret_cast<const KeyLogoutRequest*>(
+               &_KeyLogoutRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  void Swap(KeyLogoutRequest* other);
+  friend void swap(KeyLogoutRequest& a, KeyLogoutRequest& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline KeyLogoutRequest* New() const final {
+    return CreateMaybeMessage<KeyLogoutRequest>(nullptr);
+  }
+
+  KeyLogoutRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<KeyLogoutRequest>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const KeyLogoutRequest& from);
+  void MergeFrom(const KeyLogoutRequest& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(KeyLogoutRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "secmng.v2.KeyLogoutRequest";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_MessageV2_2eproto);
+    return ::descriptor_table_MessageV2_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 key_id = 1;
+  void clear_key_id();
+  static const int kKeyIdFieldNumber = 1;
+  ::PROTOBUF_NAMESPACE_ID::int32 key_id() const;
+  void set_key_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:secmng.v2.KeyLogoutRequest)
+ private:
+  class HasBitSetters;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::int32 key_id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_MessageV2_2eproto;
+};
+// -------------------------------------------------------------------
+
+class KeyOperationResponse :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:secmng.v2.KeyOperationResponse) */ {
+ public:
+  KeyOperationResponse();
+  virtual ~KeyOperationResponse();
+
+  KeyOperationResponse(const KeyOperationResponse& from);
+  KeyOperationResponse(KeyOperationResponse&& from) noexcept
+    : KeyOperationResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline KeyOperationResponse& operator=(const KeyOperationResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline KeyOperationResponse& operator=(KeyOperationResponse&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const KeyOperationResponse& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const KeyOperationResponse* internal_default_instance() {
+    return reinterpret_cast<const KeyOperationResponse*>(
+               &_KeyOperationResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  void Swap(KeyOperationResponse* other);
+  friend void swap(KeyOperationResponse& a, KeyOperationResponse& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline KeyOperationResponse* New() const final {
+    return CreateMaybeMessage<KeyOperationResponse>(nullptr);
+  }
+
+  KeyOperationResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<KeyOperationResponse>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const KeyOperationResponse& from);
+  void MergeFrom(const KeyOperationResponse& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(KeyOperationResponse* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "secmng.v2.KeyOperationResponse";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_MessageV2_2eproto);
+    return ::descriptor_table_MessageV2_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string message = 2;
+  void clear_message();
+  static const int kMessageFieldNumber = 2;
+  const std::string& message() const;
+  void set_message(const std::string& value);
+  void set_message(std::string&& value);
+  void set_message(const char* value);
+  void set_message(const char* value, size_t size);
+  std::string* mutable_message();
+  std::string* release_message();
+  void set_allocated_message(std::string* message);
+
+  // string data = 4;
+  void clear_data();
+  static const int kDataFieldNumber = 4;
+  const std::string& data() const;
+  void set_data(const std::string& value);
+  void set_data(std::string&& value);
+  void set_data(const char* value);
+  void set_data(const char* value, size_t size);
+  std::string* mutable_data();
+  std::string* release_data();
+  void set_allocated_data(std::string* data);
+
+  // .secmng.v2.ResultCode code = 1;
+  void clear_code();
+  static const int kCodeFieldNumber = 1;
+  ::secmng::v2::ResultCode code() const;
+  void set_code(::secmng::v2::ResultCode value);
+
+  // int32 key_id = 3;
+  void clear_key_id();
+  static const int kKeyIdFieldNumber = 3;
+  ::PROTOBUF_NAMESPACE_ID::int32 key_id() const;
+  void set_key_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:secmng.v2.KeyOperationResponse)
+ private:
+  class HasBitSetters;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr data_;
+  int code_;
+  ::PROTOBUF_NAMESPACE_ID::int32 key_id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_MessageV2_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Header :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:secmng.v2.Header) */ {
  public:
@@ -403,7 +984,7 @@ class Header :
                &_Header_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    5;
 
   void Swap(Header* other);
   friend void swap(Header& a, Header& b) {
@@ -575,7 +1156,7 @@ class EncryptedMessage :
                &_EncryptedMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    6;
 
   void Swap(EncryptedMessage* other);
   friend void swap(EncryptedMessage& a, EncryptedMessage& b) {
@@ -760,7 +1341,7 @@ class SendMessageRequest :
                &_SendMessageRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    7;
 
   void Swap(SendMessageRequest* other);
   friend void swap(SendMessageRequest& a, SendMessageRequest& b) {
@@ -889,7 +1470,7 @@ class SendMessageResponse :
                &_SendMessageResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    8;
 
   void Swap(SendMessageResponse* other);
   friend void swap(SendMessageResponse& a, SendMessageResponse& b) {
@@ -1055,7 +1636,7 @@ class QueryMessageRequest :
                &_QueryMessageRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    9;
 
   void Swap(QueryMessageRequest* other);
   friend void swap(QueryMessageRequest& a, QueryMessageRequest& b) {
@@ -1187,7 +1768,7 @@ class QueryMessageResponse :
                &_QueryMessageResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    10;
 
   void Swap(QueryMessageResponse* other);
   friend void swap(QueryMessageResponse& a, QueryMessageResponse& b) {
@@ -1399,7 +1980,7 @@ class MessageSummary :
                &_MessageSummary_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    11;
 
   void Swap(MessageSummary* other);
   friend void swap(MessageSummary& a, MessageSummary& b) {
@@ -1591,7 +2172,7 @@ class QueryMessageListResponse :
                &_QueryMessageListResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    12;
 
   void Swap(QueryMessageListResponse* other);
   friend void swap(QueryMessageListResponse& a, QueryMessageListResponse& b) {
@@ -1741,6 +2322,9 @@ class RequestPacket :
     kSendMsgReq = 2,
     kQueryMsgReq = 3,
     kQueryMsgListReq = 4,
+    kKeyAgreeReq = 5,
+    kKeyCheckReq = 6,
+    kKeyLogoutReq = 7,
     BODY_NOT_SET = 0,
   };
 
@@ -1750,7 +2334,7 @@ class RequestPacket :
                &_RequestPacket_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    13;
 
   void Swap(RequestPacket* other);
   friend void swap(RequestPacket& a, RequestPacket& b) {
@@ -1853,6 +2437,33 @@ class RequestPacket :
   ::secmng::v2::QueryMessageListRequest* mutable_query_msg_list_req();
   void set_allocated_query_msg_list_req(::secmng::v2::QueryMessageListRequest* query_msg_list_req);
 
+  // .secmng.v2.KeyAgreementRequest key_agree_req = 5;
+  bool has_key_agree_req() const;
+  void clear_key_agree_req();
+  static const int kKeyAgreeReqFieldNumber = 5;
+  const ::secmng::v2::KeyAgreementRequest& key_agree_req() const;
+  ::secmng::v2::KeyAgreementRequest* release_key_agree_req();
+  ::secmng::v2::KeyAgreementRequest* mutable_key_agree_req();
+  void set_allocated_key_agree_req(::secmng::v2::KeyAgreementRequest* key_agree_req);
+
+  // .secmng.v2.KeyCheckRequest key_check_req = 6;
+  bool has_key_check_req() const;
+  void clear_key_check_req();
+  static const int kKeyCheckReqFieldNumber = 6;
+  const ::secmng::v2::KeyCheckRequest& key_check_req() const;
+  ::secmng::v2::KeyCheckRequest* release_key_check_req();
+  ::secmng::v2::KeyCheckRequest* mutable_key_check_req();
+  void set_allocated_key_check_req(::secmng::v2::KeyCheckRequest* key_check_req);
+
+  // .secmng.v2.KeyLogoutRequest key_logout_req = 7;
+  bool has_key_logout_req() const;
+  void clear_key_logout_req();
+  static const int kKeyLogoutReqFieldNumber = 7;
+  const ::secmng::v2::KeyLogoutRequest& key_logout_req() const;
+  ::secmng::v2::KeyLogoutRequest* release_key_logout_req();
+  ::secmng::v2::KeyLogoutRequest* mutable_key_logout_req();
+  void set_allocated_key_logout_req(::secmng::v2::KeyLogoutRequest* key_logout_req);
+
   void clear_body();
   BodyCase body_case() const;
   // @@protoc_insertion_point(class_scope:secmng.v2.RequestPacket)
@@ -1861,6 +2472,9 @@ class RequestPacket :
   void set_has_send_msg_req();
   void set_has_query_msg_req();
   void set_has_query_msg_list_req();
+  void set_has_key_agree_req();
+  void set_has_key_check_req();
+  void set_has_key_logout_req();
 
   inline bool has_body() const;
   inline void clear_has_body();
@@ -1872,6 +2486,9 @@ class RequestPacket :
     ::secmng::v2::SendMessageRequest* send_msg_req_;
     ::secmng::v2::QueryMessageRequest* query_msg_req_;
     ::secmng::v2::QueryMessageListRequest* query_msg_list_req_;
+    ::secmng::v2::KeyAgreementRequest* key_agree_req_;
+    ::secmng::v2::KeyCheckRequest* key_check_req_;
+    ::secmng::v2::KeyLogoutRequest* key_logout_req_;
   } body_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
@@ -1920,6 +2537,7 @@ class ResponsePacket :
     kSendMsgResp = 2,
     kQueryMsgResp = 3,
     kQueryMsgListResp = 4,
+    kKeyOpResp = 5,
     BODY_NOT_SET = 0,
   };
 
@@ -1929,7 +2547,7 @@ class ResponsePacket :
                &_ResponsePacket_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    14;
 
   void Swap(ResponsePacket* other);
   friend void swap(ResponsePacket& a, ResponsePacket& b) {
@@ -2032,6 +2650,15 @@ class ResponsePacket :
   ::secmng::v2::QueryMessageListResponse* mutable_query_msg_list_resp();
   void set_allocated_query_msg_list_resp(::secmng::v2::QueryMessageListResponse* query_msg_list_resp);
 
+  // .secmng.v2.KeyOperationResponse key_op_resp = 5;
+  bool has_key_op_resp() const;
+  void clear_key_op_resp();
+  static const int kKeyOpRespFieldNumber = 5;
+  const ::secmng::v2::KeyOperationResponse& key_op_resp() const;
+  ::secmng::v2::KeyOperationResponse* release_key_op_resp();
+  ::secmng::v2::KeyOperationResponse* mutable_key_op_resp();
+  void set_allocated_key_op_resp(::secmng::v2::KeyOperationResponse* key_op_resp);
+
   void clear_body();
   BodyCase body_case() const;
   // @@protoc_insertion_point(class_scope:secmng.v2.ResponsePacket)
@@ -2040,6 +2667,7 @@ class ResponsePacket :
   void set_has_send_msg_resp();
   void set_has_query_msg_resp();
   void set_has_query_msg_list_resp();
+  void set_has_key_op_resp();
 
   inline bool has_body() const;
   inline void clear_has_body();
@@ -2051,6 +2679,7 @@ class ResponsePacket :
     ::secmng::v2::SendMessageResponse* send_msg_resp_;
     ::secmng::v2::QueryMessageResponse* query_msg_resp_;
     ::secmng::v2::QueryMessageListResponse* query_msg_list_resp_;
+    ::secmng::v2::KeyOperationResponse* key_op_resp_;
   } body_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
@@ -2077,43 +2706,43 @@ inline const std::string& QueryMessageListRequest::sender_id() const {
   return sender_id_.GetNoArena();
 }
 inline void QueryMessageListRequest::set_sender_id(const std::string& value) {
-  
+
   sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageListRequest.sender_id)
 }
 inline void QueryMessageListRequest::set_sender_id(std::string&& value) {
-  
+
   sender_id_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.QueryMessageListRequest.sender_id)
 }
 inline void QueryMessageListRequest::set_sender_id(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.QueryMessageListRequest.sender_id)
 }
 inline void QueryMessageListRequest::set_sender_id(const char* value, size_t size) {
-  
+
   sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.QueryMessageListRequest.sender_id)
 }
 inline std::string* QueryMessageListRequest::mutable_sender_id() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.QueryMessageListRequest.sender_id)
   return sender_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* QueryMessageListRequest::release_sender_id() {
   // @@protoc_insertion_point(field_release:secmng.v2.QueryMessageListRequest.sender_id)
-  
+
   return sender_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void QueryMessageListRequest::set_allocated_sender_id(std::string* sender_id) {
   if (sender_id != nullptr) {
-    
+
   } else {
-    
+
   }
   sender_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), sender_id);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.QueryMessageListRequest.sender_id)
@@ -2128,9 +2757,285 @@ inline ::PROTOBUF_NAMESPACE_ID::int32 QueryMessageListRequest::limit() const {
   return limit_;
 }
 inline void QueryMessageListRequest::set_limit(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  
+
   limit_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageListRequest.limit)
+}
+
+// -------------------------------------------------------------------
+
+// KeyAgreementRequest
+
+// string public_key = 1;
+inline void KeyAgreementRequest::clear_public_key() {
+  public_key_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& KeyAgreementRequest::public_key() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.KeyAgreementRequest.public_key)
+  return public_key_.GetNoArena();
+}
+inline void KeyAgreementRequest::set_public_key(const std::string& value) {
+
+  public_key_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:secmng.v2.KeyAgreementRequest.public_key)
+}
+inline void KeyAgreementRequest::set_public_key(std::string&& value) {
+
+  public_key_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:secmng.v2.KeyAgreementRequest.public_key)
+}
+inline void KeyAgreementRequest::set_public_key(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+
+  public_key_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:secmng.v2.KeyAgreementRequest.public_key)
+}
+inline void KeyAgreementRequest::set_public_key(const char* value, size_t size) {
+
+  public_key_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:secmng.v2.KeyAgreementRequest.public_key)
+}
+inline std::string* KeyAgreementRequest::mutable_public_key() {
+
+  // @@protoc_insertion_point(field_mutable:secmng.v2.KeyAgreementRequest.public_key)
+  return public_key_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* KeyAgreementRequest::release_public_key() {
+  // @@protoc_insertion_point(field_release:secmng.v2.KeyAgreementRequest.public_key)
+
+  return public_key_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void KeyAgreementRequest::set_allocated_public_key(std::string* public_key) {
+  if (public_key != nullptr) {
+
+  } else {
+
+  }
+  public_key_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), public_key);
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.KeyAgreementRequest.public_key)
+}
+
+// string sign = 2;
+inline void KeyAgreementRequest::clear_sign() {
+  sign_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& KeyAgreementRequest::sign() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.KeyAgreementRequest.sign)
+  return sign_.GetNoArena();
+}
+inline void KeyAgreementRequest::set_sign(const std::string& value) {
+
+  sign_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:secmng.v2.KeyAgreementRequest.sign)
+}
+inline void KeyAgreementRequest::set_sign(std::string&& value) {
+
+  sign_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:secmng.v2.KeyAgreementRequest.sign)
+}
+inline void KeyAgreementRequest::set_sign(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+
+  sign_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:secmng.v2.KeyAgreementRequest.sign)
+}
+inline void KeyAgreementRequest::set_sign(const char* value, size_t size) {
+
+  sign_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:secmng.v2.KeyAgreementRequest.sign)
+}
+inline std::string* KeyAgreementRequest::mutable_sign() {
+
+  // @@protoc_insertion_point(field_mutable:secmng.v2.KeyAgreementRequest.sign)
+  return sign_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* KeyAgreementRequest::release_sign() {
+  // @@protoc_insertion_point(field_release:secmng.v2.KeyAgreementRequest.sign)
+
+  return sign_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void KeyAgreementRequest::set_allocated_sign(std::string* sign) {
+  if (sign != nullptr) {
+
+  } else {
+
+  }
+  sign_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), sign);
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.KeyAgreementRequest.sign)
+}
+
+// -------------------------------------------------------------------
+
+// KeyCheckRequest
+
+// int32 key_id = 1;
+inline void KeyCheckRequest::clear_key_id() {
+  key_id_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 KeyCheckRequest::key_id() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.KeyCheckRequest.key_id)
+  return key_id_;
+}
+inline void KeyCheckRequest::set_key_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+
+  key_id_ = value;
+  // @@protoc_insertion_point(field_set:secmng.v2.KeyCheckRequest.key_id)
+}
+
+// -------------------------------------------------------------------
+
+// KeyLogoutRequest
+
+// int32 key_id = 1;
+inline void KeyLogoutRequest::clear_key_id() {
+  key_id_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 KeyLogoutRequest::key_id() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.KeyLogoutRequest.key_id)
+  return key_id_;
+}
+inline void KeyLogoutRequest::set_key_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+
+  key_id_ = value;
+  // @@protoc_insertion_point(field_set:secmng.v2.KeyLogoutRequest.key_id)
+}
+
+// -------------------------------------------------------------------
+
+// KeyOperationResponse
+
+// .secmng.v2.ResultCode code = 1;
+inline void KeyOperationResponse::clear_code() {
+  code_ = 0;
+}
+inline ::secmng::v2::ResultCode KeyOperationResponse::code() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.KeyOperationResponse.code)
+  return static_cast< ::secmng::v2::ResultCode >(code_);
+}
+inline void KeyOperationResponse::set_code(::secmng::v2::ResultCode value) {
+
+  code_ = value;
+  // @@protoc_insertion_point(field_set:secmng.v2.KeyOperationResponse.code)
+}
+
+// string message = 2;
+inline void KeyOperationResponse::clear_message() {
+  message_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& KeyOperationResponse::message() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.KeyOperationResponse.message)
+  return message_.GetNoArena();
+}
+inline void KeyOperationResponse::set_message(const std::string& value) {
+
+  message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:secmng.v2.KeyOperationResponse.message)
+}
+inline void KeyOperationResponse::set_message(std::string&& value) {
+
+  message_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:secmng.v2.KeyOperationResponse.message)
+}
+inline void KeyOperationResponse::set_message(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+
+  message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:secmng.v2.KeyOperationResponse.message)
+}
+inline void KeyOperationResponse::set_message(const char* value, size_t size) {
+
+  message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:secmng.v2.KeyOperationResponse.message)
+}
+inline std::string* KeyOperationResponse::mutable_message() {
+
+  // @@protoc_insertion_point(field_mutable:secmng.v2.KeyOperationResponse.message)
+  return message_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* KeyOperationResponse::release_message() {
+  // @@protoc_insertion_point(field_release:secmng.v2.KeyOperationResponse.message)
+
+  return message_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void KeyOperationResponse::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+
+  } else {
+
+  }
+  message_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message);
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.KeyOperationResponse.message)
+}
+
+// int32 key_id = 3;
+inline void KeyOperationResponse::clear_key_id() {
+  key_id_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 KeyOperationResponse::key_id() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.KeyOperationResponse.key_id)
+  return key_id_;
+}
+inline void KeyOperationResponse::set_key_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+
+  key_id_ = value;
+  // @@protoc_insertion_point(field_set:secmng.v2.KeyOperationResponse.key_id)
+}
+
+// string data = 4;
+inline void KeyOperationResponse::clear_data() {
+  data_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& KeyOperationResponse::data() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.KeyOperationResponse.data)
+  return data_.GetNoArena();
+}
+inline void KeyOperationResponse::set_data(const std::string& value) {
+
+  data_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:secmng.v2.KeyOperationResponse.data)
+}
+inline void KeyOperationResponse::set_data(std::string&& value) {
+
+  data_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:secmng.v2.KeyOperationResponse.data)
+}
+inline void KeyOperationResponse::set_data(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+
+  data_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:secmng.v2.KeyOperationResponse.data)
+}
+inline void KeyOperationResponse::set_data(const char* value, size_t size) {
+
+  data_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:secmng.v2.KeyOperationResponse.data)
+}
+inline std::string* KeyOperationResponse::mutable_data() {
+
+  // @@protoc_insertion_point(field_mutable:secmng.v2.KeyOperationResponse.data)
+  return data_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* KeyOperationResponse::release_data() {
+  // @@protoc_insertion_point(field_release:secmng.v2.KeyOperationResponse.data)
+
+  return data_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void KeyOperationResponse::set_allocated_data(std::string* data) {
+  if (data != nullptr) {
+
+  } else {
+
+  }
+  data_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), data);
+  // @@protoc_insertion_point(field_set_allocated:secmng.v2.KeyOperationResponse.data)
 }
 
 // -------------------------------------------------------------------
@@ -2146,43 +3051,43 @@ inline const std::string& Header::message_id() const {
   return message_id_.GetNoArena();
 }
 inline void Header::set_message_id(const std::string& value) {
-  
+
   message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.Header.message_id)
 }
 inline void Header::set_message_id(std::string&& value) {
-  
+
   message_id_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.Header.message_id)
 }
 inline void Header::set_message_id(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.Header.message_id)
 }
 inline void Header::set_message_id(const char* value, size_t size) {
-  
+
   message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.Header.message_id)
 }
 inline std::string* Header::mutable_message_id() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.Header.message_id)
   return message_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* Header::release_message_id() {
   // @@protoc_insertion_point(field_release:secmng.v2.Header.message_id)
-  
+
   return message_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void Header::set_allocated_message_id(std::string* message_id) {
   if (message_id != nullptr) {
-    
+
   } else {
-    
+
   }
   message_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message_id);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.Header.message_id)
@@ -2197,7 +3102,7 @@ inline ::secmng::v2::CommandType Header::command() const {
   return static_cast< ::secmng::v2::CommandType >(command_);
 }
 inline void Header::set_command(::secmng::v2::CommandType value) {
-  
+
   command_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.Header.command)
 }
@@ -2211,43 +3116,43 @@ inline const std::string& Header::sender_id() const {
   return sender_id_.GetNoArena();
 }
 inline void Header::set_sender_id(const std::string& value) {
-  
+
   sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.Header.sender_id)
 }
 inline void Header::set_sender_id(std::string&& value) {
-  
+
   sender_id_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.Header.sender_id)
 }
 inline void Header::set_sender_id(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.Header.sender_id)
 }
 inline void Header::set_sender_id(const char* value, size_t size) {
-  
+
   sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.Header.sender_id)
 }
 inline std::string* Header::mutable_sender_id() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.Header.sender_id)
   return sender_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* Header::release_sender_id() {
   // @@protoc_insertion_point(field_release:secmng.v2.Header.sender_id)
-  
+
   return sender_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void Header::set_allocated_sender_id(std::string* sender_id) {
   if (sender_id != nullptr) {
-    
+
   } else {
-    
+
   }
   sender_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), sender_id);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.Header.sender_id)
@@ -2262,43 +3167,43 @@ inline const std::string& Header::receiver_id() const {
   return receiver_id_.GetNoArena();
 }
 inline void Header::set_receiver_id(const std::string& value) {
-  
+
   receiver_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.Header.receiver_id)
 }
 inline void Header::set_receiver_id(std::string&& value) {
-  
+
   receiver_id_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.Header.receiver_id)
 }
 inline void Header::set_receiver_id(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   receiver_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.Header.receiver_id)
 }
 inline void Header::set_receiver_id(const char* value, size_t size) {
-  
+
   receiver_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.Header.receiver_id)
 }
 inline std::string* Header::mutable_receiver_id() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.Header.receiver_id)
   return receiver_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* Header::release_receiver_id() {
   // @@protoc_insertion_point(field_release:secmng.v2.Header.receiver_id)
-  
+
   return receiver_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void Header::set_allocated_receiver_id(std::string* receiver_id) {
   if (receiver_id != nullptr) {
-    
+
   } else {
-    
+
   }
   receiver_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), receiver_id);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.Header.receiver_id)
@@ -2313,7 +3218,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int64 Header::timestamp() const {
   return timestamp_;
 }
 inline void Header::set_timestamp(::PROTOBUF_NAMESPACE_ID::int64 value) {
-  
+
   timestamp_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.Header.timestamp)
 }
@@ -2331,7 +3236,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int32 EncryptedMessage::key_id() const {
   return key_id_;
 }
 inline void EncryptedMessage::set_key_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  
+
   key_id_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.EncryptedMessage.key_id)
 }
@@ -2345,7 +3250,7 @@ inline ::secmng::v2::MessageType EncryptedMessage::msg_type() const {
   return static_cast< ::secmng::v2::MessageType >(msg_type_);
 }
 inline void EncryptedMessage::set_msg_type(::secmng::v2::MessageType value) {
-  
+
   msg_type_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.EncryptedMessage.msg_type)
 }
@@ -2359,43 +3264,43 @@ inline const std::string& EncryptedMessage::ciphertext() const {
   return ciphertext_.GetNoArena();
 }
 inline void EncryptedMessage::set_ciphertext(const std::string& value) {
-  
+
   ciphertext_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.EncryptedMessage.ciphertext)
 }
 inline void EncryptedMessage::set_ciphertext(std::string&& value) {
-  
+
   ciphertext_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.EncryptedMessage.ciphertext)
 }
 inline void EncryptedMessage::set_ciphertext(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   ciphertext_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.EncryptedMessage.ciphertext)
 }
 inline void EncryptedMessage::set_ciphertext(const char* value, size_t size) {
-  
+
   ciphertext_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.EncryptedMessage.ciphertext)
 }
 inline std::string* EncryptedMessage::mutable_ciphertext() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.EncryptedMessage.ciphertext)
   return ciphertext_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* EncryptedMessage::release_ciphertext() {
   // @@protoc_insertion_point(field_release:secmng.v2.EncryptedMessage.ciphertext)
-  
+
   return ciphertext_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void EncryptedMessage::set_allocated_ciphertext(std::string* ciphertext) {
   if (ciphertext != nullptr) {
-    
+
   } else {
-    
+
   }
   ciphertext_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ciphertext);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.EncryptedMessage.ciphertext)
@@ -2410,43 +3315,43 @@ inline const std::string& EncryptedMessage::nonce() const {
   return nonce_.GetNoArena();
 }
 inline void EncryptedMessage::set_nonce(const std::string& value) {
-  
+
   nonce_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.EncryptedMessage.nonce)
 }
 inline void EncryptedMessage::set_nonce(std::string&& value) {
-  
+
   nonce_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.EncryptedMessage.nonce)
 }
 inline void EncryptedMessage::set_nonce(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   nonce_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.EncryptedMessage.nonce)
 }
 inline void EncryptedMessage::set_nonce(const char* value, size_t size) {
-  
+
   nonce_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.EncryptedMessage.nonce)
 }
 inline std::string* EncryptedMessage::mutable_nonce() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.EncryptedMessage.nonce)
   return nonce_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* EncryptedMessage::release_nonce() {
   // @@protoc_insertion_point(field_release:secmng.v2.EncryptedMessage.nonce)
-  
+
   return nonce_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void EncryptedMessage::set_allocated_nonce(std::string* nonce) {
   if (nonce != nullptr) {
-    
+
   } else {
-    
+
   }
   nonce_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), nonce);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.EncryptedMessage.nonce)
@@ -2461,43 +3366,43 @@ inline const std::string& EncryptedMessage::tag() const {
   return tag_.GetNoArena();
 }
 inline void EncryptedMessage::set_tag(const std::string& value) {
-  
+
   tag_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.EncryptedMessage.tag)
 }
 inline void EncryptedMessage::set_tag(std::string&& value) {
-  
+
   tag_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.EncryptedMessage.tag)
 }
 inline void EncryptedMessage::set_tag(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   tag_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.EncryptedMessage.tag)
 }
 inline void EncryptedMessage::set_tag(const char* value, size_t size) {
-  
+
   tag_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.EncryptedMessage.tag)
 }
 inline std::string* EncryptedMessage::mutable_tag() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.EncryptedMessage.tag)
   return tag_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* EncryptedMessage::release_tag() {
   // @@protoc_insertion_point(field_release:secmng.v2.EncryptedMessage.tag)
-  
+
   return tag_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void EncryptedMessage::set_allocated_tag(std::string* tag) {
   if (tag != nullptr) {
-    
+
   } else {
-    
+
   }
   tag_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), tag);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.EncryptedMessage.tag)
@@ -2512,43 +3417,43 @@ inline const std::string& EncryptedMessage::algorithm() const {
   return algorithm_.GetNoArena();
 }
 inline void EncryptedMessage::set_algorithm(const std::string& value) {
-  
+
   algorithm_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.EncryptedMessage.algorithm)
 }
 inline void EncryptedMessage::set_algorithm(std::string&& value) {
-  
+
   algorithm_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.EncryptedMessage.algorithm)
 }
 inline void EncryptedMessage::set_algorithm(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   algorithm_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.EncryptedMessage.algorithm)
 }
 inline void EncryptedMessage::set_algorithm(const char* value, size_t size) {
-  
+
   algorithm_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.EncryptedMessage.algorithm)
 }
 inline std::string* EncryptedMessage::mutable_algorithm() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.EncryptedMessage.algorithm)
   return algorithm_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* EncryptedMessage::release_algorithm() {
   // @@protoc_insertion_point(field_release:secmng.v2.EncryptedMessage.algorithm)
-  
+
   return algorithm_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void EncryptedMessage::set_allocated_algorithm(std::string* algorithm) {
   if (algorithm != nullptr) {
-    
+
   } else {
-    
+
   }
   algorithm_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), algorithm);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.EncryptedMessage.algorithm)
@@ -2576,13 +3481,13 @@ inline const ::secmng::v2::EncryptedMessage& SendMessageRequest::message() const
 }
 inline ::secmng::v2::EncryptedMessage* SendMessageRequest::release_message() {
   // @@protoc_insertion_point(field_release:secmng.v2.SendMessageRequest.message)
-  
+
   ::secmng::v2::EncryptedMessage* temp = message_;
   message_ = nullptr;
   return temp;
 }
 inline ::secmng::v2::EncryptedMessage* SendMessageRequest::mutable_message() {
-  
+
   if (message_ == nullptr) {
     auto* p = CreateMaybeMessage<::secmng::v2::EncryptedMessage>(GetArenaNoVirtual());
     message_ = p;
@@ -2601,9 +3506,9 @@ inline void SendMessageRequest::set_allocated_message(::secmng::v2::EncryptedMes
       message = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, message, submessage_arena);
     }
-    
+
   } else {
-    
+
   }
   message_ = message;
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.SendMessageRequest.message)
@@ -2622,7 +3527,7 @@ inline ::secmng::v2::ResultCode SendMessageResponse::code() const {
   return static_cast< ::secmng::v2::ResultCode >(code_);
 }
 inline void SendMessageResponse::set_code(::secmng::v2::ResultCode value) {
-  
+
   code_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.SendMessageResponse.code)
 }
@@ -2636,43 +3541,43 @@ inline const std::string& SendMessageResponse::message() const {
   return message_.GetNoArena();
 }
 inline void SendMessageResponse::set_message(const std::string& value) {
-  
+
   message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.SendMessageResponse.message)
 }
 inline void SendMessageResponse::set_message(std::string&& value) {
-  
+
   message_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.SendMessageResponse.message)
 }
 inline void SendMessageResponse::set_message(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.SendMessageResponse.message)
 }
 inline void SendMessageResponse::set_message(const char* value, size_t size) {
-  
+
   message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.SendMessageResponse.message)
 }
 inline std::string* SendMessageResponse::mutable_message() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.SendMessageResponse.message)
   return message_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* SendMessageResponse::release_message() {
   // @@protoc_insertion_point(field_release:secmng.v2.SendMessageResponse.message)
-  
+
   return message_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void SendMessageResponse::set_allocated_message(std::string* message) {
   if (message != nullptr) {
-    
+
   } else {
-    
+
   }
   message_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.SendMessageResponse.message)
@@ -2687,43 +3592,43 @@ inline const std::string& SendMessageResponse::server_message_id() const {
   return server_message_id_.GetNoArena();
 }
 inline void SendMessageResponse::set_server_message_id(const std::string& value) {
-  
+
   server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.SendMessageResponse.server_message_id)
 }
 inline void SendMessageResponse::set_server_message_id(std::string&& value) {
-  
+
   server_message_id_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.SendMessageResponse.server_message_id)
 }
 inline void SendMessageResponse::set_server_message_id(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.SendMessageResponse.server_message_id)
 }
 inline void SendMessageResponse::set_server_message_id(const char* value, size_t size) {
-  
+
   server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.SendMessageResponse.server_message_id)
 }
 inline std::string* SendMessageResponse::mutable_server_message_id() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.SendMessageResponse.server_message_id)
   return server_message_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* SendMessageResponse::release_server_message_id() {
   // @@protoc_insertion_point(field_release:secmng.v2.SendMessageResponse.server_message_id)
-  
+
   return server_message_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void SendMessageResponse::set_allocated_server_message_id(std::string* server_message_id) {
   if (server_message_id != nullptr) {
-    
+
   } else {
-    
+
   }
   server_message_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), server_message_id);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.SendMessageResponse.server_message_id)
@@ -2738,7 +3643,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int64 SendMessageResponse::server_time() const {
   return server_time_;
 }
 inline void SendMessageResponse::set_server_time(::PROTOBUF_NAMESPACE_ID::int64 value) {
-  
+
   server_time_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.SendMessageResponse.server_time)
 }
@@ -2752,7 +3657,7 @@ inline ::secmng::v2::DeliveryStatus SendMessageResponse::delivery_status() const
   return static_cast< ::secmng::v2::DeliveryStatus >(delivery_status_);
 }
 inline void SendMessageResponse::set_delivery_status(::secmng::v2::DeliveryStatus value) {
-  
+
   delivery_status_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.SendMessageResponse.delivery_status)
 }
@@ -2770,43 +3675,43 @@ inline const std::string& QueryMessageRequest::server_message_id() const {
   return server_message_id_.GetNoArena();
 }
 inline void QueryMessageRequest::set_server_message_id(const std::string& value) {
-  
+
   server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageRequest.server_message_id)
 }
 inline void QueryMessageRequest::set_server_message_id(std::string&& value) {
-  
+
   server_message_id_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.QueryMessageRequest.server_message_id)
 }
 inline void QueryMessageRequest::set_server_message_id(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.QueryMessageRequest.server_message_id)
 }
 inline void QueryMessageRequest::set_server_message_id(const char* value, size_t size) {
-  
+
   server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.QueryMessageRequest.server_message_id)
 }
 inline std::string* QueryMessageRequest::mutable_server_message_id() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.QueryMessageRequest.server_message_id)
   return server_message_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* QueryMessageRequest::release_server_message_id() {
   // @@protoc_insertion_point(field_release:secmng.v2.QueryMessageRequest.server_message_id)
-  
+
   return server_message_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void QueryMessageRequest::set_allocated_server_message_id(std::string* server_message_id) {
   if (server_message_id != nullptr) {
-    
+
   } else {
-    
+
   }
   server_message_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), server_message_id);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.QueryMessageRequest.server_message_id)
@@ -2825,7 +3730,7 @@ inline ::secmng::v2::ResultCode QueryMessageResponse::code() const {
   return static_cast< ::secmng::v2::ResultCode >(code_);
 }
 inline void QueryMessageResponse::set_code(::secmng::v2::ResultCode value) {
-  
+
   code_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageResponse.code)
 }
@@ -2839,43 +3744,43 @@ inline const std::string& QueryMessageResponse::message() const {
   return message_.GetNoArena();
 }
 inline void QueryMessageResponse::set_message(const std::string& value) {
-  
+
   message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageResponse.message)
 }
 inline void QueryMessageResponse::set_message(std::string&& value) {
-  
+
   message_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.QueryMessageResponse.message)
 }
 inline void QueryMessageResponse::set_message(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.QueryMessageResponse.message)
 }
 inline void QueryMessageResponse::set_message(const char* value, size_t size) {
-  
+
   message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.QueryMessageResponse.message)
 }
 inline std::string* QueryMessageResponse::mutable_message() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.QueryMessageResponse.message)
   return message_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* QueryMessageResponse::release_message() {
   // @@protoc_insertion_point(field_release:secmng.v2.QueryMessageResponse.message)
-  
+
   return message_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void QueryMessageResponse::set_allocated_message(std::string* message) {
   if (message != nullptr) {
-    
+
   } else {
-    
+
   }
   message_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.QueryMessageResponse.message)
@@ -2890,43 +3795,43 @@ inline const std::string& QueryMessageResponse::server_message_id() const {
   return server_message_id_.GetNoArena();
 }
 inline void QueryMessageResponse::set_server_message_id(const std::string& value) {
-  
+
   server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageResponse.server_message_id)
 }
 inline void QueryMessageResponse::set_server_message_id(std::string&& value) {
-  
+
   server_message_id_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.QueryMessageResponse.server_message_id)
 }
 inline void QueryMessageResponse::set_server_message_id(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.QueryMessageResponse.server_message_id)
 }
 inline void QueryMessageResponse::set_server_message_id(const char* value, size_t size) {
-  
+
   server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.QueryMessageResponse.server_message_id)
 }
 inline std::string* QueryMessageResponse::mutable_server_message_id() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.QueryMessageResponse.server_message_id)
   return server_message_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* QueryMessageResponse::release_server_message_id() {
   // @@protoc_insertion_point(field_release:secmng.v2.QueryMessageResponse.server_message_id)
-  
+
   return server_message_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void QueryMessageResponse::set_allocated_server_message_id(std::string* server_message_id) {
   if (server_message_id != nullptr) {
-    
+
   } else {
-    
+
   }
   server_message_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), server_message_id);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.QueryMessageResponse.server_message_id)
@@ -2941,43 +3846,43 @@ inline const std::string& QueryMessageResponse::sender_id() const {
   return sender_id_.GetNoArena();
 }
 inline void QueryMessageResponse::set_sender_id(const std::string& value) {
-  
+
   sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageResponse.sender_id)
 }
 inline void QueryMessageResponse::set_sender_id(std::string&& value) {
-  
+
   sender_id_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.QueryMessageResponse.sender_id)
 }
 inline void QueryMessageResponse::set_sender_id(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.QueryMessageResponse.sender_id)
 }
 inline void QueryMessageResponse::set_sender_id(const char* value, size_t size) {
-  
+
   sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.QueryMessageResponse.sender_id)
 }
 inline std::string* QueryMessageResponse::mutable_sender_id() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.QueryMessageResponse.sender_id)
   return sender_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* QueryMessageResponse::release_sender_id() {
   // @@protoc_insertion_point(field_release:secmng.v2.QueryMessageResponse.sender_id)
-  
+
   return sender_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void QueryMessageResponse::set_allocated_sender_id(std::string* sender_id) {
   if (sender_id != nullptr) {
-    
+
   } else {
-    
+
   }
   sender_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), sender_id);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.QueryMessageResponse.sender_id)
@@ -2992,43 +3897,43 @@ inline const std::string& QueryMessageResponse::receiver_id() const {
   return receiver_id_.GetNoArena();
 }
 inline void QueryMessageResponse::set_receiver_id(const std::string& value) {
-  
+
   receiver_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageResponse.receiver_id)
 }
 inline void QueryMessageResponse::set_receiver_id(std::string&& value) {
-  
+
   receiver_id_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.QueryMessageResponse.receiver_id)
 }
 inline void QueryMessageResponse::set_receiver_id(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   receiver_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.QueryMessageResponse.receiver_id)
 }
 inline void QueryMessageResponse::set_receiver_id(const char* value, size_t size) {
-  
+
   receiver_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.QueryMessageResponse.receiver_id)
 }
 inline std::string* QueryMessageResponse::mutable_receiver_id() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.QueryMessageResponse.receiver_id)
   return receiver_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* QueryMessageResponse::release_receiver_id() {
   // @@protoc_insertion_point(field_release:secmng.v2.QueryMessageResponse.receiver_id)
-  
+
   return receiver_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void QueryMessageResponse::set_allocated_receiver_id(std::string* receiver_id) {
   if (receiver_id != nullptr) {
-    
+
   } else {
-    
+
   }
   receiver_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), receiver_id);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.QueryMessageResponse.receiver_id)
@@ -3043,7 +3948,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int32 QueryMessageResponse::key_id() const {
   return key_id_;
 }
 inline void QueryMessageResponse::set_key_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  
+
   key_id_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageResponse.key_id)
 }
@@ -3057,43 +3962,43 @@ inline const std::string& QueryMessageResponse::msg_type() const {
   return msg_type_.GetNoArena();
 }
 inline void QueryMessageResponse::set_msg_type(const std::string& value) {
-  
+
   msg_type_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageResponse.msg_type)
 }
 inline void QueryMessageResponse::set_msg_type(std::string&& value) {
-  
+
   msg_type_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.QueryMessageResponse.msg_type)
 }
 inline void QueryMessageResponse::set_msg_type(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   msg_type_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.QueryMessageResponse.msg_type)
 }
 inline void QueryMessageResponse::set_msg_type(const char* value, size_t size) {
-  
+
   msg_type_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.QueryMessageResponse.msg_type)
 }
 inline std::string* QueryMessageResponse::mutable_msg_type() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.QueryMessageResponse.msg_type)
   return msg_type_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* QueryMessageResponse::release_msg_type() {
   // @@protoc_insertion_point(field_release:secmng.v2.QueryMessageResponse.msg_type)
-  
+
   return msg_type_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void QueryMessageResponse::set_allocated_msg_type(std::string* msg_type) {
   if (msg_type != nullptr) {
-    
+
   } else {
-    
+
   }
   msg_type_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), msg_type);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.QueryMessageResponse.msg_type)
@@ -3108,7 +4013,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int64 QueryMessageResponse::send_time() const {
   return send_time_;
 }
 inline void QueryMessageResponse::set_send_time(::PROTOBUF_NAMESPACE_ID::int64 value) {
-  
+
   send_time_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageResponse.send_time)
 }
@@ -3122,7 +4027,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int32 QueryMessageResponse::status() const {
   return status_;
 }
 inline void QueryMessageResponse::set_status(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  
+
   status_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageResponse.status)
 }
@@ -3140,43 +4045,43 @@ inline const std::string& MessageSummary::server_message_id() const {
   return server_message_id_.GetNoArena();
 }
 inline void MessageSummary::set_server_message_id(const std::string& value) {
-  
+
   server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.MessageSummary.server_message_id)
 }
 inline void MessageSummary::set_server_message_id(std::string&& value) {
-  
+
   server_message_id_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.MessageSummary.server_message_id)
 }
 inline void MessageSummary::set_server_message_id(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.MessageSummary.server_message_id)
 }
 inline void MessageSummary::set_server_message_id(const char* value, size_t size) {
-  
+
   server_message_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.MessageSummary.server_message_id)
 }
 inline std::string* MessageSummary::mutable_server_message_id() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.MessageSummary.server_message_id)
   return server_message_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* MessageSummary::release_server_message_id() {
   // @@protoc_insertion_point(field_release:secmng.v2.MessageSummary.server_message_id)
-  
+
   return server_message_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void MessageSummary::set_allocated_server_message_id(std::string* server_message_id) {
   if (server_message_id != nullptr) {
-    
+
   } else {
-    
+
   }
   server_message_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), server_message_id);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.MessageSummary.server_message_id)
@@ -3191,43 +4096,43 @@ inline const std::string& MessageSummary::sender_id() const {
   return sender_id_.GetNoArena();
 }
 inline void MessageSummary::set_sender_id(const std::string& value) {
-  
+
   sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.MessageSummary.sender_id)
 }
 inline void MessageSummary::set_sender_id(std::string&& value) {
-  
+
   sender_id_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.MessageSummary.sender_id)
 }
 inline void MessageSummary::set_sender_id(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.MessageSummary.sender_id)
 }
 inline void MessageSummary::set_sender_id(const char* value, size_t size) {
-  
+
   sender_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.MessageSummary.sender_id)
 }
 inline std::string* MessageSummary::mutable_sender_id() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.MessageSummary.sender_id)
   return sender_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* MessageSummary::release_sender_id() {
   // @@protoc_insertion_point(field_release:secmng.v2.MessageSummary.sender_id)
-  
+
   return sender_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void MessageSummary::set_allocated_sender_id(std::string* sender_id) {
   if (sender_id != nullptr) {
-    
+
   } else {
-    
+
   }
   sender_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), sender_id);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.MessageSummary.sender_id)
@@ -3242,43 +4147,43 @@ inline const std::string& MessageSummary::receiver_id() const {
   return receiver_id_.GetNoArena();
 }
 inline void MessageSummary::set_receiver_id(const std::string& value) {
-  
+
   receiver_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.MessageSummary.receiver_id)
 }
 inline void MessageSummary::set_receiver_id(std::string&& value) {
-  
+
   receiver_id_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.MessageSummary.receiver_id)
 }
 inline void MessageSummary::set_receiver_id(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   receiver_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.MessageSummary.receiver_id)
 }
 inline void MessageSummary::set_receiver_id(const char* value, size_t size) {
-  
+
   receiver_id_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.MessageSummary.receiver_id)
 }
 inline std::string* MessageSummary::mutable_receiver_id() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.MessageSummary.receiver_id)
   return receiver_id_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* MessageSummary::release_receiver_id() {
   // @@protoc_insertion_point(field_release:secmng.v2.MessageSummary.receiver_id)
-  
+
   return receiver_id_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void MessageSummary::set_allocated_receiver_id(std::string* receiver_id) {
   if (receiver_id != nullptr) {
-    
+
   } else {
-    
+
   }
   receiver_id_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), receiver_id);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.MessageSummary.receiver_id)
@@ -3293,7 +4198,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int32 MessageSummary::key_id() const {
   return key_id_;
 }
 inline void MessageSummary::set_key_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  
+
   key_id_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.MessageSummary.key_id)
 }
@@ -3307,43 +4212,43 @@ inline const std::string& MessageSummary::msg_type() const {
   return msg_type_.GetNoArena();
 }
 inline void MessageSummary::set_msg_type(const std::string& value) {
-  
+
   msg_type_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.MessageSummary.msg_type)
 }
 inline void MessageSummary::set_msg_type(std::string&& value) {
-  
+
   msg_type_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.MessageSummary.msg_type)
 }
 inline void MessageSummary::set_msg_type(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   msg_type_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.MessageSummary.msg_type)
 }
 inline void MessageSummary::set_msg_type(const char* value, size_t size) {
-  
+
   msg_type_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.MessageSummary.msg_type)
 }
 inline std::string* MessageSummary::mutable_msg_type() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.MessageSummary.msg_type)
   return msg_type_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* MessageSummary::release_msg_type() {
   // @@protoc_insertion_point(field_release:secmng.v2.MessageSummary.msg_type)
-  
+
   return msg_type_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void MessageSummary::set_allocated_msg_type(std::string* msg_type) {
   if (msg_type != nullptr) {
-    
+
   } else {
-    
+
   }
   msg_type_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), msg_type);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.MessageSummary.msg_type)
@@ -3358,7 +4263,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int64 MessageSummary::send_time() const {
   return send_time_;
 }
 inline void MessageSummary::set_send_time(::PROTOBUF_NAMESPACE_ID::int64 value) {
-  
+
   send_time_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.MessageSummary.send_time)
 }
@@ -3372,7 +4277,7 @@ inline ::PROTOBUF_NAMESPACE_ID::int32 MessageSummary::status() const {
   return status_;
 }
 inline void MessageSummary::set_status(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  
+
   status_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.MessageSummary.status)
 }
@@ -3390,7 +4295,7 @@ inline ::secmng::v2::ResultCode QueryMessageListResponse::code() const {
   return static_cast< ::secmng::v2::ResultCode >(code_);
 }
 inline void QueryMessageListResponse::set_code(::secmng::v2::ResultCode value) {
-  
+
   code_ = value;
   // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageListResponse.code)
 }
@@ -3404,43 +4309,43 @@ inline const std::string& QueryMessageListResponse::message() const {
   return message_.GetNoArena();
 }
 inline void QueryMessageListResponse::set_message(const std::string& value) {
-  
+
   message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:secmng.v2.QueryMessageListResponse.message)
 }
 inline void QueryMessageListResponse::set_message(std::string&& value) {
-  
+
   message_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:secmng.v2.QueryMessageListResponse.message)
 }
 inline void QueryMessageListResponse::set_message(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  
+
   message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:secmng.v2.QueryMessageListResponse.message)
 }
 inline void QueryMessageListResponse::set_message(const char* value, size_t size) {
-  
+
   message_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:secmng.v2.QueryMessageListResponse.message)
 }
 inline std::string* QueryMessageListResponse::mutable_message() {
-  
+
   // @@protoc_insertion_point(field_mutable:secmng.v2.QueryMessageListResponse.message)
   return message_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline std::string* QueryMessageListResponse::release_message() {
   // @@protoc_insertion_point(field_release:secmng.v2.QueryMessageListResponse.message)
-  
+
   return message_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 inline void QueryMessageListResponse::set_allocated_message(std::string* message) {
   if (message != nullptr) {
-    
+
   } else {
-    
+
   }
   message_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message);
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.QueryMessageListResponse.message)
@@ -3498,13 +4403,13 @@ inline const ::secmng::v2::Header& RequestPacket::header() const {
 }
 inline ::secmng::v2::Header* RequestPacket::release_header() {
   // @@protoc_insertion_point(field_release:secmng.v2.RequestPacket.header)
-  
+
   ::secmng::v2::Header* temp = header_;
   header_ = nullptr;
   return temp;
 }
 inline ::secmng::v2::Header* RequestPacket::mutable_header() {
-  
+
   if (header_ == nullptr) {
     auto* p = CreateMaybeMessage<::secmng::v2::Header>(GetArenaNoVirtual());
     header_ = p;
@@ -3523,9 +4428,9 @@ inline void RequestPacket::set_allocated_header(::secmng::v2::Header* header) {
       header = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, header, submessage_arena);
     }
-    
+
   } else {
-    
+
   }
   header_ = header;
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.RequestPacket.header)
@@ -3654,6 +4559,129 @@ inline ::secmng::v2::QueryMessageListRequest* RequestPacket::mutable_query_msg_l
   return body_.query_msg_list_req_;
 }
 
+// .secmng.v2.KeyAgreementRequest key_agree_req = 5;
+inline bool RequestPacket::has_key_agree_req() const {
+  return body_case() == kKeyAgreeReq;
+}
+inline void RequestPacket::set_has_key_agree_req() {
+  _oneof_case_[0] = kKeyAgreeReq;
+}
+inline void RequestPacket::clear_key_agree_req() {
+  if (has_key_agree_req()) {
+    delete body_.key_agree_req_;
+    clear_has_body();
+  }
+}
+inline ::secmng::v2::KeyAgreementRequest* RequestPacket::release_key_agree_req() {
+  // @@protoc_insertion_point(field_release:secmng.v2.RequestPacket.key_agree_req)
+  if (has_key_agree_req()) {
+    clear_has_body();
+      ::secmng::v2::KeyAgreementRequest* temp = body_.key_agree_req_;
+    body_.key_agree_req_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::secmng::v2::KeyAgreementRequest& RequestPacket::key_agree_req() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.RequestPacket.key_agree_req)
+  return has_key_agree_req()
+      ? *body_.key_agree_req_
+      : *reinterpret_cast< ::secmng::v2::KeyAgreementRequest*>(&::secmng::v2::_KeyAgreementRequest_default_instance_);
+}
+inline ::secmng::v2::KeyAgreementRequest* RequestPacket::mutable_key_agree_req() {
+  if (!has_key_agree_req()) {
+    clear_body();
+    set_has_key_agree_req();
+    body_.key_agree_req_ = CreateMaybeMessage< ::secmng::v2::KeyAgreementRequest >(
+        GetArenaNoVirtual());
+  }
+  // @@protoc_insertion_point(field_mutable:secmng.v2.RequestPacket.key_agree_req)
+  return body_.key_agree_req_;
+}
+
+// .secmng.v2.KeyCheckRequest key_check_req = 6;
+inline bool RequestPacket::has_key_check_req() const {
+  return body_case() == kKeyCheckReq;
+}
+inline void RequestPacket::set_has_key_check_req() {
+  _oneof_case_[0] = kKeyCheckReq;
+}
+inline void RequestPacket::clear_key_check_req() {
+  if (has_key_check_req()) {
+    delete body_.key_check_req_;
+    clear_has_body();
+  }
+}
+inline ::secmng::v2::KeyCheckRequest* RequestPacket::release_key_check_req() {
+  // @@protoc_insertion_point(field_release:secmng.v2.RequestPacket.key_check_req)
+  if (has_key_check_req()) {
+    clear_has_body();
+      ::secmng::v2::KeyCheckRequest* temp = body_.key_check_req_;
+    body_.key_check_req_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::secmng::v2::KeyCheckRequest& RequestPacket::key_check_req() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.RequestPacket.key_check_req)
+  return has_key_check_req()
+      ? *body_.key_check_req_
+      : *reinterpret_cast< ::secmng::v2::KeyCheckRequest*>(&::secmng::v2::_KeyCheckRequest_default_instance_);
+}
+inline ::secmng::v2::KeyCheckRequest* RequestPacket::mutable_key_check_req() {
+  if (!has_key_check_req()) {
+    clear_body();
+    set_has_key_check_req();
+    body_.key_check_req_ = CreateMaybeMessage< ::secmng::v2::KeyCheckRequest >(
+        GetArenaNoVirtual());
+  }
+  // @@protoc_insertion_point(field_mutable:secmng.v2.RequestPacket.key_check_req)
+  return body_.key_check_req_;
+}
+
+// .secmng.v2.KeyLogoutRequest key_logout_req = 7;
+inline bool RequestPacket::has_key_logout_req() const {
+  return body_case() == kKeyLogoutReq;
+}
+inline void RequestPacket::set_has_key_logout_req() {
+  _oneof_case_[0] = kKeyLogoutReq;
+}
+inline void RequestPacket::clear_key_logout_req() {
+  if (has_key_logout_req()) {
+    delete body_.key_logout_req_;
+    clear_has_body();
+  }
+}
+inline ::secmng::v2::KeyLogoutRequest* RequestPacket::release_key_logout_req() {
+  // @@protoc_insertion_point(field_release:secmng.v2.RequestPacket.key_logout_req)
+  if (has_key_logout_req()) {
+    clear_has_body();
+      ::secmng::v2::KeyLogoutRequest* temp = body_.key_logout_req_;
+    body_.key_logout_req_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::secmng::v2::KeyLogoutRequest& RequestPacket::key_logout_req() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.RequestPacket.key_logout_req)
+  return has_key_logout_req()
+      ? *body_.key_logout_req_
+      : *reinterpret_cast< ::secmng::v2::KeyLogoutRequest*>(&::secmng::v2::_KeyLogoutRequest_default_instance_);
+}
+inline ::secmng::v2::KeyLogoutRequest* RequestPacket::mutable_key_logout_req() {
+  if (!has_key_logout_req()) {
+    clear_body();
+    set_has_key_logout_req();
+    body_.key_logout_req_ = CreateMaybeMessage< ::secmng::v2::KeyLogoutRequest >(
+        GetArenaNoVirtual());
+  }
+  // @@protoc_insertion_point(field_mutable:secmng.v2.RequestPacket.key_logout_req)
+  return body_.key_logout_req_;
+}
+
 inline bool RequestPacket::has_body() const {
   return body_case() != BODY_NOT_SET;
 }
@@ -3685,13 +4713,13 @@ inline const ::secmng::v2::Header& ResponsePacket::header() const {
 }
 inline ::secmng::v2::Header* ResponsePacket::release_header() {
   // @@protoc_insertion_point(field_release:secmng.v2.ResponsePacket.header)
-  
+
   ::secmng::v2::Header* temp = header_;
   header_ = nullptr;
   return temp;
 }
 inline ::secmng::v2::Header* ResponsePacket::mutable_header() {
-  
+
   if (header_ == nullptr) {
     auto* p = CreateMaybeMessage<::secmng::v2::Header>(GetArenaNoVirtual());
     header_ = p;
@@ -3710,9 +4738,9 @@ inline void ResponsePacket::set_allocated_header(::secmng::v2::Header* header) {
       header = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, header, submessage_arena);
     }
-    
+
   } else {
-    
+
   }
   header_ = header;
   // @@protoc_insertion_point(field_set_allocated:secmng.v2.ResponsePacket.header)
@@ -3841,6 +4869,47 @@ inline ::secmng::v2::QueryMessageListResponse* ResponsePacket::mutable_query_msg
   return body_.query_msg_list_resp_;
 }
 
+// .secmng.v2.KeyOperationResponse key_op_resp = 5;
+inline bool ResponsePacket::has_key_op_resp() const {
+  return body_case() == kKeyOpResp;
+}
+inline void ResponsePacket::set_has_key_op_resp() {
+  _oneof_case_[0] = kKeyOpResp;
+}
+inline void ResponsePacket::clear_key_op_resp() {
+  if (has_key_op_resp()) {
+    delete body_.key_op_resp_;
+    clear_has_body();
+  }
+}
+inline ::secmng::v2::KeyOperationResponse* ResponsePacket::release_key_op_resp() {
+  // @@protoc_insertion_point(field_release:secmng.v2.ResponsePacket.key_op_resp)
+  if (has_key_op_resp()) {
+    clear_has_body();
+      ::secmng::v2::KeyOperationResponse* temp = body_.key_op_resp_;
+    body_.key_op_resp_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::secmng::v2::KeyOperationResponse& ResponsePacket::key_op_resp() const {
+  // @@protoc_insertion_point(field_get:secmng.v2.ResponsePacket.key_op_resp)
+  return has_key_op_resp()
+      ? *body_.key_op_resp_
+      : *reinterpret_cast< ::secmng::v2::KeyOperationResponse*>(&::secmng::v2::_KeyOperationResponse_default_instance_);
+}
+inline ::secmng::v2::KeyOperationResponse* ResponsePacket::mutable_key_op_resp() {
+  if (!has_key_op_resp()) {
+    clear_body();
+    set_has_key_op_resp();
+    body_.key_op_resp_ = CreateMaybeMessage< ::secmng::v2::KeyOperationResponse >(
+        GetArenaNoVirtual());
+  }
+  // @@protoc_insertion_point(field_mutable:secmng.v2.ResponsePacket.key_op_resp)
+  return body_.key_op_resp_;
+}
+
 inline bool ResponsePacket::has_body() const {
   return body_case() != BODY_NOT_SET;
 }
@@ -3853,6 +4922,14 @@ inline ResponsePacket::BodyCase ResponsePacket::body_case() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

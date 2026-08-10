@@ -41,13 +41,17 @@ struct EncryptMessageResult
     std::string errorMsg;      // 失败原因
 };
 
-// MessageService 的职责是处理“发送加密消息”这个新业务。
+// MessageService 是服务端消息业务的核心编排层。
 // 它不负责 socket 收发，也不负责 protobuf 编解码细节。
 // 它只关心业务本身：
 // 1. 校验请求是否合法
-// 2. 查找当前 key
-// 3. 解密消息
-// 4. 生成结构化响应
+// 2. 查找发送方和接收方的当前 key
+// 3. 在可信服务端模型下完成解密与重加密
+// 4. 写入消息记录和审计记录
+// 5. 生成结构化响应
+//
+// 当前项目不是端到端加密：服务端会短暂拿到明文。
+// 因此这里特别注意不把明文写入日志，只保存加密后的消息内容。
 class MessageService
 {
 public:
@@ -62,12 +66,14 @@ public:
     // 这里先返回 V2SendMessageResponseInfo，后面由外层 codec 编码。
 	V2SendMessageResponseInfo handleSendMessage(const secmng::v2::RequestPacket& packet);
 
-    // 处理“查询消息请求”
+    // 处理“查询消息请求”。
+    // 当前只返回元数据，并且只允许发送方或接收方查询。
     V2QueryMessageResponseInfo handleQueryMessage(
         const secmng::v2::RequestPacket& packet
     );
 
-    // 处理“查询最近 N 条消息请求”
+    // 处理“查询最近 N 条消息请求”。
+    // 当前只允许查询当前客户端自己的发送记录。
     V2QueryMessageListResponseInfo handleQueryMessageList(
         const secmng::v2::RequestPacket& packet
     );
@@ -112,7 +118,7 @@ private:
     V2HeaderInfo buildResponseHeader(const secmng::v2::RequestPacket& packet,int command);
 
     // 生成服务端消息记录 ID。
-    // 第一阶段先用简单规则，后面可以替换成更规范的 UUID。
+    // 使用微秒时间戳 + 进程内递增序号，降低高频写入时的碰撞概率。
     std::string generateServerMessageId();
 
     // 生成审计日志 ID

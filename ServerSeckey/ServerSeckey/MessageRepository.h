@@ -66,6 +66,8 @@ struct MessageSummaryInfo
 };
 
 // 负责 message_log 表的数据库操作。
+// Repository 层只做数据访问和结构转换，不做权限判断。
+// 这样权限规则可以集中放在 MessageService，避免存储层混入业务上下文。
 // 1. 把消息写入 message_log
 // 2. 从 message_log 查询消息
 class MessageRepository

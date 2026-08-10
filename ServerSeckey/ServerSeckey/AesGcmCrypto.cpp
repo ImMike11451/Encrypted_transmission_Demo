@@ -1,10 +1,10 @@
 #include "AesGcmCrypto.h"
 #include <openssl/rand.h>
 
-// GCM 模式下，推荐使用 12 字节 nonce
+// GCM 推荐使用 12 字节 nonce。注意：同一个 key 下 nonce 不能复用。
 static const size_t GCM_NONCE_SIZE = 12;
 
-// GCM 模式下，tag 常用 16 字节
+// 16 字节 tag 是常见安全强度选择，用于解密时做认证校验。
 static const size_t GCM_TAG_SIZE = 16;
 
 AesGcmCrypto::AesGcmCrypto(const std::string& key)
@@ -33,7 +33,7 @@ GcmEncryptResult AesGcmCrypto::encrypt(const std::string& plaintext)
 		return result;
 	}
 
-	// 随机生成 nonce
+	// 每次加密都随机生成 nonce，避免同一 key 下重复加密泄露明文关系。
 	std::string nonce(GCM_NONCE_SIZE, '\0');
 	if (RAND_bytes(reinterpret_cast<unsigned char*>(&nonce[0]), GCM_NONCE_SIZE) != 1)
 	{
@@ -80,7 +80,7 @@ GcmEncryptResult AesGcmCrypto::encrypt(const std::string& plaintext)
 			break;
 		}
 
-		//执行加密
+		// 执行加密主体。GCM 不需要填充，密文长度通常与明文一致。
 		if(EVP_EncryptUpdate(ctx, reinterpret_cast<unsigned char*>(&ciphertext[0]), 
 			&len, reinterpret_cast<const unsigned char*>(plaintext.data()), plaintext.size()) != 1)
 		{
@@ -96,9 +96,9 @@ GcmEncryptResult AesGcmCrypto::encrypt(const std::string& plaintext)
 		}
 
 		ciphertextLen += len;
-		ciphertext.resize(ciphertextLen); //调整密文长度
+		ciphertext.resize(ciphertextLen);
 
-		// 取出认证标签 tag
+		// 取出认证标签 tag。接收方必须带着同一个 tag 才能通过解密校验。
 		if(EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, GCM_TAG_SIZE,&tag[0]) != 1)
 		{
 			result.errorMsg = "get GCM tag failed";
@@ -151,11 +151,11 @@ GcmDecryptResult AesGcmCrypto::decrypt(const std::string& nonce, const std::stri
 	int len = 0;
 	int plaintextLen = 0;
 
-	std::string plaintext(ciphertext.size(), '\0'); //解密后的明文长度与密文相同
+	std::string plaintext(ciphertext.size(), '\0');
 
 	do
 	{
-		//初始解密上下文
+		// 初始化解密上下文。
 		if(EVP_DecryptInit_ex(ctx,cipher,nullptr,nullptr,nullptr) != 1)
 		{
 			result.errorMsg = "EVP_DecryptInit_ex failed";
@@ -181,7 +181,7 @@ GcmDecryptResult AesGcmCrypto::decrypt(const std::string& nonce, const std::stri
 			break;
 		}
 
-		// 先解密主体
+		// 先解密主体，最终是否可信要等 Final 阶段验证 tag。
 		if (EVP_DecryptUpdate(
 			ctx,
 			reinterpret_cast<unsigned char*>(&plaintext[0]),
@@ -215,7 +215,7 @@ GcmDecryptResult AesGcmCrypto::decrypt(const std::string& nonce, const std::stri
 		}
 
 		plaintextLen += len;
-		plaintext.resize(plaintextLen); //调整明文长度
+		plaintext.resize(plaintextLen);
 
 		result.success = true;
 		result.plaintext = plaintext;
@@ -231,18 +231,18 @@ const EVP_CIPHER* AesGcmCrypto::getCipherByKeyLen() const
 {
 	if (m_key.size() == 16)
 	{
-		return EVP_aes_128_gcm();  //返回的是一个指向 EVP_CIPHER 结构的指针，表示 AES-128-GCM 算法
+		return EVP_aes_128_gcm();
 	}
 	else if(m_key.size() == 24)
 	{
-		return EVP_aes_192_gcm();  //返回的是一个指向 EVP_CIPHER 结构的指针，表示 AES-192-GCM 算法
+		return EVP_aes_192_gcm();
 	}
 	else if(m_key.size() == 32)
 	{
-		return EVP_aes_256_gcm();  //返回的是一个指向 EVP_CIPHER 结构的指针，表示 AES-256-GCM 算法
+		return EVP_aes_256_gcm();
 	}
 	else
 	{
-		return nullptr; //不支持的 key 长度
+		return nullptr;
 	}
 }
