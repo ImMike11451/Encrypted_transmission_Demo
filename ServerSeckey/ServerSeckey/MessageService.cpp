@@ -4,10 +4,9 @@
 #include "Logger.h"
 #include "AuditService.h"
 #include "MessageRepository.h"
+#include "MessageQueryService.h"
 #include "AesGcmCrypto.h"
 #include <ctime>
-#include <sstream>
-#include <iomanip>
 #include <atomic>
 #include <chrono>
 
@@ -168,32 +167,33 @@ V2SendMessageResponseInfo MessageService::handleSendMessage(const secmng::v2::Re
 		return respInfo;
 	}
 
-	// 如果 B 的密钥状态不是 1，说明密钥不可用。
-	// 例如已经注销、过期，或者状态被服务端置为无效。
-	if (receiverNode.status != 1)
-	{
-		respInfo.code = secmng::v2::RESULT_KEY_INVALID;
-		respInfo.message = "receiver key is invalid";
+    // 接收方与发送方复用同一个生命周期入口，不能仅凭缓存状态继续使用旧密钥。
+    const ActiveKeyResult receiverKeyResult =
+        getActiveKey(header.receiver_id(), m_serverId, receiverNode.seckeyID);
+    if (!receiverKeyResult.found || !receiverKeyResult.valid)
+    {
+        respInfo.code = receiverKeyResult.found ? secmng::v2::RESULT_KEY_INVALID
+                                              : secmng::v2::RESULT_KEY_NOT_FOUND;
+        respInfo.message = "receiver key unavailable: " + receiverKeyResult.errorMsg;
 
-		auditSvc.logAction(
-			generateAuditLogId(),
-			header.sender_id(),
-			"MSG_DELIVER",
-			header.receiver_id(),
-			0,
-			"receiver key invalid",
-			m_db->getCurTime()
-		);
+        auditSvc.logAction(
+            generateAuditLogId(),
+            header.sender_id(),
+            "MSG_DELIVER",
+            header.receiver_id(),
+            0,
+            "receiver key unavailable: " + receiverKeyResult.errorMsg,
+            m_db->getCurTime()
+        );
 
-		return respInfo;
-	}
+        return respInfo;
+    }
 
-	// 第 6 步：用 B-Server key 重新加密明文。
-	// message_log 中保存 receiverCiphertext，接收方后续只能用自己的 B-Server key 解密。
-	EncryptMessageResult receiverEncResult = encryptMessage(
-		receiverNode.seckey,
-		decResult.plaintext
-	);
+    // 第 6 步：使用经过生命周期校验的密钥快照重加密，不再使用原始缓存中的密钥。
+    EncryptMessageResult receiverEncResult = encryptMessage(
+        receiverKeyResult.base64Key,
+        decResult.plaintext
+    );
 
 	if (!receiverEncResult.success)
 	{
@@ -229,7 +229,7 @@ V2SendMessageResponseInfo MessageService::handleSendMessage(const secmng::v2::Re
 	msgRecord.senderKeyId = encMsg.key_id();
 
 	// receiverKeyId 表示 B-Server key。
-	msgRecord.receiverKeyId = receiverNode.seckeyID;
+    msgRecord.receiverKeyId = receiverKeyResult.keyId;
 
 	msgRecord.msgType = "text";
 
@@ -292,314 +292,19 @@ V2SendMessageResponseInfo MessageService::handleSendMessage(const secmng::v2::Re
 
 V2QueryMessageResponseInfo MessageService::handleQueryMessage(const secmng::v2::RequestPacket& packet)
 {
-	V2QueryMessageResponseInfo respInfo;
-
-	// 第 1 步：先准备默认失败响应
-	respInfo.header = buildResponseHeader(packet, secmng::v2::CMD_QUERY_MSG_RESP);
-	respInfo.code = secmng::v2::RESULT_FAILED;
-	respInfo.message = "query message failed";
-	respInfo.serverMessageId = "";
-	respInfo.senderId = "";
-	respInfo.receiverId = "";
-	respInfo.keyId = 0;
-	respInfo.msgType = "";
-	respInfo.sendTime = 0;
-	respInfo.status = 0;
-
-	// 查询业务同样会写审计日志，所以这里先准备服务对象
-	AuditService auditSvc(m_db);
-	MessageRepository msgRepo(m_db);
-
-	// 第 2 步：校验请求是否合法
-	std::string validateErr;
-	if (!validateQueryRequest(packet, validateErr))
-	{
-		respInfo.code = secmng::v2::RESULT_INVALID_REQUEST;
-		respInfo.message = validateErr;
-
-		// 非法查询请求也应留痕
-		auditSvc.logAction(
-			generateAuditLogId(),
-			packet.has_header() ? packet.header().sender_id() : "",
-			"MSG_QUERY",
-			"",
-			0,
-			"invalid query request: " + validateErr,
-			m_db->getCurTime()
-		);
-
-		return respInfo;
-	}
-
-	const secmng::v2::Header& header = packet.header();
-	const secmng::v2::QueryMessageRequest& req = packet.query_msg_req();
-
-	// 第 3 步：调用 Repository 查询消息
-	MessageQueryResult queryResult;
-	bool ret = msgRepo.queryMessageById(req.server_message_id(),queryResult);
-
-	if (!ret || !queryResult.found)
-	{
-		respInfo.code = secmng::v2::RESULT_MSG_NOT_FOUND;
-		respInfo.message = "message not found";
-		respInfo.serverMessageId = req.server_message_id();
-
-		auditSvc.logAction(
-			generateAuditLogId(),
-			header.sender_id(),
-			"MSG_QUERY",
-			req.server_message_id(),
-			0,
-			"message not found",
-			m_db->getCurTime()
-		);
-
-		return respInfo;
-	}
-
-	// 权限控制放在服务层：Repository 只负责查数据，Service 才知道“谁在请求”。
-	if (header.sender_id() != queryResult.senderId &&
-		header.sender_id() != queryResult.receiverId)
-	{
-		respInfo.code = secmng::v2::RESULT_INVALID_REQUEST;
-		respInfo.message = "permission denied";
-		respInfo.serverMessageId = req.server_message_id();
-
-		auditSvc.logAction(
-			generateAuditLogId(),
-			header.sender_id(),
-			"MSG_QUERY",
-			req.server_message_id(),
-			0,
-			"permission denied",
-			m_db->getCurTime()
-		);
-
-		return respInfo;
-	}
-
-	// 第 4 步：组装成功响应
-	respInfo.code = secmng::v2::RESULT_SUCCESS;
-	respInfo.message = "query message success";
-	respInfo.serverMessageId = queryResult.msgId;
-	respInfo.senderId = queryResult.senderId;
-	respInfo.receiverId = queryResult.receiverId;
-	respInfo.keyId = queryResult.keyId;
-	respInfo.msgType = queryResult.msgType;
-	respInfo.sendTime = parseDateTimeToTimestamp(queryResult.sendTime);
-	respInfo.status = queryResult.status;
-
-	// 第 5 步：写成功审计日志
-	auditSvc.logAction(
-		generateAuditLogId(),
-		header.sender_id(),
-		"MSG_QUERY",
-		req.server_message_id(),
-		1,
-		"query message success",
-		m_db->getCurTime()
-	);
-
-	return respInfo;
+    MessageRepository repository(m_db);
+    AuditService audit(m_db);
+    MessageQueryService queryService(m_serverId, &repository, &audit);
+    return queryService.handleQueryMessage(packet);
 }
 
 V2QueryMessageListResponseInfo MessageService::handleQueryMessageList(const secmng::v2::RequestPacket& packet)
 {
-	V2QueryMessageListResponseInfo respInfo;
-
-	// 第 1 步：准备默认失败响应
-	// 注意这里的命令类型是 CMD_QUERY_MSG_LIST_RESP
-	respInfo.header = buildResponseHeader(packet, secmng::v2::CMD_QUERY_MSG_LIST_RESP);
-	respInfo.code = secmng::v2::RESULT_FAILED;
-	respInfo.message = "query message list failed";
-	respInfo.messages.clear();
-
-	AuditService auditSvc(m_db);
-	MessageRepository msgRepo(m_db);
-
-	// 第 2 步：校验请求是否合法
-	std::string validateErr;
-	if(!validateQueryListRequest(packet, validateErr))
-	{
-		respInfo.code = secmng::v2::RESULT_INVALID_REQUEST;
-		respInfo.message = validateErr;
-
-		auditSvc.logAction(
-			generateAuditLogId(),
-			packet.has_header() ? packet.header().sender_id() : "",
-			"MSG_LIST_QUERY",
-			"",
-			0,
-			"invalid query list request: " + validateErr,
-			m_db->getCurTime()
-		);
-
-		return respInfo;
-	}
-
-	const secmng::v2::Header& header = packet.header();
-	const secmng::v2::QueryMessageListRequest& req = packet.query_msg_list_req();
-
-	// 列表查询先采用最严格的演示策略：只能查自己的发送记录。
-	// 如果后续支持“收件箱”，建议单独增加 receiver_id 维度的查询接口。
-	if (req.sender_id() != header.sender_id())
-	{
-		respInfo.code = secmng::v2::RESULT_INVALID_REQUEST;
-		respInfo.message = "permission denied";
-
-		auditSvc.logAction(
-			generateAuditLogId(),
-			header.sender_id(),
-			"MSG_LIST_QUERY",
-			req.sender_id(),
-			0,
-			"permission denied",
-			m_db->getCurTime()
-		);
-
-		return respInfo;
-	}
-
-	// 第 3 步：调用 Repository 查询最近 N 条消息
-	std::vector<MessageSummaryInfo> dbMessages;
-	bool ret = msgRepo.queryRecentMessagesBySender(req.sender_id(), req.limit(), dbMessages);
-
-	if (!ret)
-	{
-		respInfo.code = secmng::v2::RESULT_FAILED;
-		respInfo.message = "query recent messages failed";
-
-		auditSvc.logAction(
-			generateAuditLogId(),
-			header.sender_id(),
-			"MSG_LIST_QUERY",
-			req.sender_id(),
-			0,
-			"query recent messages failed",
-			m_db->getCurTime()
-		);
-
-		return respInfo;
-	}
-
-	// 第 4 步：把 Repository 层结构转换成 V2 响应结构
-	for (const auto& item : dbMessages)
-	{
-		V2MessageSummaryInfo summary;
-		summary.serverMessageId = item.msgId;
-		summary.senderId = item.senderId;
-		summary.receiverId = item.receiverId;
-		summary.keyId = item.keyId;
-		summary.msgType = item.msgType;
-		summary.sendTime = parseDateTimeToTimestamp(item.sendTime);
-		summary.status = item.status;
-
-		respInfo.messages.push_back(summary);
-	}
-
-	// 第 5 步：写成功审计日志
-	auditSvc.logAction(
-		generateAuditLogId(),
-		header.sender_id(),
-		"MSG_LIST_QUERY",
-		req.sender_id(),
-		1,
-		"query message list success, count = " +
-		std::to_string(respInfo.messages.size()),
-		m_db->getCurTime()
-	);
-
-	// 第 6 步：组装成功响应
-	respInfo.code = secmng::v2::RESULT_SUCCESS;
-	respInfo.message = "query message list success";
-
-	return respInfo;
-
+    MessageRepository repository(m_db);
+    AuditService audit(m_db);
+    MessageQueryService queryService(m_serverId, &repository, &audit);
+    return queryService.handleQueryMessageList(packet);
 }
-
-bool MessageService::validateQueryRequest(const secmng::v2::RequestPacket& packet, std::string& errorMsg)
-{
-	// 第 1 步：必须有 header
-	if(!packet.has_header())
-	{
-		errorMsg = "header is empty";
-		return false;
-	}
-
-	// 第 2 步：必须有 query_msg_req
-	if(!packet.has_query_msg_req())
-	{
-		errorMsg = "query_msg_req is empty";
-		return false;
-	}
-
-	const secmng::v2::QueryMessageRequest& req = packet.query_msg_req();
-
-	// 第 3 步：server_message_id 不能为空
-	if(req.server_message_id().empty())
-	{
-		errorMsg = "server_message_id is empty";
-		return false;
-	}
-	return true;
-}
-
-bool MessageService::validateQueryListRequest(
-	const secmng::v2::RequestPacket& packet,
-	std::string& errorMsg
-)
-{
-	// 第 1 步：必须有 header
-	if (!packet.has_header())
-	{
-		errorMsg = "header is empty";
-		return false;
-	}
-
-	// 第 2 步：必须有 query_msg_list_req
-	if (!packet.has_query_msg_list_req())
-	{
-		errorMsg = "query_msg_list_req is empty";
-		return false;
-	}
-
-	const secmng::v2::Header& header = packet.header();
-	const secmng::v2::QueryMessageListRequest& req =
-		packet.query_msg_list_req();
-
-	// 第 3 步：请求头 sender_id 不能为空
-	// 这个 sender_id 表示“谁发起了查询”
-	if (header.sender_id().empty())
-	{
-		errorMsg = "header sender_id is empty";
-		return false;
-	}
-
-	// 第 4 步：查询条件 sender_id 不能为空
-	// 这个 sender_id 表示“要查谁发送过的消息”
-	if (req.sender_id().empty())
-	{
-		errorMsg = "query sender_id is empty";
-		return false;
-	}
-
-	// 第 5 步：limit 必须合法
-	if (req.limit() <= 0)
-	{
-		errorMsg = "limit must be greater than 0";
-		return false;
-	}
-
-	// 第 6 步：限制最大查询数量，避免一次查太多
-	if (req.limit() > 100)
-	{
-		errorMsg = "limit must not exceed 100";
-		return false;
-	}
-
-	return true;
-}
-
 
 // 校验请求包是否合法。
 // 这一步的目标是尽早挡掉格式错误的请求，避免后面业务处理混乱。
@@ -672,7 +377,7 @@ bool MessageService::validateRequest(const secmng::v2::RequestPacket& packet, st
 
 // 查找当前活跃 key。
 // 当前消息解密必须拿到真实 key，因此共享内存命中是必要条件。
-// 数据库现有接口只能确认 key 状态，不能把 key 本体安全地回填给业务层。
+// 数据库是生命周期权威源，共享内存只负责缓存真实 key。
 ActiveKeyResult MessageService::getActiveKey(const std::string& senderId, const std::string& receiverId, int keyId)
 {
 	ActiveKeyResult result;
@@ -683,12 +388,19 @@ ActiveKeyResult MessageService::getActiveKey(const std::string& senderId, const 
 	// 第 1 步：先从共享内存读取
 	NodeSHMInfo node = m_shm->shmRead(senderId, receiverId);
 
-	// 如果共享内存命中，并且 keyId/status 都匹配，
-	if(strlen(node.clientID) != 0 && node.serverID != 0 && node.seckeyID == keyId)
+	// 如果共享内存命中，并且 keyId/status 都匹配，仍需回源确认生命周期状态。
+	if(strlen(node.clientID) != 0 && strlen(node.serverID) != 0 && node.seckeyID == keyId)
 	{
 		result.found = true;
 		if (node.status == 1)
 		{
+			if (!m_db->checkSecKey(senderId, receiverId, keyId))
+			{
+				m_shm->shmUpdateStatus(senderId, receiverId, 0);
+				result.errorMsg = "key expired, revoked or rotated";
+				return result;
+			}
+
 			result.valid = true;
 			result.base64Key = node.seckey;
 			return result;
@@ -888,35 +600,4 @@ std::string MessageService::generateServerMessageId()
 std::string MessageService::generateAuditLogId()
 {
 	return generateScopedId(m_serverId + "_audit");
-}
-
-long long MessageService::parseDateTimeToTimestamp(const std::string& dateTimeStr)
-{
-	if (dateTimeStr.empty())
-	{
-		return 0;
-	}
-
-	std::tm tmTime = {};
-	std::istringstream ss(dateTimeStr);
-
-	// 按固定格式解析
-	ss >> std::get_time(&tmTime, "%Y-%m-%d %H:%M:%S");
-
-	// 如果解析失败，直接返回 0，表示当前时间不可用
-	if (ss.fail())
-	{
-		Logger::error("parseDateTimeToTimestamp failed: " + dateTimeStr);
-		return 0;
-	}
-
-	// mktime 会把本地时间 struct tm 转成 time_t
-	std::time_t timeValue = std::mktime(&tmTime);
-	if(timeValue == -1)
-	{
-		Logger::error("mktime failed for: " + dateTimeStr);
-		return 0;
-	}
-
-	return static_cast<long long>(timeValue);
 }

@@ -2,7 +2,11 @@
 
 #include <string>
 #include "Codec.h"
+#ifdef DEMO_CMAKE_PROTO
+#include <MessageV2.pb.h>
+#else
 #include "MessageV2.pb.h"
+#endif
 
 // 这个结构体表示“业务层眼里的公共头信息”。
 // 也就是说，客户端在准备发送消息时，先把这些字段填进来，

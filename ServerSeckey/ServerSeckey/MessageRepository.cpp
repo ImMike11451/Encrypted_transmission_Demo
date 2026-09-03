@@ -1,6 +1,6 @@
 #include "MessageRepository.h"
 #include "Logger.h"
-#include <mysql/mysql.h>
+#include "mysqlOP.h"
 #include <cstdio>
 
 MessageRepository::MessageRepository(mysqlOP* db)

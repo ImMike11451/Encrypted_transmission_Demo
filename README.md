@@ -1,191 +1,137 @@
 # 加密传输与密钥管理演示系统
 
-基于 C++ 的安全消息传输与密钥管理演示系统。
+一个基于 **C++17 / Linux** 的命令行网络项目，将会话密钥管理、AES-GCM 文本加密、Protobuf 通信、MySQL 持久化和共享内存缓存串成完整的服务端处理链路。
 
-本项目实现了客户端与服务端之间的会话密钥协商、密钥校验、密钥注销、AES-GCM 加密消息发送、服务端消息转发存储、消息元数据查询和审计日志记录。项目重点展示 C++ 网络编程、OpenSSL 加密、Protobuf 协议设计、MySQL 持久化、共享内存缓存、epoll 与线程池并发处理等能力。
+适合查看的重点：网络请求如何分发、消息如何解密并重加密存储、密钥如何失效和轮换、查询逻辑如何通过接口脱离数据库进行测试。
 
-> 当前版本是可信服务端转发模型：服务端会解密发送方消息，再使用接收方与服务端之间的会话密钥重新加密后存储。它不是端到端加密模型。
+> 项目定位是学习与面试展示用 Demo。服务端能看到处理中的明文，**不是端到端加密产品**；客户端 B 的密文下载和本地解密尚未实现。
 
-## 功能特性
+## 快速了解
 
-- RSA 公私钥生成、签名验签与会话密钥加密传输
-- AES-128-GCM 认证加密，支持 ciphertext、nonce、tag 传输
-- Protobuf 统一二进制协议，覆盖密钥业务和消息业务
-- TCP 长度帧协议：4 字节网络序长度 + protobuf payload
-- 服务端基于 epoll + 线程池处理客户端短连接请求
-- MySQL 持久化密钥、消息记录和审计日志
-- System V 共享内存缓存活跃会话密钥
-- 双客户端演示配置：Client A 向 Client B 发送加密消息
+| 能力 | 当前实现 |
+| --- | --- |
+| 密钥管理 | RSA 公钥、签名验签与会话密钥传输；协商、校验、注销 |
+| 密钥生命周期 | 默认 24 小时有效期，访问时检查过期，再次协商时轮换旧活跃密钥 |
+| 消息保护 | AES-128-GCM，携带密文、nonce 和认证标签 |
+| 网络与协议 | TCP 短连接、4 字节网络序长度帧、统一 Protobuf 请求/响应 |
+| 服务端处理 | epoll + 线程池；按接收方会话密钥重加密后写库 |
+| 查询与审计 | 单条元数据与最近发送列表查询、基础归属检查、审计记录 |
+| 工程组织 | CMake 构建、构建时生成协议、隔离运行目录、可选 CTest 目标 |
+
+密钥状态、存储模型和并发使用边界见[当前架构](docs/current-architecture.md)。
 
 ## 架构概览
 
 ```text
-Client A
-  | 1. 密钥协商
-  | 2. AES-GCM 加密消息
-  v
-Server
-  | 校验密钥
-  | 使用 A-Server 密钥解密
-  | 使用 B-Server 密钥重加密
-  | 写入 message_log / audit_log
-  v
-Client B
+Client A ── A-Server 密钥 / AES-GCM ──> Server
+                                        ├─ 校验生命周期、解密
+Client B ── 预先协商 B-Server 密钥 ────────>├─ 使用 B-Server 密钥重加密
+                                        ├─ MySQL：两侧密文、元数据、审计
+                                        └─ 返回消息 ID，供客户端查询元数据
 ```
 
-主要模块：
-
-```text
-ClientSecKey/ClientSecKey/
-  ClientOP            菜单业务协调与密钥操作
-  MessageClient       加密消息发送与查询客户端
-  TcpSocket           长度帧 TCP 客户端
-  SecKeyShm           本地会话密钥缓存
-  RsaCrypto           RSA 加解密与签名验签
-  AesGcmCrypto        AES-GCM 加解密
-  V2RequestCodec      protobuf 请求编码
-  V2RespondCodec      protobuf 响应解码
-
-ServerSeckey/ServerSeckey/
-  ServerOP            服务端启动、协议路由与密钥操作
-  EpollServer         epoll 事件循环封装
-  ThreadPool          工作线程池
-  MessageService      消息业务逻辑
-  MessageRepository   message_log 访问层
-  AuditService        audit_log 访问层
-  mysqlOP             MySQL 底层操作
-  SecKeyShm           服务端活跃密钥缓存
-```
-
-更多当前架构说明见 [docs/current-architecture.md](docs/current-architecture.md)。
-
-## 协议设计
-
-当前协议文件：
-
-```text
-ClientSecKey/ClientSecKey/MessageV2.proto
-ServerSeckey/ServerSeckey/MessageV2.proto
-```
-
-统一请求与响应：
-
-```text
-RequestPacket
-ResponsePacket
-Header
-KeyAgreementRequest
-KeyCheckRequest
-KeyLogoutRequest
-SendMessageRequest
-QueryMessageRequest
-QueryMessageListRequest
-```
-
-## 环境要求
-
-- Linux 构建和运行环境
-- 支持 C++17 或更高版本的 C++ 编译器
-- OpenSSL 开发库
-- Protobuf 编译器和 C++ 运行库
-- MySQL 客户端开发库
-- MySQL 服务端
-
-当前仓库保留 Visual Studio Linux 工程文件，同时提供顶层 CMake 构建入口。推荐使用 CMake 进行跨平台构建，具体命令见 `docs/构建说明.md`。
+服务端使用 System V 共享内存缓存活跃密钥，并回源 MySQL 检查生命周期。查询模块通过仓储和审计接口与数据库实现分离。接收侧密文目前保存在服务端，不代表 B 已实际接收、解密或阅读。
 
 ## 快速开始
 
-1. 初始化数据库。
+以下命令在 **Linux 或 WSL2 的 Bash** 中执行，并以仓库根目录为当前目录。原生 Windows 不支持项目使用的 epoll 和 System V IPC。
+
+### 1. 安装依赖并构建
+
+Ubuntu 22.04 / 24.04 可使用系统软件包准备依赖：
 
 ```bash
-mysql -u root -p < scripts/init_db.sql
+sudo apt update
+sudo apt install build-essential cmake pkg-config libssl-dev \
+  protobuf-compiler libprotobuf-dev libjsoncpp-dev \
+  default-libmysqlclient-dev mysql-client
+
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
 ```
 
-2. 准备配置文件。
+产物为 `build/bin/encrypted-server` 和 `build/bin/encrypted-client`。已有自定义 Protobuf 安装时，见[构建说明](docs/构建说明.md)，不要混用不同版本的编译器、头文件和运行库。
+
+### 2. 准备数据库
+
+需要一个可访问的 MySQL 服务端；上述客户端开发包不会替你部署数据库。本机需要时可另行安装 `mysql-server`，也可使用现有 Linux 数据库。
+
+**首次创建演示库：**
 
 ```bash
-cp ServerSeckey/ServerSeckey/server.example.json ServerSeckey/ServerSeckey/server.json
-cp ClientSecKey/ClientSecKey/clientA.example.json ClientSecKey/ClientSecKey/clientA.json
-cp ClientSecKey/ClientSecKey/clientB.example.json ClientSecKey/ClientSecKey/clientB.json
+mysql -h 127.0.0.1 -u root -p < scripts/init_db.sql
 ```
 
-根据本机 MySQL 用户名、密码、共享内存路径等修改配置。
+**已存在旧版数据库：**先备份、停止服务端，确认数据库后执行[生命周期迁移](scripts/migrate_key_lifecycle.sql)，不要把初始化脚本当作自动升级。详情见[演示指南](docs/demo-guide.md)。
 
-## 敏感配置与密钥文件
+### 3. 准备运行配置
 
-仓库只提交 `server.example.json`、`clientA.example.json` 和 `clientB.example.json` 这类公开模板。复制模板后生成的真实配置文件仅用于本机运行，不能提交到版本控制。
+```bash
+bash scripts/setup-demo.sh
+```
 
-客户端完成密钥协商时会在运行目录生成 `pri.pem` 和 `pub.pem`；服务端会按客户端 ID 生成或缓存 `客户端ID_pub.pem`。这些文件属于运行时密钥材料，不能用于生产环境，也不能提交到公开仓库。若私钥意外泄露，应删除旧密钥、重新执行密钥协商，并更新本机配置。
+编辑 `runtime/server/server.json` 中的 `Host`、`UserDB`、`PassDB`、`ConnectDB`，填写可用的数据库连接信息。示例密码 `change_me` 只是占位值。
 
-3. 编译服务端和客户端。
+三个角色分别使用独立的运行目录，配置和共享内存路径已经分开。脚本不会覆盖现有配置，也不会读取源码目录中的历史真实配置。跨机器运行时还要修改客户端配置里的 `ServerIP`。
 
-当前工程主要通过 Visual Studio Linux 项目编译：
+### 4. 在三个终端启动
+
+```bash
+# 终端一
+bash scripts/start-server.sh
+
+# 终端二：启动后选择 1，先完成 B 的密钥协商
+bash scripts/start-client-b.sh
+
+# 终端三：选择 1 协商，再选择 3，接收方输入 0002
+bash scripts/start-client-a.sh
+```
+
+同一角色只启动一个实例。使用其他构建目录时，例如：
+
+```bash
+BUILD_DIR=build-release bash scripts/start-server.sh
+```
+
+完成消息发送后，使用菜单 4 查询元数据、菜单 5 查看最近发送列表；菜单 2 校验密钥，菜单 6 注销密钥。完整操作和预期结果见[演示指南](docs/demo-guide.md)。
+
+## 项目目录
 
 ```text
-ServerSeckey/ServerSeckey.sln
-ClientSecKey/ClientSecKey.sln
+ClientSecKey/ClientSecKey/   客户端、协议与加密封装
+ServerSeckey/ServerSeckey/   网络服务、密钥和消息业务、数据访问
+tests/                     核心模块与查询归属规则测试
+scripts/                   初始化、迁移及本地演示入口
+docs/                      架构、构建、部署及项目导览
+build/                     构建生成，不提交
+runtime/                   各角色配置和运行文件，不提交
 ```
 
-4. 启动服务端。
+## 测试与验证边界
+
+默认不构建测试。需要运行已有离线测试时：
 
 ```bash
-./ServerSeckey
+cmake -S . -B build-tests -DBUILD_TESTING=ON
+cmake --build build-tests --parallel
+(cd build-tests && ctest --output-on-failure)
 ```
 
-5. 分别启动两个客户端。
+两个 CTest 目标覆盖加密/编码基础及消息查询归属规则，不连接数据库或网络；它们不覆盖真实数据库迁移、完整消息链路和并发场景。
 
-```bash
-./ClientSecKey clientA.json
-./ClientSecKey clientB.json
-```
+## 阅读导航
 
-6. 按演示流程操作。
+- [项目导览](docs/项目导览.md)：技术栈、源码阅读顺序与功能说明。
+- [当前架构](docs/current-architecture.md)：职责、真实消息流、安全和并发边界。
+- [构建说明](docs/构建说明.md)：依赖、构建选项、Protobuf、WSL 与 Visual Studio。
+- [演示指南](docs/demo-guide.md)：数据库、新旧部署、配置和操作排错。
+- [配置与密钥说明](docs/敏感配置与密钥说明.md)：本机文件与公开模板的区别。
+- [文档索引](docs/README.md)：项目使用文档。
 
-详见 [docs/demo-guide.md](docs/demo-guide.md)。
+## 当前限制
 
-## 演示流程
-
-推荐演示顺序：
-
-1. Client B 执行密钥协商。
-2. Client A 执行密钥协商。
-3. Client A 发送加密消息给 Client B，接收方节点 ID 输入 `0002`。
-4. Client A 查询最近一次消息。
-5. Client A 查询最近消息列表。
-6. Client A 执行密钥校验。
-7. Client A 执行密钥注销，再次校验密钥状态。
-
-## 存储模型
-
-数据库 `secmng` 包含：
-
-- `keysn`：分配递增密钥 ID
-- `seckeyinfo`：保存客户端与服务端之间的会话密钥和状态
-- `message_log`：保存发送方密文、接收方重加密密文和消息元数据
-- `audit_log`：保存密钥与消息相关审计记录
-
-初始化脚本见 [scripts/init_db.sql](scripts/init_db.sql)。
-
-## 安全说明
-
-当前版本仍有一些适合继续打磨的安全点：
-
-- 服务端属于可信节点，当前能看到消息明文。
-- 演示密钥与配置只应用于本地测试环境。
-- 当前代码已避免在客户端日志输出协商后的会话密钥。
-- 当前代码已避免在服务端日志输出解密后的消息明文。
-- 当前消息 ID 和审计 ID 已改为微秒时间戳 + 进程内递增序号，降低高频请求碰撞概率。
-- 当前消息查询已增加基础权限控制：单条消息只允许发送方或接收方查询，消息列表只允许查询当前客户端自己的发送记录。
-- 生产级实现仍应避免日志输出完整 SQL 和敏感配置。
-- 动态 SQL 已统一通过 MySQL 长度感知转义处理；生产级实现仍建议进一步升级为 `mysql_stmt` 参数化查询。
-- 后续可以进一步将消息 ID 与审计 ID 升级为 UUID。
-
-## 后续路线
-
-- 顶层 CMake 工程与公共模块拆分
-- 参数化 SQL 与敏感配置治理
-- 单元测试：crypto、codec、repository、message service
-- 一键集成测试与并发压测脚本
-- 接收方拉取密文并本地解密
-- 端到端加密模式
-- 长连接实时推送
+- 服务端可信，不是端到端加密；查询归属检查不等于完整身份认证。
+- 尚无完整防重放、接收端下载解密、已读回执和实时推送。
+- 线程池共享 MySQL 连接，轮换与缓存同步没有整体并发一致性保证。
+- 旧 OpenSSL 接口仍有弃用警告；本项目不应直接用于生产环境。
+- 本项目未提供性能基准数据。

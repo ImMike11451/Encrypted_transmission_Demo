@@ -2,7 +2,11 @@
 #include <string>
 #include <vector>
 #include "Codec.h"
+#ifdef DEMO_CMAKE_PROTO
+#include <MessageV2.pb.h>
+#else
 #include "MessageV2.pb.h"
+#endif
 #include "V2RequestCodec.h"
 
 // 这个结构体表示“发送消息响应”的业务层数据。

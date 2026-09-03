@@ -5,7 +5,6 @@
     "PassDB": "change_me",
     "Host": "127.0.0.1",
     "ConnectDB": "secmng",
-    "ShmKey": "/usr/lib",
+    "ShmKey": "./shm",
     "ShmMaxNode": 100
 }
-

@@ -263,28 +263,33 @@ V2KeyOperationResponseInfo ServerOP::secKeyCheck(const secmng::v2::RequestPacket
 
 	const secmng::v2::Header& header = packet.header();
 	const int reqKeyID = packet.key_check_req().key_id();
-
-	//先检查共享内存中是否存在有效的秘钥
 	NodeSHMInfo node = m_shm->shmRead(header.sender_id(), header.receiver_id());
+
+	// 数据库是生命周期权威源，先确认密钥未过期、未注销且未被轮换。
+	bool dbRet = mySQL->checkSecKey(header.sender_id(), header.receiver_id(), reqKeyID);
+	if (!dbRet)
+	{
+		// 查询旧密钥失败时，不能把已经轮换出的新密钥缓存误置为失效。
+		if (node.seckeyID == reqKeyID)
+		{
+			m_shm->shmUpdateStatus(header.sender_id(), header.receiver_id(), 0);
+		}
+		return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_CHECK_RESP,
+			secmng::v2::RESULT_KEY_INVALID, "key expired, revoked, rotated or not found", reqKeyID);
+	}
+
+	// 数据库确认有效后，再检查共享内存缓存是否同步。
 	if(strcmp(node.clientID, header.sender_id().data()) == 0 &&
 		strcmp(node.serverID, header.receiver_id().data()) == 0 &&
 		node.seckeyID == reqKeyID &&
 		node.status == 1)
 	{
 		return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_CHECK_RESP,
-			secmng::v2::RESULT_SUCCESS, "key valid in shm", reqKeyID);
-	}
-
-	//共享内存中没有，就查找数据库
-	bool ret = mySQL->checkSecKey(header.sender_id(), header.receiver_id(), reqKeyID);
-	if (ret)
-	{
-		return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_CHECK_RESP,
-			secmng::v2::RESULT_SUCCESS, "key valid in db", reqKeyID);
+			secmng::v2::RESULT_SUCCESS, "key active", reqKeyID);
 	}
 
 	return makeKeyResponse(packet, m_serverID, secmng::v2::CMD_KEY_CHECK_RESP,
-		secmng::v2::RESULT_KEY_INVALID, "key invalid", reqKeyID);
+		secmng::v2::RESULT_SUCCESS, "key active in db, local cache missing", reqKeyID);
 }
 
 V2KeyOperationResponseInfo ServerOP::SeckeyLogout(const secmng::v2::RequestPacket& packet)

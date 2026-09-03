@@ -10,6 +10,24 @@ Release/
 *.dll
 *.log
 
+# CMake 构建目录和生成文件。
+/build/
+/build-*/
+/out/
+/runtime/
+/tmp/
+/backups/
+/.superpowers/
+compile_commands.json
+CMakeUserPresets.json
+*.o
+*.a
+*.so
+*.so.*
+
+# 已跟踪的历史中间产物不会仅因忽略规则自动取消跟踪。
+/ServerSeckey/ServerSeckey/RC[a-z][0-9]*
+
 # 本机运行配置：公开仓库只保留对应的 *.example.json 模板。
 /ClientSecKey/ClientSecKey/client.json
 /ClientSecKey/ClientSecKey/clientA.json
@@ -19,3 +37,14 @@ Release/
 # 密钥协商运行时生成的私钥、公钥和服务端缓存公钥。
 *.pem
 /ServerSeckey/ServerSeckey/*_pub.pem
+
+# 本地过程资料与 IDE 自动生成的教程，不属于发布源码。
+/protocol-unification-comparison/
+/unified-protocol-changes.patch
+/ClientSecKey/readme/
+/ServerSeckey/readme/
+/docs/2026-07-26-今日改动记录.md
+/docs/2026-09-03-本窗口改动与学习总结.md
+/docs/发布检查清单.md
+/docs/项目续接与创新蓝图.md
+/.agents/

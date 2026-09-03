@@ -1,14 +1,10 @@
 #include "AuditService.h"
 #include "Logger.h"
+#include "mysqlOP.h"
 
-AuditService::AuditService(mysqlOP* db)
-    : m_db(db)
-{
-}
+AuditService::AuditService(mysqlOP* db) : m_db(db) {}
 
-AuditService::~AuditService()
-{
-}
+AuditService::~AuditService() {}
 
 // 写入一条完整的审计记录。
 // 这里故意只依赖 mysqlOP 的公开接口，避免业务层直接接触 MYSQL*。
@@ -20,25 +16,26 @@ bool AuditService::logAction(const AuditLogRecord& record)
         return false;
     }
 
-    return m_db->insertAuditLog(
-        record.logId,
-        record.nodeId,
-        record.action,
-        record.targetId,
-        record.result,
-        record.detail,
-        record.createTime
-    );
+    return m_db->insertAuditLog(record.logId, record.nodeId, record.action, record.targetId, record.result,
+                                record.detail, record.createTime);
+}
+
+bool AuditService::logAction(const std::string& logId, const std::string& nodeId, const std::string& action,
+                             const std::string& targetId, int result, const std::string& detail)
+{
+    if (m_db == nullptr)
+    {
+        Logger::error("AuditService logAction failed: m_db is nullptr");
+        return false;
+    }
+
+    return logAction(logId, nodeId, action, targetId, result, detail, m_db->getCurTime());
 }
 
 // 辅助重载版本：方便 MessageService 直接按字段写审计记录
-bool AuditService::logAction(const std::string& logId,
-    const std::string& nodeId,
-    const std::string& action,
-    const std::string& targetId,
-    int result,
-    const std::string& detail,
-    const std::string& createTime)
+bool AuditService::logAction(const std::string& logId, const std::string& nodeId, const std::string& action,
+                             const std::string& targetId, int result, const std::string& detail,
+                             const std::string& createTime)
 {
     AuditLogRecord record;
     record.logId = logId;

@@ -3,7 +3,6 @@
     "ClientID": "0002",
     "ServerIP": "127.0.0.1",
     "Port": 9898,
-    "ShmKey": "/usr/local/clientB",
+    "ShmKey": "./shm",
     "ShmMaxNode": 1
 }
-

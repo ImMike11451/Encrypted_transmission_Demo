@@ -93,6 +93,7 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MessageRepository.cpp" />
+    <ClCompile Include="MessageQueryService.cpp" />
     <ClCompile Include="MessageService.cpp" />
     <ClCompile Include="MessageV2.pb.cc" />
     <ClCompile Include="mysqlOP.cpp" />
@@ -116,8 +117,10 @@
     <ClInclude Include="EpollServer.h" />
     <ClInclude Include="ErrorCode.h" />
     <ClInclude Include="Hash.h" />
+    <ClInclude Include="KeyLifecycle.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MessageRepository.h" />
+    <ClInclude Include="MessageQueryService.h" />
     <ClInclude Include="MessageService.h" />
     <ClInclude Include="MessageV2.pb.h" />
     <ClInclude Include="mysqlOP.h" />

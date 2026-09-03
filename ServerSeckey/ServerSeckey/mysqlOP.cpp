@@ -1,5 +1,6 @@
 #include "mysqlOP.h"
 
+#include "KeyLifecycle.h"
 #include "Logger.h"
 
 #include <ctime>
@@ -68,11 +69,12 @@ bool mysqlOP::writeSecKey(NodeSHMInfo* pNode)
 	}
 
 	std::ostringstream sql;
-	sql << "insert into seckeyinfo(clientid,serverid,keyid,createtime,state,seckey) values('"
+	sql << "insert into seckeyinfo(clientid,serverid,keyid,createtime,expiretime,state,seckey) values('"
 		<< escapeSqlString(pNode->clientID) << "','"
 		<< escapeSqlString(pNode->serverID) << "',"
 		<< pNode->seckeyID << ",'"
-		<< escapeSqlString(getCurTime()) << "',1,'"
+		<< escapeSqlString(getCurTime()) << "',date_add(now(), interval " << KEY_DEFAULT_VALIDITY_HOURS
+		<< " hour)," << static_cast<int>(KeyLifecycleState::Active) << ",'"
 		<< escapeSqlString(pNode->seckey) << "')";
 
 	if (mysql_query(m_conn, sql.str().c_str()))
@@ -143,69 +145,173 @@ bool mysqlOP::updateKeyId(int keyID)
 
 bool mysqlOP::writeSecKeyWithTrans(NodeSHMInfo* pNode)
 {
-	if (pNode == nullptr)
-	{
-		Logger::error("写入密钥失败: 密钥节点为空");
-		return false;
-	}
+    if (pNode == nullptr || m_conn == nullptr)
+    {
+        Logger::error("写入密钥失败: 密钥节点或数据库连接为空");
+        return false;
+    }
 
-	// 开启事务后用 select ... for update 锁住 keysn。
-	// 这样多个客户端同时协商密钥时，不会拿到相同的 key_id。
-	mysql_query(m_conn, "start transaction");
+    // 仅记录错误码和 SQLSTATE，不记录可能包含密钥值的数据库错误原文或 SQL。
+    // 必须在回滚前读取错误信息，避免原始错误被后续调用覆盖。
+    const auto logDatabaseError = [this](const std::string& stage)
+    {
+        Logger::error(stage + " [MySQL errno=" + std::to_string(mysql_errno(m_conn))
+            + ", SQLSTATE=" + mysql_sqlstate(m_conn) + "]");
+    };
 
-	std::string sql = "select ikeysn from keysn for update";
-	if (mysql_query(m_conn, sql.c_str()))
-	{
-		Logger::error("执行查询失败: " + std::string(mysql_error(m_conn)));
-		mysql_query(m_conn, "rollback");
-		return false;
-	}
+    // 只有事务确实开启，才允许后续修改旧密钥和编号。
+    if (mysql_query(m_conn, "start transaction") != 0)
+    {
+        logDatabaseError("开启密钥轮换事务失败");
+        return false;
+    }
 
-	MYSQL_RES* res = mysql_store_result(m_conn);
-	MYSQL_ROW row = mysql_fetch_row(res);
+    const auto rollback = [this, &logDatabaseError]()
+    {
+        if (mysql_query(m_conn, "rollback") != 0)
+        {
+            logDatabaseError("回滚密钥轮换事务失败，连接状态需要检查");
+        }
+    };
 
-	if (!row)
-	{
-		mysql_free_result(res);
-		mysql_query(m_conn, "rollback");
-		return false;
-	}
+    // 锁定编号行，串行分配编号；后续旧密钥更新和新密钥写入同属本事务。
+    if (mysql_query(m_conn, "select ikeysn from keysn for update") != 0)
+    {
+        logDatabaseError("锁定密钥编号失败");
+        rollback();
+        return false;
+    }
 
-	int keyID = atoi(row[0]);
-	mysql_free_result(res);
+    MYSQL_RES* result = mysql_store_result(m_conn);
+    if (result == nullptr)
+    {
+        logDatabaseError("读取密钥编号结果集失败");
+        rollback();
+        return false;
+    }
 
-	pNode->seckeyID = keyID;
+    MYSQL_ROW row = mysql_fetch_row(result);
+    if (row == nullptr || row[0] == nullptr)
+    {
+        mysql_free_result(result);
+        Logger::error("密钥编号记录不存在");
+        rollback();
+        return false;
+    }
 
-	std::ostringstream sqlInsert;
-	sqlInsert << "insert into seckeyinfo(clientid,serverid,keyid,createtime,state,seckey) values('"
-		<< escapeSqlString(pNode->clientID) << "','"
-		<< escapeSqlString(pNode->serverID) << "',"
-		<< pNode->seckeyID << ",'"
-		<< escapeSqlString(getCurTime()) << "',1,'"
-		<< escapeSqlString(pNode->seckey) << "')";
+    const int keyID = atoi(row[0]);
+    mysql_free_result(result);
+    if (keyID <= 0)
+    {
+        Logger::error("密钥编号无效");
+        rollback();
+        return false;
+    }
 
-	if (mysql_query(m_conn, sqlInsert.str().c_str()))
-	{
-		Logger::error("执行查询失败: " + std::string(mysql_error(m_conn)));
-		mysql_query(m_conn, "rollback");
-		return false;
-	}
+    const std::string clientID = escapeSqlString(pNode->clientID);
+    const std::string serverID = escapeSqlString(pNode->serverID);
+    int rotatedFromKeyID = 0;
 
-	std::string updateSql = "update keysn set ikeysn = ikeysn + 1";
-	if (mysql_query(m_conn, updateSql.c_str()))
-	{
-		Logger::error("执行更新失败: " + std::string(mysql_error(m_conn)));
-		mysql_query(m_conn, "rollback");
-		return false;
-	}
+    // 锁定该节点对全部旧活跃记录；最新记录仅用于保存轮换来源。
+    // 不能只失效最新一条，否则旧数据库中更早的活跃记录会继续有效。
+    // 新旧表均有递增分配的 keyid；旧表没有独立的 id 列，不能依赖该列排序。
+    std::ostringstream sqlCurrentKey;
+    sqlCurrentKey << "select keyid from seckeyinfo where clientid = '"
+                  << clientID << "' and serverid = '" << serverID << "' and state = "
+                  << static_cast<int>(KeyLifecycleState::Active) << " order by keyid desc for update";
+    if (mysql_query(m_conn, sqlCurrentKey.str().c_str()) != 0)
+    {
+        logDatabaseError("锁定旧活跃密钥失败");
+        rollback();
+        return false;
+    }
 
-	mysql_query(m_conn, "commit");
+    MYSQL_RES* currentKeyResult = mysql_store_result(m_conn);
+    if (currentKeyResult == nullptr)
+    {
+        logDatabaseError("读取旧活跃密钥结果集失败");
+        rollback();
+        return false;
+    }
 
-	return true;
+    MYSQL_ROW currentKeyRow = mysql_fetch_row(currentKeyResult);
+    if (currentKeyRow != nullptr && currentKeyRow[0] != nullptr)
+    {
+        rotatedFromKeyID = atoi(currentKeyRow[0]);
+    }
+    mysql_free_result(currentKeyResult);
+
+    std::ostringstream sqlRotate;
+    sqlRotate << "update seckeyinfo set state = " << static_cast<int>(KeyLifecycleState::Rotated)
+              << ", invalidatetime = now() where clientid = '" << clientID
+              << "' and serverid = '" << serverID << "' and state = "
+              << static_cast<int>(KeyLifecycleState::Active);
+    if (mysql_query(m_conn, sqlRotate.str().c_str()) != 0)
+    {
+        logDatabaseError("轮换旧活跃密钥失败");
+        rollback();
+        return false;
+    }
+
+    std::ostringstream sqlInsert;
+    sqlInsert << "insert into seckeyinfo(clientid,serverid,keyid,createtime,expiretime,state,seckey,"
+                 "rotated_from_keyid) values('"
+              << clientID << "','" << serverID << "'," << keyID
+              << ",now(),date_add(now(), interval " << KEY_DEFAULT_VALIDITY_HOURS << " hour),"
+              << static_cast<int>(KeyLifecycleState::Active) << ",'"
+              << escapeSqlString(pNode->seckey) << "',";
+    if (rotatedFromKeyID > 0)
+    {
+        sqlInsert << rotatedFromKeyID;
+    }
+    else
+    {
+        sqlInsert << "null";
+    }
+    sqlInsert << ")";
+    if (mysql_query(m_conn, sqlInsert.str().c_str()) != 0)
+    {
+        logDatabaseError("写入新密钥失败");
+        rollback();
+        return false;
+    }
+
+    if (mysql_query(m_conn, "update keysn set ikeysn = ikeysn + 1") != 0)
+    {
+        logDatabaseError("更新密钥编号失败");
+        rollback();
+        return false;
+    }
+
+    if (mysql_query(m_conn, "commit") != 0)
+    {
+        // 提交响应失败时结果可能不确定，不返回成功，也不触发共享内存发布。
+        logDatabaseError("提交密钥轮换事务失败，需要核对数据库状态");
+        rollback();
+        return false;
+    }
+
+    // 提交成功后才向调用方发布新编号，失败时保留传入节点原状。
+    pNode->seckeyID = keyID;
+    pNode->status = static_cast<int>(KeyLifecycleState::Active);
+    return true;
 }
 
 bool mysqlOP::checkSecKey(const std::string& clientID, const std::string& serverID, int keyID)
 {
+	// 首次访问过期密钥时，将状态从“活跃”推进到“已过期”。
+	// 后续校验和消息发送都只接受活跃状态。
+	std::ostringstream sqlExpire;
+	sqlExpire << "update seckeyinfo set state = " << static_cast<int>(KeyLifecycleState::Expired)
+		<< ", invalidatetime = now() where clientid = '" << escapeSqlString(clientID)
+		<< "' and serverid = '" << escapeSqlString(serverID) << "' and keyid = " << keyID
+		<< " and state = " << static_cast<int>(KeyLifecycleState::Active) << " and expiretime <= now()";
+	if (mysql_query(m_conn, sqlExpire.str().c_str()))
+	{
+		Logger::error("更新过期密钥状态失败: " + std::string(mysql_error(m_conn)));
+		return false;
+	}
+
 	// 只校验 key 是否存在且有效，不把 seckey 本体返回给上层。
 	// 消息解密仍依赖共享内存中的活跃 key。
 	std::ostringstream sql;
@@ -236,7 +342,7 @@ bool mysqlOP::checkSecKey(const std::string& clientID, const std::string& server
 
 	mysql_free_result(res);
 
-	if(dbKeyID == keyID && state == 1)
+	if(dbKeyID == keyID && state == static_cast<int>(KeyLifecycleState::Active))
 	{
 		return true;
 	}
@@ -249,12 +355,14 @@ bool mysqlOP::checkSecKey(const std::string& clientID, const std::string& server
 
 bool mysqlOP::logoutSecKey(const std::string& clientID, const std::string& serverID, int keyID)
 {
-	// 注销并不删除历史密钥记录，而是把 state 置为 0。
+	// 注销并不删除历史密钥记录，而是进入不可逆的“已注销”状态。
 	// 这样可以保留审计和排查所需的历史状态。
 	std::ostringstream sql;
-	sql << "update seckeyinfo set state = 0 where clientid = '"
+	sql << "update seckeyinfo set state = " << static_cast<int>(KeyLifecycleState::Revoked)
+		<< ", invalidatetime = now() where clientid = '"
 		<< escapeSqlString(clientID) << "' and serverid = '"
-		<< escapeSqlString(serverID) << "' and keyid = " << keyID << " and state = 1";
+		<< escapeSqlString(serverID) << "' and keyid = " << keyID << " and state = "
+		<< static_cast<int>(KeyLifecycleState::Active);
 	if (mysql_query(m_conn, sql.str().c_str()))
 	{
 		Logger::error("执行更新失败: " + std::string(mysql_error(m_conn)));

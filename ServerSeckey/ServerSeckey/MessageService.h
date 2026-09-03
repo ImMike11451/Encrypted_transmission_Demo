@@ -2,7 +2,11 @@
 #include "SecKeyShm.h"
 #include "mysqlOP.h"
 #include "V2RespondCodec.h"
+#ifdef DEMO_CMAKE_PROTO
+#include <MessageV2.pb.h>
+#else
 #include "MessageV2.pb.h"
+#endif
 #include <string>
 
 // 这个结构体表示服务端查 key 之后得到的结果。
@@ -78,17 +82,6 @@ public:
         const secmng::v2::RequestPacket& packet
     );
 private:
-    // 校验查询消息请求是否合法
-    bool validateQueryRequest(const secmng::v2::RequestPacket& packet,
-        std::string& errorMsg);
-
-    // 校验查询消息列表请求是否合法
-    bool validateQueryListRequest(
-        const secmng::v2::RequestPacket& packet,
-        std::string& errorMsg
-    );
-
-private:
     // 校验请求包字段是否合法。
     // 合法返回 true，不合法时同时填写 errorMsg。
     bool validateRequest(const secmng::v2::RequestPacket& packet,std::string& errorMsg);
@@ -123,9 +116,6 @@ private:
 
     // 生成审计日志 ID
 	std::string generateAuditLogId();
-
-    // 把数据库中的时间字符串（YYYY-MM-DD HH:MM:SS）转换成 Unix 时间戳
-    long long parseDateTimeToTimestamp(const std::string& dateTimeStr);
 
 private:
     std::string m_serverId;   // 当前服务端 ID

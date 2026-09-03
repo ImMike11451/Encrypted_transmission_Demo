@@ -1,7 +1,11 @@
 #pragma once
 #include "TcpSocket.h"
 #include "TcpServer.h"
+#ifdef DEMO_CMAKE_PROTO
+#include <MessageV2.pb.h>
+#else
 #include "MessageV2.pb.h"
+#endif
 #include "mysqlOP.h"
 #include "SecKeyShm.h"
 #include "ThreadPool.h"
