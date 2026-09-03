@@ -73,7 +73,7 @@ mysql -h 127.0.0.1 -u root -p < scripts/init_db.sql
 bash scripts/setup-demo.sh
 ```
 
-编辑 `runtime/server/server.json` 中的 `Host`、`UserDB`、`PassDB`、`ConnectDB`，填写可用的数据库连接信息。示例密码 `change_me` 只是占位值。
+编辑 `runtime/server/server.json` 中的 `Host`、`UserDB`、`PassDB`、`ConnectDB`，填写可用的数据库连接信息。
 
 三个角色分别使用独立的运行目录，配置和共享内存路径已经分开。脚本保留已存在的配置。跨机器运行时还要修改客户端配置里的 `ServerIP`。
 
