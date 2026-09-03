@@ -2,11 +2,7 @@
 
 一个基于 **C++17 / Linux** 的命令行网络项目，将会话密钥管理、AES-GCM 文本加密、Protobuf 通信、MySQL 持久化和共享内存缓存串成完整的服务端处理链路。
 
-适合查看的重点：网络请求如何分发、消息如何解密并重加密存储、密钥如何失效和轮换、查询逻辑如何通过接口脱离数据库进行测试。
-
-> 项目定位是学习与面试展示用 Demo。服务端能看到处理中的明文，**不是端到端加密产品**；客户端 B 的密文下载和本地解密尚未实现。
-
-## 快速了解
+## 主要功能
 
 | 能力 | 当前实现 |
 | --- | --- |
@@ -18,7 +14,7 @@
 | 查询与审计 | 单条元数据与最近发送列表查询、基础归属检查、审计记录 |
 | 工程组织 | CMake 构建、构建时生成协议、隔离运行目录、可选 CTest 目标 |
 
-密钥状态、存储模型和并发使用边界见[当前架构](docs/current-architecture.md)。
+密钥状态、存储模型和模块职责见[当前架构](docs/current-architecture.md)。
 
 ## 架构概览
 
@@ -30,13 +26,20 @@ Client B ── 预先协商 B-Server 密钥 ────────>├─ 使
                                         └─ 返回消息 ID，供客户端查询元数据
 ```
 
-服务端使用 System V 共享内存缓存活跃密钥，并回源 MySQL 检查生命周期。查询模块通过仓储和审计接口与数据库实现分离。接收侧密文目前保存在服务端，不代表 B 已实际接收、解密或阅读。
+服务端使用 System V 共享内存缓存活跃密钥，并回源 MySQL 检查生命周期。消息查询返回消息 ID、参与方、时间和状态等元数据。
 
 ## 快速开始
 
 以下命令在 **Linux 或 WSL2 的 Bash** 中执行，并以仓库根目录为当前目录。原生 Windows 不支持项目使用的 epoll 和 System V IPC。
 
-### 1. 安装依赖并构建
+### 1. 下载项目
+
+```bash
+git clone https://github.com/ImMike11451/Encrypted_transmission_Demo.git
+cd Encrypted_transmission_Demo
+```
+
+### 2. 安装依赖并构建
 
 Ubuntu 22.04 / 24.04 可使用系统软件包准备依赖：
 
@@ -52,19 +55,19 @@ cmake --build build --parallel
 
 产物为 `build/bin/encrypted-server` 和 `build/bin/encrypted-client`。已有自定义 Protobuf 安装时，见[构建说明](docs/构建说明.md)，不要混用不同版本的编译器、头文件和运行库。
 
-### 2. 准备数据库
+### 3. 初始化数据库
 
 需要一个可访问的 MySQL 服务端；上述客户端开发包不会替你部署数据库。本机需要时可另行安装 `mysql-server`，也可使用现有 Linux 数据库。
 
-**首次创建演示库：**
+在 MySQL 中创建项目数据库和数据表：
 
 ```bash
 mysql -h 127.0.0.1 -u root -p < scripts/init_db.sql
 ```
 
-**已存在旧版数据库：**先备份、停止服务端，确认数据库后执行[生命周期迁移](scripts/migrate_key_lifecycle.sql)，不要把初始化脚本当作自动升级。详情见[演示指南](docs/demo-guide.md)。
+将命令中的主机、用户名替换为实际数据库连接信息。脚本创建 `secmng` 数据库及四张业务表，数据库账户需自行准备。详细步骤见[部署与运行](docs/demo-guide.md)。
 
-### 3. 准备运行配置
+### 4. 准备运行配置
 
 ```bash
 bash scripts/setup-demo.sh
@@ -72,9 +75,9 @@ bash scripts/setup-demo.sh
 
 编辑 `runtime/server/server.json` 中的 `Host`、`UserDB`、`PassDB`、`ConnectDB`，填写可用的数据库连接信息。示例密码 `change_me` 只是占位值。
 
-三个角色分别使用独立的运行目录，配置和共享内存路径已经分开。脚本不会覆盖现有配置，也不会读取源码目录中的历史真实配置。跨机器运行时还要修改客户端配置里的 `ServerIP`。
+三个角色分别使用独立的运行目录，配置和共享内存路径已经分开。脚本保留已存在的配置。跨机器运行时还要修改客户端配置里的 `ServerIP`。
 
-### 4. 在三个终端启动
+### 5. 在三个终端启动
 
 ```bash
 # 终端一
@@ -101,13 +104,13 @@ BUILD_DIR=build-release bash scripts/start-server.sh
 ClientSecKey/ClientSecKey/   客户端、协议与加密封装
 ServerSeckey/ServerSeckey/   网络服务、密钥和消息业务、数据访问
 tests/                     核心模块与查询归属规则测试
-scripts/                   初始化、迁移及本地演示入口
+scripts/                   数据库脚本与启动入口
 docs/                      架构、构建、部署及项目导览
 build/                     构建生成，不提交
 runtime/                   各角色配置和运行文件，不提交
 ```
 
-## 测试与验证边界
+## 运行测试
 
 默认不构建测试。需要运行已有离线测试时：
 
@@ -117,21 +120,13 @@ cmake --build build-tests --parallel
 (cd build-tests && ctest --output-on-failure)
 ```
 
-两个 CTest 目标覆盖加密/编码基础及消息查询归属规则，不连接数据库或网络；它们不覆盖真实数据库迁移、完整消息链路和并发场景。
+两个 CTest 目标覆盖加密、协议编解码和消息查询归属规则，使用离线数据运行。
 
 ## 阅读导航
 
 - [项目导览](docs/项目导览.md)：技术栈、源码阅读顺序与功能说明。
-- [当前架构](docs/current-architecture.md)：职责、真实消息流、安全和并发边界。
+- [当前架构](docs/current-architecture.md)：模块职责、消息流、协议和存储模型。
 - [构建说明](docs/构建说明.md)：依赖、构建选项、Protobuf、WSL 与 Visual Studio。
-- [演示指南](docs/demo-guide.md)：数据库、新旧部署、配置和操作排错。
+- [部署与运行](docs/demo-guide.md)：数据库初始化、配置、操作和排错。
 - [配置与密钥说明](docs/敏感配置与密钥说明.md)：本机文件与公开模板的区别。
 - [文档索引](docs/README.md)：项目使用文档。
-
-## 当前限制
-
-- 服务端可信，不是端到端加密；查询归属检查不等于完整身份认证。
-- 尚无完整防重放、接收端下载解密、已读回执和实时推送。
-- 线程池共享 MySQL 连接，轮换与缓存同步没有整体并发一致性保证。
-- 旧 OpenSSL 接口仍有弃用警告；本项目不应直接用于生产环境。
-- 本项目未提供性能基准数据。
